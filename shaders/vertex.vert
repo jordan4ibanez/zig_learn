@@ -1,12 +1,21 @@
 #version 460
 
-in vec3 pixel_color;
-in vec2 output_texture_coordinate;
+layout (location = 0) in vec3 position;
+// layout (location = 1) in vec2 texture_coordinate;
+layout (location = 1) in vec3 color;
 
-uniform sampler2D texture_sampler;
+layout (location = 0) uniform mat4 camera_matrix;
+layout (location = 1) uniform mat4 object_matrix;
 
-out vec4 frag_color;
+out vec3 pixel_color;
+out vec3 rgb;
+// out vec2 output_texture_coordinate;
 
 void main() {
-   frag_color = texture(texture_sampler, output_texture_coordinate) * vec4(pixel_color, 1.0);
+  gl_Position = camera_matrix * object_matrix * vec4(position, 1.0);
+
+  pixel_color = color;
+
+//   output_texture_coordinate = texture_coordinate;
+   rgb = color;
 }

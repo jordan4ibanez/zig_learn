@@ -1,12 +1,13 @@
 #version 460
 
 in vec3 pixel_color;
-in vec2 output_texture_coordinate;
+in vec3 rgb
+// in vec2 output_texture_coordinate;
 
-uniform sampler2D texture_sampler;
+// uniform sampler2D texture_sampler;
 
 out vec4 frag_color;
 
 void main() {
-   frag_color = texture(texture_sampler, output_texture_coordinate) * vec4(pixel_color, 1.0);
+   frag_color = vec4(r,g,b,1.0);//texture(texture_sampler, output_texture_coordinate) * vec4(pixel_color, 1.0);
 }
