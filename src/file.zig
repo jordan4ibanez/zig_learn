@@ -1,6 +1,9 @@
 const std = @import("std");
 const allocator = @import("allocator.zig");
 
+///
+/// The easy way to read an entire file to a string buffer.
+///
 pub fn readToString(location: []const u8) []const u8 {
     const code_file = std.fs.cwd().openFile(location, .{}) catch |err| {
         std.log.err("[Shader]: Failed to open file for {s}. {s}", .{ location, @errorName(err) });
@@ -8,22 +11,25 @@ pub fn readToString(location: []const u8) []const u8 {
     };
     defer code_file.close();
 
-    var fileSizeBytes: []u8 = allocator.alloc(u8, 0);
-
-    const blah = code_file.getEndPos() catch |err| {
+    const fileSizeBytes = code_file.getEndPos() catch |err| {
         std.log.err("[Shader]: Failed to get file length for {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
-    fileSizeBytes = allocator.realloc(fileSizeBytes, blah);
 
-    _ = code_file.readAll(fileSizeBytes) catch |err| {
+    const buffer: []u8 = allocator.alloc(u8, fileSizeBytes);
+
+    _ = code_file.readAll(buffer) catch |err| {
         std.log.err("[Shader]: Failed to read file for {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
 
-    return fileSizeBytes;
+    return buffer;
 }
 
+///
+///  The easy way to read an entire file to a string buffer.
+/// For talking to C.
+///
 pub fn readToNullTerminatedString(location: []const u8) []const u8 {
     const code_file = std.fs.cwd().openFile(location, .{}) catch |err| {
         std.log.err("[Shader]: Failed to open file for {s}. {s}", .{ location, @errorName(err) });
@@ -31,18 +37,19 @@ pub fn readToNullTerminatedString(location: []const u8) []const u8 {
     };
     defer code_file.close();
 
-    var buffer: []u8 = allocator.alloc(u8, 0);
-
     const fileSizeBytes = code_file.getEndPos() catch |err| {
         std.log.err("[Shader]: Failed to get file length for {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
-    buffer = allocator.realloc(buffer, fileSizeBytes);
+
+    const buffer: []u8 = allocator.alloc(u8, fileSizeBytes + 1);
 
     _ = code_file.readAll(buffer) catch |err| {
         std.log.err("[Shader]: Failed to read file for {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
+
+    buffer[fileSizeBytes] = 0;
 
     return buffer;
 }
