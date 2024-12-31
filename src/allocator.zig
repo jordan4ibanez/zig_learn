@@ -1,4 +1,5 @@
-// I am very lazy, and I am also learning, let me do this stupid shit. Thanks.
+// I am very lazy, and I am also learning.
+// Somehow, I will blow this thing up.
 const std = @import("std");
 
 var gpa: std.heap.GeneralPurposeAllocator(.{}) = undefined;
