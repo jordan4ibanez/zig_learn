@@ -4,6 +4,8 @@ const gl = @import("gl");
 
 var database: std.StringHashMap(u32) = undefined;
 
+const 
+
 pub fn initialize() void {
     database = std.StringHashMap(u32).init(allocator.get());
 }
@@ -15,6 +17,6 @@ pub fn terminate() void {
 
 //* PUBLIC API ==============================================
 
-pub fn use(name: *[]u8, vert_path: *[]u8, frag_path: *[]u8) void {
-    std.debug.print("{s}\n", .{ name, vert_path, frag_path });
+pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void {
+    std.debug.print("{s}{s}{s}\n", .{ name, vert_path, frag_path });
 }
