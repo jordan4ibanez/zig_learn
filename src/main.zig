@@ -3,13 +3,13 @@ const glfw = @import("mach-glfw");
 const gl = @import("gl");
 const init = @import("init");
 
+var gl_procs: gl.ProcTable = undefined;
+
 fn errorCallback(error_code: glfw.ErrorCode, description: [:0]const u8) void {
     std.log.err("glfw: {}: {s}\n", .{ error_code, description });
 }
 
 pub fn main() !void {
-    var gl_procs: gl.ProcTable = undefined;
-
     std.debug.print("[Main]: Hello!\n", .{});
     glfw.setErrorCallback(errorCallback);
 
