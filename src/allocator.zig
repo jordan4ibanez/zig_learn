@@ -40,5 +40,8 @@ pub fn free(memory: anytype) void {
 /// Only use this for talking to things like OpenGL and Vulkan.
 ///
 pub fn get() std.mem.Allocator {
+    if (allocator == undefined) {
+        std.log.err("[Allocator]: The allocator is null.", .{});
+    }
     return allocator;
 }
