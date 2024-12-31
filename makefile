@@ -1,2 +1,2 @@
 default:
-	zig run src/main.zig
+	@zig build run
