@@ -46,8 +46,6 @@ fn errorCallback(error_code: glfw.ErrorCode, description: [:0]const u8) void {
     std.log.err("glfw: {}: {s}\n", .{ error_code, description });
 }
 
-//* PUBLIC API BEGINS HERE ===========================================================
-
 pub fn terminate() void {
     gl.makeProcTableCurrent(null);
     std.debug.print("[OpenGL]: Process pointers nullified.\n", .{});
@@ -56,6 +54,8 @@ pub fn terminate() void {
     glfw.terminate();
     std.debug.print("[GLFW]: Terminated.\n", .{});
 }
+
+//* PUBLIC API BEGINS HERE ===========================================================
 
 pub fn shouldClose() bool {
     return window.shouldClose();
