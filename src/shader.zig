@@ -43,9 +43,10 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
 
     // gl.ShaderSource(vertex_id, 1, )
 
-    const x = allocator.alloc(u8, 1);
+    var x: []u32 = allocator.alloc(u32, 1);
     defer allocator.free(x);
-    // x = try allocator.realloc(x, 2);
+
+    x = allocator.realloc(x, 2);
 
     std.debug.print("{any}\n", .{x});
 

@@ -34,19 +34,21 @@ pub fn destroy(ptr: anytype) void {
 }
 
 pub fn alloc(comptime T: type, n: usize) []T {
-    const r = allocator.alloc(T, n) catch |err| {
+    return allocator.alloc(T, n) catch |err| {
         std.log.err("{}", .{err});
         std.process.exit(1);
     };
-    return r;
 }
 
 pub fn free(memory: anytype) void {
     allocator.free(memory);
 }
 
-pub fn realloc(comptime T: type, new_n: usize) std.mem.Allocator.Error![]T {
-    return allocator.realloc(T, new_n);
+pub fn realloc(old_mem: anytype, new_n: usize) @TypeOf(old_mem) {
+    return allocator.realloc(old_mem, new_n) catch |err| {
+        std.log.err("{}", .{err});
+        std.process.exit(1);
+    };
 }
 
 ///
