@@ -22,18 +22,10 @@ pub fn main() !void {
     defer allocator.terminate();
 
     mesh.initialize();
+    defer mesh.terminate();
 
-    const data = try allocator.create(blah);
-    defer allocator.destroy(data);
-
-    std.debug.print("{any}\n", .{data});
-
-    data.x = 1;
-
-    std.debug.print("{any}", .{data});
-
-    // window.initialize();
-    // defer window.terminate();
+    window.initialize();
+    defer window.terminate();
 
     // var projection = za.perspective(45.0, 800.0 / 600.0, 0.1, 100.0);
     // projection.debugPrint();
