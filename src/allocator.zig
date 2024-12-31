@@ -6,6 +6,9 @@ var gpa: std.heap.GeneralPurposeAllocator(.{}) = undefined;
 var allocator: std.mem.Allocator = undefined;
 
 pub fn initialize() void {
+    // Thanks to Eyad for notifying that this will need to be [.init]
+    // instead of [{}] when 0.14 releases.
+    // todo: 0.14 release fix.
     gpa = std.heap.GeneralPurposeAllocator(.{}){};
     allocator = gpa.allocator();
 }
