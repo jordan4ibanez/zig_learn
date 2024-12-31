@@ -2,7 +2,7 @@ const std = @import("std");
 const allocator = @import("allocator.zig");
 const gl = @import("gl");
 
-const Mesh = struct {
+pub const Mesh = struct {
     vao: gl.uint,
     position: gl.uint,
     color: gl.uint,
@@ -19,3 +19,9 @@ pub fn initialize() void {
 pub fn terminate() void {
     database.clearAndFree();
 }
+
+//* PUBLIC API ==============================================
+
+// pub fn new_mesh(positions: *[]f32, colors: *[]f32) void {
+
+// }
