@@ -46,24 +46,26 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
 }
 
 fn readFileToString(location: []const u8) []const u8 {
-    var x: []u8 = allocator.alloc(u8, 0);
-
-    x = allocator.realloc(x, x.len + 2);
-
     const code_file = std.fs.cwd().openFile(location, .{}) catch |err| {
-        std.log.err("[Shader]: Failed to load code for shader. {s}", .{@errorName(err)});
+        std.log.err("[Shader]: Failed to open file for {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
     defer code_file.close();
 
-    _ = code_file.readAll(x) catch |err| {
-        std.log.err("[Shader]: Failed to load code for shader. {s}", .{@errorName(err)});
+    var buffer: []u8 = allocator.alloc(u8, 0);
+
+    const blah = code_file.getEndPos() catch |err| {
+        std.log.err("[Shader]: Failed to get file length for {s}. {s}", .{ location, @errorName(err) });
+        std.process.exit(1);
+    };
+    buffer = allocator.realloc(buffer, blah);
+
+    _ = code_file.readAll(buffer) catch |err| {
+        std.log.err("[Shader]: Failed to read file for {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
 
-    // std.debug.print("this {any} {any}\n", .{ x, location });
-
-    return x;
+    return buffer;
 }
 
 ///
