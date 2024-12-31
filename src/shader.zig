@@ -36,21 +36,34 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
         name,
     );
 
-    const vert_source_code = std.fs.cwd().openFile(vert_path, .{}) catch |err| {
-        std.log.err("[Shader]: Failed to load vertex code for shader {s}. {s}", .{ name, @errorName(err) });
-        std.process.exit(1);
-    };
+    const x = readFileToString("shaders/vertex.vert");
+    defer allocator.free(x);
+    std.debug.print("{s}", .{x});
 
     // gl.ShaderSource(vertex_id, 1, )
 
-    var x: []u32 = allocator.alloc(u32, 1);
-    defer allocator.free(x);
+    std.debug.print("{} {}\n", .{ program_id, vertex_id });
+}
 
-    x = allocator.realloc(x, 2);
+fn readFileToString(location: []const u8) []const u8 {
+    var x: []u8 = allocator.alloc(u8, 0);
 
-    std.debug.print("{any}\n", .{x});
+    x = allocator.realloc(x, x.len + 2);
 
-    std.debug.print("{} {} {}\n", .{ program_id, vertex_id, vert_source_code });
+    const code_file = std.fs.cwd().openFile(location, .{}) catch |err| {
+        std.log.err("[Shader]: Failed to load code for shader. {s}", .{@errorName(err)});
+        std.process.exit(1);
+    };
+    defer code_file.close();
+
+    _ = code_file.readAll(x) catch |err| {
+        std.log.err("[Shader]: Failed to load code for shader. {s}", .{@errorName(err)});
+        std.process.exit(1);
+    };
+
+    // std.debug.print("this {any} {any}\n", .{ x, location });
+
+    return x;
 }
 
 ///
