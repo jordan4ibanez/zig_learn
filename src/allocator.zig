@@ -10,6 +10,8 @@ pub fn initialize() void {
     // Thanks to Eyad for notifying that this will need to be [.init]
     // instead of [{}] when 0.14 releases.
     // todo: 0.14 release fix.
+    // Freakman notes that it can literally be called as so:
+    // gpa = .init; 
     gpa = std.heap.GeneralPurposeAllocator(.{}){};
     allocator = gpa.allocator();
     valid_pointer = true;
