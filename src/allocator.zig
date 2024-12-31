@@ -11,7 +11,7 @@ pub fn initialize() void {
     // instead of [{}] when 0.14 releases.
     // todo: 0.14 release fix.
     // Freakman notes that it can literally be called as so:
-    // gpa = .init; 
+    // gpa = .init;
     gpa = std.heap.GeneralPurposeAllocator(.{}){};
     allocator = gpa.allocator();
     valid_pointer = true;
@@ -33,12 +33,20 @@ pub fn destroy(ptr: anytype) void {
     allocator.destroy(ptr);
 }
 
-pub fn alloc(comptime T: type, n: usize) std.mem.Allocator.Error![]T {
-    allocator.alloc(T, n);
+pub fn alloc(comptime T: type, n: usize) []T {
+    const r = allocator.alloc(T, n) catch |err| {
+        std.log.err("{}", .{err});
+        std.process.exit(1);
+    };
+    return r;
 }
 
 pub fn free(memory: anytype) void {
     allocator.free(memory);
+}
+
+pub fn realloc(comptime T: type, new_n: usize) std.mem.Allocator.Error![]T {
+    return allocator.realloc(T, new_n);
 }
 
 ///
