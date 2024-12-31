@@ -17,6 +17,7 @@ pub fn initialize() void {
 }
 
 pub fn terminate() void {
+    // todo: make this thing clean the GPU memory.
     database.clearAndFree();
 }
 
