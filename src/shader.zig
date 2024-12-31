@@ -23,6 +23,13 @@ pub fn terminate() void {
 
 pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void {
     std.debug.print("{s}{s}{s}\n", .{ name, vert_path, frag_path });
+
+    const program_id = gl.CreateProgram();
+
+    if (program_id == 0) {
+        std.log.err("[Shader]: Failed to create program ID for shader {s}.", .{name});
+        std.process.exit(1);
+    }
+
     
-        
 }
