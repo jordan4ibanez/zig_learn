@@ -1,6 +1,7 @@
 const std = @import("std");
 const gl = @import("gl");
 const allocator = @import("allocator.zig");
+const shader = @import("shader.zig");
 const mesh = @import("mesh.zig");
 
 // const za = @import("zalgebra");
@@ -21,11 +22,14 @@ pub fn main() !void {
     allocator.initialize();
     defer allocator.terminate();
 
-    mesh.initialize();
-    defer mesh.terminate();
-
     window.initialize();
     defer window.terminate();
+
+    shader.initialize();
+    defer shader.terminate();
+
+    mesh.initialize();
+    defer mesh.terminate();
 
     // var projection = za.perspective(45.0, 800.0 / 600.0, 0.1, 100.0);
     // projection.debugPrint();
