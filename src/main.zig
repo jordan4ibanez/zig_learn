@@ -1,6 +1,8 @@
 const std = @import("std");
 const gl = @import("gl");
 const allocator = @import("allocator.zig");
+const mesh = @import("mesh.zig");
+
 // const za = @import("zalgebra");
 // const Vec3 = za.Vec3;
 // const Mat4 = za.Mat4;
@@ -18,6 +20,8 @@ pub fn main() !void {
 
     allocator.initialize();
     defer allocator.terminate();
+
+    mesh.initialize();
 
     const data = try allocator.create(blah);
     defer allocator.destroy(data);

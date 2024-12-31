@@ -4,6 +4,7 @@ const std = @import("std");
 
 var gpa: std.heap.GeneralPurposeAllocator(.{}) = undefined;
 var allocator: std.mem.Allocator = undefined;
+var valid_pointer = false;
 
 pub fn initialize() void {
     // Thanks to Eyad for notifying that this will need to be [.init]
@@ -11,6 +12,7 @@ pub fn initialize() void {
     // todo: 0.14 release fix.
     gpa = std.heap.GeneralPurposeAllocator(.{}){};
     allocator = gpa.allocator();
+    valid_pointer = true;
 }
 
 pub fn terminate() void {
@@ -18,6 +20,7 @@ pub fn terminate() void {
     if (deinit_status == .leak) {
         std.log.err("[Allocator]: Error, memory leak.", .{});
     }
+    valid_pointer = false;
 }
 
 pub fn create(comptime T: type) std.mem.Allocator.Error!*T {
@@ -40,7 +43,7 @@ pub fn free(memory: anytype) void {
 /// Only use this for talking to things like OpenGL and Vulkan.
 ///
 pub fn get() std.mem.Allocator {
-    if (allocator == undefined) {
+    if (!valid_pointer) {
         std.log.err("[Allocator]: The allocator is null.", .{});
     }
     return allocator;
