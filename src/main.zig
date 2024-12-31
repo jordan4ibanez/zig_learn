@@ -1,13 +1,28 @@
 const std = @import("std");
 const gl = @import("gl");
+const allocator = @import("allocator.zig");
 // const za = @import("zalgebra");
 // const Vec3 = za.Vec3;
 // const Mat4 = za.Mat4;
 
 const window = @import("window.zig");
 
+const blah = struct { x: i32 };
+
+pub fn cool(x: i32) void {
+    std.debug.print("{i}\n", .{x});
+}
+
 pub fn main() !void {
     std.debug.print("[Main]: Hello!\n", .{});
+
+    allocator.initialize();
+    defer allocator.terminate();
+
+    const data = try allocator.create(blah);
+    defer allocator.destroy(data);
+
+    std.debug.print("{any}\n", .{data});
 
     // window.initialize();
     // defer window.terminate();
@@ -22,5 +37,4 @@ pub fn main() !void {
     //     window.pollEvents();
     // }
 
-    
 }
