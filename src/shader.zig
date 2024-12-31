@@ -44,28 +44,7 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
     std.debug.print("{} {}\n", .{ program_id, vertex_id });
 }
 
-fn readFileToString(location: []const u8) []const u8 {
-    const code_file = std.fs.cwd().openFile(location, .{}) catch |err| {
-        std.log.err("[Shader]: Failed to open file for {s}. {s}", .{ location, @errorName(err) });
-        std.process.exit(1);
-    };
-    defer code_file.close();
 
-    var buffer: []u8 = allocator.alloc(u8, 0);
-
-    const blah = code_file.getEndPos() catch |err| {
-        std.log.err("[Shader]: Failed to get file length for {s}. {s}", .{ location, @errorName(err) });
-        std.process.exit(1);
-    };
-    buffer = allocator.realloc(buffer, blah);
-
-    _ = code_file.readAll(buffer) catch |err| {
-        std.log.err("[Shader]: Failed to read file for {s}. {s}", .{ location, @errorName(err) });
-        std.process.exit(1);
-    };
-
-    return buffer;
-}
 
 ///
 /// In OpenGL, when generating buffers, object, arrays, 0 means failure.
