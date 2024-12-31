@@ -17,8 +17,6 @@ pub fn cool(x: i32) void {
 }
 
 pub fn main() !void {
-    std.debug.print("[Main]: Hello!\n", .{});
-
     allocator.initialize();
     defer allocator.terminate();
 
@@ -30,6 +28,12 @@ pub fn main() !void {
 
     mesh.initialize();
     defer mesh.terminate();
+
+    shader.new(
+        "main",
+        "shaders/vertex.vert",
+        "shaders/fragment.frag",
+    );
 
     // var projection = za.perspective(45.0, 800.0 / 600.0, 0.1, 100.0);
     // projection.debugPrint();
