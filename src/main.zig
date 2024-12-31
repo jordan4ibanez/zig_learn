@@ -7,7 +7,7 @@ const allocator = @import("allocator.zig");
 
 const window = @import("window.zig");
 
-const blah = struct { x: i32 };
+const blah = struct { x: i32 = 0 };
 
 pub fn cool(x: i32) void {
     std.debug.print("{i}\n", .{x});
@@ -23,6 +23,10 @@ pub fn main() !void {
     defer allocator.destroy(data);
 
     std.debug.print("{any}\n", .{data});
+
+    data.x = 1;
+
+    std.debug.print("{any}", .{data});
 
     // window.initialize();
     // defer window.terminate();

@@ -27,3 +27,18 @@ pub fn create(comptime T: type) std.mem.Allocator.Error!*T {
 pub fn destroy(ptr: anytype) void {
     allocator.destroy(ptr);
 }
+
+pub fn alloc(comptime T: type, n: usize) std.mem.Allocator.Error![]T {
+    allocator.alloc(T, n);
+}
+
+pub fn free(memory: anytype) void {
+    allocator.free(memory);
+}
+
+///
+/// Only use this for talking to things like OpenGL and Vulkan.
+///
+pub fn get() std.mem.Allocator {
+    return allocator;
+}
