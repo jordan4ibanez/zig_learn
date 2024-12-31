@@ -1,6 +1,7 @@
 const std = @import("std");
 const allocator = @import("allocator.zig");
 const gl = @import("gl");
+const file = @import("file.zig");
 
 var database: std.StringHashMap(u32) = undefined;
 
@@ -36,15 +37,19 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
         name,
     );
 
-    const vertex_code = readFileToString(vert_path);
+    const vertex_code: []const u8 = file.readToNullTerminatedString(vert_path);
     defer allocator.free(vertex_code);
 
-    // gl.ShaderSource(vertex_id, 1, )
+    const blah: [:0]const u8 = @as([:0]const u8, @ptrCast(vertex_code));
+
+    std.debug.print("{s}", .{blah});
+
+    // I took this part from https://github.com/slimsag/mach-glfw-opengl-example/blob/main/src/main.zig#L158
+    // Ain't know way I'm gonna figure out that as a noobie.
+    gl.ShaderSource(vertex_id, 1, (&vertex_code.ptr)[0..1], (&@as(c_int, @intCast(vertex_code.len)))[0..1]);
 
     std.debug.print("{} {}\n", .{ program_id, vertex_id });
 }
-
-
 
 ///
 /// In OpenGL, when generating buffers, object, arrays, 0 means failure.
