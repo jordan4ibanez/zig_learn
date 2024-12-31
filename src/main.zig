@@ -27,10 +27,9 @@ pub fn main() !void {
 
     glfw.makeContextCurrent(window);
 
-    // gl.clearColor(1.0, 1.0, 1.0, 1.0);
-    // gl.clear(.{ .color = true, .depth = false, .stencil = false });
-
     while (!window.shouldClose()) {
+        gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        gl.clear(.{ .color = true, .depth = false, .stencil = false });
         window.swapBuffers();
         glfw.pollEvents();
     }
