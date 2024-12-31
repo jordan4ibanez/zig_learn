@@ -36,9 +36,8 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
         name,
     );
 
-    const x = readFileToString("shaders/vertex.vert");
-    defer allocator.free(x);
-    std.debug.print("{s}", .{x});
+    const vertex_code = readFileToString(vert_path);
+    defer allocator.free(vertex_code);
 
     // gl.ShaderSource(vertex_id, 1, )
 
