@@ -31,9 +31,9 @@
             .url = "git+https://github.com/castholm/zigglgen#1c901bef6d312ef1814b8fce3c5a9e9e8e61ac2d",
             .hash = "12209d8a018832bee15d9da29a12fa753d89b56cd843cdf1f39501546c6467e38ba1",
         },
-        .zm = .{
-            .url = "git+https://github.com/griush/zm#98bd59aa0518d7fb3ff37a1c5c9c5be2eee5fb8b",
-            .hash = "12202ecfbd1adb731c57231d4345f297dbaf549140c0c07b6fd36b6d9dea530be20c",
+        .zalgebra = .{
+            .url = "git+https://github.com/kooparse/zalgebra#0ff2b6093a410b26a294d4ed53985882256072a1",
+            .hash = "1220fbbcfa859f668d69b4f7d2aa621d13b128a77b46965e6c4aae35f9c1d7b85eb8",
         },
     },
     .paths = .{

@@ -50,9 +50,15 @@ pub fn build(b: *std.Build) void {
         .profile = .core,
         .extensions = &.{ .ARB_clip_control, .NV_scissor_exclusive },
     });
-
     // Import the generated module.
     exe.root_module.addImport("gl", gl_bindings);
+
+    const zalgebra_dep = b.dependency("zalgebra", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    const zalgebra_module = zalgebra_dep.module("zalgebra");
+    exe.root_module.addImport("zalgebra", zalgebra_module);
 
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
