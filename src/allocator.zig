@@ -4,7 +4,7 @@ const std = @import("std");
 
 var gpa: std.heap.GeneralPurposeAllocator(.{}) = undefined;
 var allocator: std.mem.Allocator = undefined;
-var valid_pointer = false;
+var validPointer = false;
 
 pub fn initialize() void {
     // Thanks to Eyad for notifying that this will need to be [.init]
@@ -14,15 +14,15 @@ pub fn initialize() void {
     // gpa = .init;
     gpa = std.heap.GeneralPurposeAllocator(.{}){};
     allocator = gpa.allocator();
-    valid_pointer = true;
+    validPointer = true;
 }
 
 pub fn terminate() void {
-    const deinit_status = gpa.deinit();
-    if (deinit_status == .leak) {
+    const deinitStatus = gpa.deinit();
+    if (deinitStatus == .leak) {
         std.log.err("[Allocator]: Error, memory leak.", .{});
     }
-    valid_pointer = false;
+    validPointer = false;
 }
 
 pub fn create(comptime T: type) std.mem.Allocator.Error!*T {
@@ -44,15 +44,15 @@ pub fn free(memory: anytype) void {
     allocator.free(memory);
 }
 
-pub fn realloc(old_mem: anytype, new_n: usize) @TypeOf(old_mem) {
-    return allocator.realloc(old_mem, new_n) catch |err| {
+pub fn realloc(oldMem: anytype, newSize: usize) @TypeOf(oldMem) {
+    return allocator.realloc(oldMem, newSize) catch |err| {
         std.log.err("{}", .{err});
         std.process.exit(1);
     };
 }
 
 ///
-/// Only use this for talking to things like OpenGL and Vulkan.
+/// Get the raw allocator object.
 ///
 pub fn get() std.mem.Allocator {
     if (!validPointer) {
