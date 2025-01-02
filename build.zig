@@ -36,9 +36,9 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    //* BEGIN INTERNAL MODULES ==========================================================
+    //* BEGIN INTERNAL MODULES. ==========================================================
 
-    // I call this style: dumpEverythingIntoAModule3000
+    // I call this style: dumpEverythingIntoAModule4000
 
     const Searcher = struct {
         fn search(dirString: []const u8, allocator: std.mem.Allocator, moduleMap: *std.hash_map.StringHashMap([]const u8)) void {
@@ -85,12 +85,15 @@ pub fn build(b: *std.Build) void {
                         continue;
                     }
 
-                    const moduleName = allocator.alloc(u8, file.name.len - 4) catch |err| {
+                    // If you don't want the full path, you can change the module name to:
+                    // file.name.len - 4 and memcpy it the same way.
+
+                    const moduleName = allocator.alloc(u8, newDirString.len - 8) catch |err| {
                         std.log.err("{}", .{err});
                         std.process.exit(1);
                     };
 
-                    @memcpy(moduleName, file.name[0 .. file.name.len - 4]);
+                    @memcpy(moduleName, newDirString[4 .. newDirString.len - 4]);
 
                     moduleMap.put(moduleName, newDirString) catch |err| {
                         std.log.err("{}", .{err});
@@ -98,7 +101,7 @@ pub fn build(b: *std.Build) void {
                     };
 
                     // std.debug.print("file: {s}\n", .{file.name[file.name.len - 4 ..]});
-                    // std.debug.print("module name: {s}\n", .{moduleName});
+                    std.debug.print("module name: {s}\n", .{moduleName});
                     // std.debug.print("file: {s}\n", .{newDirString});
                 }
 
@@ -132,7 +135,7 @@ pub fn build(b: *std.Build) void {
 
     moduleMap.clearAndFree();
 
-    //* BEGIN EXTERNAL MODULES ==========================================================
+    //* BEGIN EXTERNAL MODULES. ==========================================================
 
     // Use mach-glfw
     const glfw_dep = b.dependency("mach-glfw", .{
