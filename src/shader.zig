@@ -31,8 +31,11 @@ pub fn terminate() void {
     database.clearAndFree();
 }
 
-//* PUBLIC API ==============================================
+//* PUBLIC API. ==============================================
 
+///
+/// Create a new shader from vertex and fragment files.
+///
 pub fn new(name: []const u8, vertPath: []const u8, fragPath: []const u8) void {
     const programID = checkValidity(
         gl.CreateProgram(),
@@ -66,6 +69,20 @@ pub fn new(name: []const u8, vertPath: []const u8, fragPath: []const u8) void {
 
     std.debug.print("[Shader]: Successfully created shader {s}\n", .{name});
 }
+
+///
+/// Start a shader.
+///
+pub fn start(name: []const u8) void {
+    const currentID = database.get(name) orelse {
+        std.log.err("[Shader]: Failed to start program {s}. Does not exist.", .{name});
+        std.process.exit(1);
+    };
+
+    gl.UseProgram(currentID);
+}
+
+//* INTERNAL API. ==============================================
 
 ///
 /// For detaching and deleting a shader. Simply encapsulates the logic in this function.
