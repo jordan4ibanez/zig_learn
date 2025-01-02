@@ -55,8 +55,9 @@ pub fn realloc(old_mem: anytype, new_n: usize) @TypeOf(old_mem) {
 /// Only use this for talking to things like OpenGL and Vulkan.
 ///
 pub fn get() std.mem.Allocator {
-    if (!valid_pointer) {
-        std.log.err("[Allocator]: The allocator is null.", .{});
+    if (!validPointer) {
+        std.log.err("[Allocator]: The allocator is null", .{});
+        std.process.exit(1);
     }
     return allocator;
 }
