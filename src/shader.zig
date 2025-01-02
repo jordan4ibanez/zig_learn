@@ -22,24 +22,34 @@ pub fn terminate() void {
 
 //* PUBLIC API ==============================================
 
-pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void {
-    std.debug.print("{s} {s} {s}\n", .{ name, vert_path, frag_path });
+pub fn new(name: []const u8, vertPath: []const u8, fragPath: []const u8) void {
+    std.debug.print("{s} {s} {s}\n", .{ name, vertPath, fragPath });
 
-    const program_id = check_validity(
+    const programID = checkValidity(
         gl.CreateProgram(),
         "program ID",
         name,
     );
 
-    const vertex_id = check_validity(
+    const vertexID = checkValidity(
         gl.CreateShader(gl.VERTEX_SHADER),
         "vertex shader",
         name,
     );
+    compileAndCheckShader(vertexID, name, vertPath);
 
-    compileAndCheckShader(vertex_id, name, vert_path);
+    const fragmentID = checkValidity(
+        gl.CreateShader(gl.FRAGMENT_SHADER),
+        "fragment shader",
+        name,
+    );
+    compileAndCheckShader(fragmentID, name, fragPath);
 
-    std.debug.print("{}\n", .{program_id});
+    gl.AttachShader(programID, vertexID);
+    gl.AttachShader(programID, fragmentID);
+    gl.LinkProgram(programID);
+
+    
 }
 
 ///
@@ -63,7 +73,7 @@ fn compileAndCheckShader(id: gl.uint, name: []const u8, codePath: []const u8) vo
 ///
 /// In OpenGL, when generating buffers, object, arrays, 0 means failure.
 ///
-fn check_validity(id: c_uint, data_component: []const u8, name: []const u8) c_uint {
+fn checkValidity(id: c_uint, data_component: []const u8, name: []const u8) c_uint {
     if (id == 0) {
         std.log.err("[Shader]: Failed to create {s} for shader {d}.", .{ data_component, name });
         std.process.exit(1);
