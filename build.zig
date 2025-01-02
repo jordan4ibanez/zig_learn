@@ -38,31 +38,99 @@ pub fn build(b: *std.Build) void {
 
     //* BEGIN INTERNAL MODULES ==========================================================
 
-    var modules = std.StringHashMap([]const u8).init(b.allocator);
+    // I call this style: dumpEverythingIntoAModule3000
 
-    const addMod = fn (name: []const u8, dir: []const u8) void{
-        modules.put(name, dir) catch |err| {
-            
-        };
-     };
+    const Searcher = struct {
+        fn search(dirString: []const u8, allocator: std.mem.Allocator, moduleMap: *std.hash_map.StringHashMap([]const u8)) void {
+            // std.debug.print("hi {s}\n", .{dir});
 
-    // Added as module name, path.
-    
+            var dir = std.fs.cwd().openDir(dirString, .{ .iterate = true }) catch |err| {
+                std.log.err("{}", .{err});
+                std.process.exit(1);
+            };
 
-    const mods = modules.iterator();
+            var iter = dir.iterate();
+            while (iter.next() catch |err| {
+                std.log.err("{}", .{err});
+                std.process.exit(1);
+            }) |file| {
+                if (file.kind == .directory) {
+                    const newDirString = std.fmt.allocPrint(allocator, "{s}/{s}", .{ dirString, file.name }) catch |err| {
+                        std.log.err("{}", .{err});
+                        std.process.exit(1);
+                    };
+                    defer allocator.free(newDirString);
 
-    std.debug.print("{any}", .{mods});
+                    // std.debug.print("folder: {s}\n", .{newDirString});
+                    search(newDirString, allocator, moduleMap);
+                }
 
-    // todo: turning this thing into an automated abomination.
-    const mesh = b.createModule(
-        .{
-            .root_source_file = b.path("src/graphics/mesh.zig"),
+                // This could maybe search for an ignore.txt for specific folders or something.
+
+                if (file.kind == .file) {
+                    const newDirString = std.fmt.allocPrint(allocator, "{s}/{s}", .{ dirString, file.name }) catch |err| {
+                        std.log.err("{}", .{err});
+                        std.process.exit(1);
+                    };
+                    // defer allocator.free(newDirString);
+
+                    // Ignore anything but zig files.
+                    if (std.mem.eql(u8, file.name[file.name.len - 4 ..], "zig")) {
+                        continue;
+                    }
+
+                    // This could have more things added in. :)
+                    if (std.mem.eql(u8, file.name, "main.zig") or std.mem.eql(u8, file.name, "root.zig")) {
+                        // std.debug.print("nope, {s}\n", .{file.name});
+                        continue;
+                    }
+
+                    const moduleName = allocator.alloc(u8, file.name.len - 4) catch |err| {
+                        std.log.err("{}", .{err});
+                        std.process.exit(1);
+                    };
+
+                    @memcpy(moduleName, file.name[0 .. file.name.len - 4]);
+
+                    moduleMap.put(moduleName, newDirString) catch |err| {
+                        std.log.err("{}", .{err});
+                        std.process.exit(1);
+                    };
+
+                    // std.debug.print("file: {s}\n", .{file.name[file.name.len - 4 ..]});
+                    // std.debug.print("module name: {s}\n", .{moduleName});
+                    // std.debug.print("file: {s}\n", .{newDirString});
+                }
+
+                // try files.append(b.dupe(file.name));
+            }
+        }
+    };
+
+    var moduleMap = std.StringHashMap([]const u8).init(b.allocator);
+
+    Searcher.search("src", b.allocator, &moduleMap);
+
+    var iter = moduleMap.iterator();
+
+    while (iter.next()) |entry| {
+        const moduleName = entry.key_ptr.*;
+        defer b.allocator.free(entry.key_ptr.*);
+        const modulePath = entry.value_ptr.*;
+        defer b.allocator.free(entry.value_ptr.*);
+
+        std.debug.print("Module: [{s}] added | [{s}]\n", .{ moduleName, modulePath });
+
+        const mod = b.createModule(.{
+            .root_source_file = b.path(modulePath),
             .target = target,
             .optimize = optimize,
-        },
-    );
+        });
 
-    exe.root_module.addImport("mesh", mesh);
+        exe.root_module.addImport(moduleName, mod);
+    }
+
+    moduleMap.clearAndFree();
 
     //* BEGIN EXTERNAL MODULES ==========================================================
 
