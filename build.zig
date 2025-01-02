@@ -36,9 +36,35 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    //* BEGIN EXTERNAL MODULES. ==========================================================
+
+    // Use mach-glfw
+    const glfw_dep = b.dependency("mach-glfw", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    exe.root_module.addImport("mach-glfw", glfw_dep.module("mach-glfw"));
+
+    // Choose the OpenGL API, version, profile and extensions you want to generate bindings for.
+    const gl_bindings = @import("zigglgen").generateBindingsModule(b, .{
+        .api = .gl,
+        .version = .@"4.6",
+        .profile = .core,
+        .extensions = &.{ .ARB_clip_control, .NV_scissor_exclusive },
+    });
+    // Import the generated module.
+    exe.root_module.addImport("gl", gl_bindings);
+
+    const zalgebra_dep = b.dependency("zalgebra", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    const zalgebra_module = zalgebra_dep.module("zalgebra");
+    exe.root_module.addImport("zalgebra", zalgebra_module);
+
     //* BEGIN INTERNAL MODULES. ==========================================================
 
-    // I call this style: dumpEverythingIntoAModule4000
+    // I call this style: dumpEverythingIntoAModule5000
 
     const Searcher = struct {
         fn search(dirString: []const u8, allocator: std.mem.Allocator, moduleMap: *std.hash_map.StringHashMap([]const u8)) void {
@@ -118,48 +144,32 @@ pub fn build(b: *std.Build) void {
 
     while (iter.next()) |entry| {
         const moduleName = entry.key_ptr.*;
-        defer b.allocator.free(entry.key_ptr.*);
+        // defer b.allocator.free(entry.key_ptr.*);
         const modulePath = entry.value_ptr.*;
-        defer b.allocator.free(entry.value_ptr.*);
+        // defer b.allocator.free(entry.value_ptr.*);
 
         // std.debug.print("Module: [{s}] added | [{s}]\n", .{ moduleName, modulePath });
+
+        // const blah: *std.Build.Module = exe.root_module.import_table.get("k") orelse {
+        //     std.process.exit(1);
+        // };
 
         const mod = b.createModule(.{
             .root_source_file = b.path(modulePath),
             .target = target,
             .optimize = optimize,
+            .imports = &.{},
         });
+
+        // A smol price to pay, you have to duplicate add in modules from the main scope.
+        mod.addImport("mach-glfw", glfw_dep.module("mach-glfw"));
+        mod.addImport("gl", gl_bindings);
+        mod.addImport("zalgebra", zalgebra_module);
 
         exe.root_module.addImport(moduleName, mod);
     }
 
     moduleMap.clearAndFree();
-
-    //* BEGIN EXTERNAL MODULES. ==========================================================
-
-    // Use mach-glfw
-    const glfw_dep = b.dependency("mach-glfw", .{
-        .target = target,
-        .optimize = optimize,
-    });
-    exe.root_module.addImport("mach-glfw", glfw_dep.module("mach-glfw"));
-
-    // Choose the OpenGL API, version, profile and extensions you want to generate bindings for.
-    const gl_bindings = @import("zigglgen").generateBindingsModule(b, .{
-        .api = .gl,
-        .version = .@"4.6",
-        .profile = .core,
-        .extensions = &.{ .ARB_clip_control, .NV_scissor_exclusive },
-    });
-    // Import the generated module.
-    exe.root_module.addImport("gl", gl_bindings);
-
-    const zalgebra_dep = b.dependency("zalgebra", .{
-        .target = target,
-        .optimize = optimize,
-    });
-    const zalgebra_module = zalgebra_dep.module("zalgebra");
-    exe.root_module.addImport("zalgebra", zalgebra_module);
 
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
