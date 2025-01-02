@@ -1,14 +1,13 @@
 const std = @import("std");
 const gl = @import("gl");
-const allocator = @import("allocator.zig");
+// const za = @import("zalgebra");
+const allocator = @import("utility/allocator.zig");
 const shader = @import("graphics/shader.zig");
 const mesh = @import("graphics/mesh.zig");
+const window = @import("graphics/window.zig");
 
-// const za = @import("zalgebra");
 // const Vec3 = za.Vec3;
 // const Mat4 = za.Mat4;
-
-const window = @import("window.zig");
 
 const blah = struct { x: i32 = 0 };
 
