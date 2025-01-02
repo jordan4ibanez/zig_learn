@@ -23,8 +23,6 @@ pub fn terminate() void {
 //* PUBLIC API ==============================================
 
 pub fn new(name: []const u8, vertPath: []const u8, fragPath: []const u8) void {
-    std.debug.print("{s} {s} {s}\n", .{ name, vertPath, fragPath });
-
     const programID = checkValidity(
         gl.CreateProgram(),
         "program ID",
@@ -49,6 +47,13 @@ pub fn new(name: []const u8, vertPath: []const u8, fragPath: []const u8) void {
     ensureShaderLink(programID, name);
 
     detachShaders(name, programID, vertexID, fragmentID);
+
+    database.put(name, programID) catch |err| {
+        std.log.err("[Shader]: Failed to store shader {s} in database. {}", .{ name, err });
+        std.process.exit(1);
+    };
+
+    std.debug.print("[Shader]: Successfully created shader {s}\n", .{name});
 }
 
 ///
