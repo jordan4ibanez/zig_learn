@@ -38,8 +38,22 @@ pub fn build(b: *std.Build) void {
 
     //* BEGIN INTERNAL MODULES ==========================================================
 
+    var modules = std.StringHashMap([]const u8).init(b.allocator);
+
+    const addMod = fn (name: []const u8, dir: []const u8) void{
+        modules.put(name, dir) catch |err| {
+            
+        };
+     };
+
+    // Added as module name, path.
     
 
+    const mods = modules.iterator();
+
+    std.debug.print("{any}", .{mods});
+
+    // todo: turning this thing into an automated abomination.
     const mesh = b.createModule(
         .{
             .root_source_file = b.path("src/graphics/mesh.zig"),
