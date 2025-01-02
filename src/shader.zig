@@ -40,15 +40,25 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
     const vertex_code: []const u8 = file.readToNullTerminatedString(vert_path);
     defer allocator.free(vertex_code);
 
-    const blah: [:0]const u8 = @as([:0]const u8, @ptrCast(vertex_code));
-
-    std.debug.print("{s}", .{blah});
-
     // I took this part from https://github.com/slimsag/mach-glfw-opengl-example/blob/main/src/main.zig#L158
     // Ain't know way I'm gonna figure out that as a noobie.
     gl.ShaderSource(vertex_id, 1, (&vertex_code.ptr)[0..1], (&@as(c_int, @intCast(vertex_code.len)))[0..1]);
+    compileAndCheckShader(vertex_id, "vertex");
 
-    std.debug.print("{} {}\n", .{ program_id, vertex_id });
+    std.debug.print("{}\n", .{program_id});
+}
+
+///
+/// Compile shader. Make sure compiled correctly.
+///
+fn compileAndCheckShader(id: gl.uint, name: []const u8) void {
+    gl.CompileShader(id);
+    var success: c_int = 0;
+    gl.GetShaderiv(id, gl.COMPILE_STATUS, &success);
+    if (success == gl.FALSE) {
+        std.log.err("[Shader]: Failed to compile {s} shader, id {d} .", .{ name, id });
+        std.process.exit(1);
+    }
 }
 
 ///
@@ -56,7 +66,7 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
 ///
 fn check_validity(id: c_uint, data_component: []const u8, name: []const u8) c_uint {
     if (id == 0) {
-        std.log.err("[Shader]: Failed to create {s} for shader {s}.", .{ data_component, name });
+        std.log.err("[Shader]: Failed to create {s} for shader {d}.", .{ data_component, name });
         std.process.exit(1);
     }
     return id;
