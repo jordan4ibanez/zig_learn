@@ -36,6 +36,22 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    //* BEGIN INTERNAL MODULES ==========================================================
+
+    
+
+    const mesh = b.createModule(
+        .{
+            .root_source_file = b.path("src/graphics/mesh.zig"),
+            .target = target,
+            .optimize = optimize,
+        },
+    );
+
+    exe.root_module.addImport("mesh", mesh);
+
+    //* BEGIN EXTERNAL MODULES ==========================================================
+
     // Use mach-glfw
     const glfw_dep = b.dependency("mach-glfw", .{
         .target = target,

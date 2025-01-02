@@ -1,8 +1,8 @@
 const std = @import("std");
 const gl = @import("gl");
 const allocator = @import("allocator.zig");
-const shader = @import("shader.zig");
-const mesh = @import("mesh.zig");
+const shader = @import("graphics/shader.zig");
+const mesh = @import("graphics/mesh.zig");
 
 // const za = @import("zalgebra");
 // const Vec3 = za.Vec3;

@@ -1,7 +1,7 @@
 const std = @import("std");
-const allocator = @import("allocator.zig");
 const gl = @import("gl");
-const file = @import("file.zig");
+const allocator = @import("../allocator.zig");
+const file = @import("../file.zig");
 
 var database: std.StringHashMap(gl.uint) = undefined;
 

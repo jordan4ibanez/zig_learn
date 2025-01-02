@@ -1,6 +1,6 @@
 const std = @import("std");
-const allocator = @import("allocator.zig");
 const gl = @import("gl");
+const allocator = @import("root/allocator.zig");
 
 pub const Mesh = struct {
     vao: gl.uint,
