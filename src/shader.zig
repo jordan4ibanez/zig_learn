@@ -16,7 +16,18 @@ pub fn initialize() void {
 }
 
 pub fn terminate() void {
-    // todo: make this thing clean the GPU memory.
+    gl.UseProgram(0);
+    var databaseIterator = database.iterator();
+    while (databaseIterator.next()) |entry| {
+        const currentID = entry.value_ptr.*;
+        gl.DeleteProgram(currentID);
+        if (gl.IsProgram(currentID) == gl.TRUE) {
+            const currentName = entry.key_ptr.*;
+            std.log.err("[Shader]: Failed to delete program {s}.", .{currentName});
+            std.process.exit(1);
+        }
+    }
+
     database.clearAndFree();
 }
 
