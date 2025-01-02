@@ -37,13 +37,7 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
         name,
     );
 
-    const vertex_code: []const u8 = file.readToNullTerminatedString(vert_path);
-    defer allocator.free(vertex_code);
-
-    // I took this part from https://github.com/slimsag/mach-glfw-opengl-example/blob/main/src/main.zig#L158
-    // Ain't know way I'm gonna figure out that as a noobie.
-    gl.ShaderSource(vertex_id, 1, (&vertex_code.ptr)[0..1], (&@as(c_int, @intCast(vertex_code.len)))[0..1]);
-    compileAndCheckShader(vertex_id, "vertex");
+    compileAndCheckShader(vertex_id, name, vert_path);
 
     std.debug.print("{}\n", .{program_id});
 }
@@ -51,7 +45,12 @@ pub fn new(name: []const u8, vert_path: []const u8, frag_path: []const u8) void 
 ///
 /// Compile shader. Make sure compiled correctly.
 ///
-fn compileAndCheckShader(id: gl.uint, name: []const u8) void {
+fn compileAndCheckShader(id: gl.uint, name: []const u8, codePath: []const u8) void {
+    const shaderCode: []const u8 = file.readToNullTerminatedString(codePath);
+    defer allocator.free(shaderCode);
+    // I took this part from https://github.com/slimsag/mach-glfw-opengl-example/blob/main/src/main.zig#L158
+    // Ain't know way I'm gonna figure out that as a noobie.
+    gl.ShaderSource(id, 1, (&shaderCode.ptr)[0..1], (&@as(c_int, @intCast(shaderCode.len)))[0..1]);
     gl.CompileShader(id);
     var success: c_int = 0;
     gl.GetShaderiv(id, gl.COMPILE_STATUS, &success);
