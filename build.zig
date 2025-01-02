@@ -122,7 +122,7 @@ pub fn build(b: *std.Build) void {
         const modulePath = entry.value_ptr.*;
         defer b.allocator.free(entry.value_ptr.*);
 
-        std.debug.print("Module: [{s}] added | [{s}]\n", .{ moduleName, modulePath });
+        // std.debug.print("Module: [{s}] added | [{s}]\n", .{ moduleName, modulePath });
 
         const mod = b.createModule(.{
             .root_source_file = b.path(modulePath),
