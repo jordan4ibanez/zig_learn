@@ -101,7 +101,7 @@ pub fn build(b: *std.Build) void {
                     };
 
                     // std.debug.print("file: {s}\n", .{file.name[file.name.len - 4 ..]});
-                    std.debug.print("module name: {s}\n", .{moduleName});
+                    // std.debug.print("module name: {s}\n", .{moduleName});
                     // std.debug.print("file: {s}\n", .{newDirString});
                 }
 
