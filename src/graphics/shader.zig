@@ -5,11 +5,11 @@ const file = @import("../utility/file.zig");
 
 var database: std.StringHashMap(gl.uint) = undefined;
 
-const position_vbo_location = 0;
-const color_vbo_location = 1;
+pub const position_vbo_location: gl.uint = 0;
+pub const color_vbo_location: gl.uint = 1;
 
-const camera_matrix_uniform_location = 0;
-const object_matrix_uniform_location = 1;
+pub const camera_matrix_uniform_location: gl.uint = 0;
+pub const object_matrix_uniform_location: gl.uint = 1;
 
 pub fn initialize() void {
     database = std.StringHashMap(gl.uint).init(allocator.get());
@@ -80,6 +80,8 @@ pub fn start(name: []const u8) void {
     };
 
     gl.UseProgram(currentID);
+
+    std.debug.print("[Shader]: Started shader {s}.\n", .{name});
 }
 
 //* INTERNAL API. ==============================================
