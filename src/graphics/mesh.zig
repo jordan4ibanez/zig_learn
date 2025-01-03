@@ -53,6 +53,8 @@ pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indice
 
 //* INTERNAL API. ==============================================
 
+// todo: mesh destroyer function.
+
 ///
 /// Unbinds from the mesh VAO. Then puts it into the database.
 ///
