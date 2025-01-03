@@ -11,10 +11,10 @@ pub const Mesh = struct {
     length: usize,
 };
 
-var database: std.StringHashMap(Mesh) = undefined;
+var database: std.StringHashMap(*Mesh) = undefined;
 
 pub fn initialize() void {
-    database = std.StringHashMap(Mesh).init(allocator.get());
+    database = std.StringHashMap(*Mesh).init(allocator.get());
 }
 
 pub fn terminate() void {
@@ -38,10 +38,22 @@ pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indice
     mesh.vboIndex = indexUpload(indices);
     mesh.length = indices.len;
 
-    gl.BindVertexArray(0);
+    unbindAndAddToDatabase(name, mesh);
 }
 
 //* INTERNAL API. ==============================================
+
+///
+/// Unbinds from the mesh VAO. Then puts it into the database.
+///
+fn unbindAndAddToDatabase(name: []const u8, mesh: *Mesh) void {
+    gl.BindVertexArray(0);
+
+    database.putNoClobber(name, mesh) catch |err| {
+        std.log.err("[Mesh]: Failed to store mesh {s} in database. {}", .{ name, err });
+        std.process.exit(1);
+    };
+}
 
 ///
 /// Creates the initial Vertex Array Object and binds to it.
