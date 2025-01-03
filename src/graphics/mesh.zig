@@ -29,10 +29,28 @@ pub fn new(positions: []f32, colors: []f32) void {
 
     const vboPosition = positionUpload(positions);
 
+    const vboColors = colorUpload(colors);
+
+    _ = &vboColors;
+
     std.debug.print("{any}, {any}, {any}\n", .{ positions, colors, vboPosition });
 }
 
 //* INTERNAL API. ==============================================
+
+///
+/// Upload an array of colors into the GPU.
+///
+fn colorUpload(colors: []f32) gl.uint {
+    var vboColors: gl.uint = 0;
+    gl.GenBuffers(1, (&vboColors)[0..1]);
+    gl.BindBuffer(gl.ARRAY_BUFFER, vboColors);
+    gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * colors.len), colors.ptr, gl.STATIC_DRAW);
+    gl.VertexAttribPointer(vboColors, 3, gl.FLOAT, gl.FALSE, 0, 0);
+    gl.EnableVertexAttribArray(shader.COLOR_VBO_LOCATION);
+    gl.BindBuffer(gl.ARRAY_BUFFER, 0);
+    return vboColors;
+}
 
 ///
 /// Upload an array of positions into the GPU.
