@@ -29,34 +29,40 @@ pub fn new(positions: []const f32, colors: []const f32, indices: []const u32) vo
 
     const vboPosition = positionUpload(positions);
 
-    const vboColors = colorUpload(colors);
+    const vboColor = colorUpload(colors);
 
     const vboIndex = indexUpload(indices);
 
-    _ = &vboColors;
+    _ = &vboColor;
     _ = &vboIndex;
     std.debug.print("{any}, {any}, {any}\n", .{ positions, colors, vboPosition });
 }
 
 //* INTERNAL API. ==============================================
 
+///
+/// Upload array of indices.
+///
 fn indexUpload(indices: []const u32) gl.uint {
-    _ = &indices;
-    return 0;
+    var vboIndex: gl.uint = 0;
+    gl.GenBuffers(1, (&vboIndex)[0..1]);
+    gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, vboIndex);
+    gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, @intCast(@sizeOf(u32) * indices.len), indices.ptr, gl.STATIC_DRAW);
+    return vboIndex;
 }
 
 ///
 /// Upload an array of colors into the GPU.
 ///
 fn colorUpload(colors: []const f32) gl.uint {
-    var vboColors: gl.uint = 0;
-    gl.GenBuffers(1, (&vboColors)[0..1]);
-    gl.BindBuffer(gl.ARRAY_BUFFER, vboColors);
+    var vboColor: gl.uint = 0;
+    gl.GenBuffers(1, (&vboColor)[0..1]);
+    gl.BindBuffer(gl.ARRAY_BUFFER, vboColor);
     gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * colors.len), colors.ptr, gl.STATIC_DRAW);
-    gl.VertexAttribPointer(vboColors, 3, gl.FLOAT, gl.FALSE, 0, 0);
+    gl.VertexAttribPointer(vboColor, 3, gl.FLOAT, gl.FALSE, 0, 0);
     gl.EnableVertexAttribArray(shader.COLOR_VBO_LOCATION);
     gl.BindBuffer(gl.ARRAY_BUFFER, 0);
-    return vboColors;
+    return vboColor;
 }
 
 ///
