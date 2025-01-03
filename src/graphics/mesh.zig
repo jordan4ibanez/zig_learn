@@ -43,7 +43,7 @@ fn positionUpload(positions: []f32) gl.uint {
     gl.BindBuffer(gl.ARRAY_BUFFER, vboPosition);
     gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * positions.len), positions.ptr, gl.STATIC_DRAW);
     gl.VertexAttribPointer(vboPosition, 3, gl.FLOAT, gl.FALSE, 0, 0);
-    gl.EnableVertexAttribArray(vboPosition);
+    gl.EnableVertexAttribArray(shader.POSITION_VBO_LOCATION);
     gl.BindBuffer(gl.ARRAY_BUFFER, 0);
     return vboPosition;
 }
