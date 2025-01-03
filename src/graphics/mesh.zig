@@ -11,10 +11,10 @@ pub const Mesh = struct {
     length: usize,
 };
 
-var database: std.StringHashMap(u32) = undefined;
+var database: std.StringHashMap(Mesh) = undefined;
 
 pub fn initialize() void {
-    database = std.StringHashMap(u32).init(allocator.get());
+    database = std.StringHashMap(Mesh).init(allocator.get());
 }
 
 pub fn terminate() void {
