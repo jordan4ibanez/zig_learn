@@ -59,6 +59,7 @@ pub fn main() !void {
     const indices = [_]u32{ 0, 1, 2 };
 
     mesh.new(
+        "test",
         positions[0..],
         colors[0..],
         indices[0..],

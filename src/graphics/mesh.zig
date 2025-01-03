@@ -5,10 +5,10 @@ const shader = @import("shader.zig");
 
 pub const Mesh = struct {
     vao: gl.uint,
-    position: gl.uint,
-    color: gl.uint,
-    indices: gl.uint,
-    length: u32,
+    vboPosition: gl.uint,
+    vboColor: gl.uint,
+    vboIndex: gl.uint,
+    length: usize,
 };
 
 var database: std.StringHashMap(u32) = undefined;
@@ -24,21 +24,34 @@ pub fn terminate() void {
 
 //* PUBLIC API. ==============================================
 
-pub fn new(positions: []const f32, colors: []const f32, indices: []const u32) void {
+pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indices: []const u32) void {
     std.debug.print("{any}, {any}\n", .{ positions, colors });
 
-    const vboPosition = positionUpload(positions);
+    var mesh = allocator.create(Mesh) catch |err| {
+        std.log.err("[Mesh]: Failed to allocate for mesh {s}. {}", .{ name, err });
+        std.process.exit(1);
+    };
 
-    const vboColor = colorUpload(colors);
+    mesh.vao = createVao();
+    mesh.vboPosition = positionUpload(positions);
+    mesh.vboColor = colorUpload(colors);
+    mesh.vboIndex = indexUpload(indices);
+    mesh.length = indices.len;
 
-    const vboIndex = indexUpload(indices);
-
-    _ = &vboColor;
-    _ = &vboIndex;
-    std.debug.print("{any}, {any}, {any}\n", .{ positions, colors, vboPosition });
+    gl.BindVertexArray(0);
 }
 
 //* INTERNAL API. ==============================================
+
+///
+/// Creates the initial Vertex Array Object and binds to it.
+///
+fn createVao() gl.uint {
+    var vao: gl.uint = 0;
+    gl.GenVertexArrays(1, (&vao)[0..1]);
+    gl.BindVertexArray(vao);
+    return vao;
+}
 
 ///
 /// Upload array of indices.
