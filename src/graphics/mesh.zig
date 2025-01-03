@@ -18,7 +18,17 @@ pub fn initialize() void {
 }
 
 pub fn terminate() void {
-    // todo: make this thing clean the GPU memory.
+    var databaseIterator = database.iterator();
+    while (databaseIterator.next()) |entry| {
+        const key = entry.key_ptr.*;
+        const value = entry.value_ptr.*;
+
+        // todo: make this thing clean the GPU memory.
+
+        allocator.free(key);
+        allocator.destroy(value);
+    }
+
     database.clearAndFree();
 }
 
