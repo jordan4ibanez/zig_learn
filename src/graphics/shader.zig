@@ -5,11 +5,11 @@ const file = @import("../utility/file.zig");
 
 var database: std.StringHashMap(gl.uint) = undefined;
 
-pub const position_vbo_location: gl.uint = 0;
-pub const color_vbo_location: gl.uint = 1;
+pub const POSITION_VBO_LOCATION: gl.uint = 0;
+pub const COLOR_VBO_LOCATION: gl.uint = 1;
 
-pub const camera_matrix_uniform_location: gl.uint = 0;
-pub const object_matrix_uniform_location: gl.uint = 1;
+pub const CAMERA_MATRIX_UNIFORM_LOCATION: gl.uint = 0;
+pub const OBJECT_MATRIX_UNIFORM_LOCATION: gl.uint = 1;
 
 pub fn initialize() void {
     database = std.StringHashMap(gl.uint).init(allocator.get());
