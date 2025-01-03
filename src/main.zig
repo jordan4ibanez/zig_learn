@@ -36,13 +36,13 @@ pub fn main() !void {
 
     shader.start("main");
 
-    var positions = [_]f32{
+    const positions = [_]f32{
         1.0,
         1.0,
         1.0,
     };
 
-    var colors = [_]f32{
+    const colors = [_]f32{
         1.0,
         0.0,
         0.0,
@@ -55,10 +55,13 @@ pub fn main() !void {
         0.0,
         1.0,
     };
+
+    const indices = [_]u32{ 0, 1, 2 };
 
     mesh.new(
         positions[0..],
         colors[0..],
+        indices[0..],
     );
 
     // var projection = za.perspective(45.0, 800.0 / 600.0, 0.1, 100.0);

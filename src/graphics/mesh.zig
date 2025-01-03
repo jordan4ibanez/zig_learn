@@ -24,24 +24,31 @@ pub fn terminate() void {
 
 //* PUBLIC API. ==============================================
 
-pub fn new(positions: []f32, colors: []f32) void {
+pub fn new(positions: []const f32, colors: []const f32, indices: []const u32) void {
     std.debug.print("{any}, {any}\n", .{ positions, colors });
 
     const vboPosition = positionUpload(positions);
 
     const vboColors = colorUpload(colors);
 
-    _ = &vboColors;
+    const vboIndex = indexUpload(indices);
 
+    _ = &vboColors;
+    _ = &vboIndex;
     std.debug.print("{any}, {any}, {any}\n", .{ positions, colors, vboPosition });
 }
 
 //* INTERNAL API. ==============================================
 
+fn indexUpload(indices: []const u32) gl.uint {
+    _ = &indices;
+    return 0;
+}
+
 ///
 /// Upload an array of colors into the GPU.
 ///
-fn colorUpload(colors: []f32) gl.uint {
+fn colorUpload(colors: []const f32) gl.uint {
     var vboColors: gl.uint = 0;
     gl.GenBuffers(1, (&vboColors)[0..1]);
     gl.BindBuffer(gl.ARRAY_BUFFER, vboColors);
@@ -55,7 +62,7 @@ fn colorUpload(colors: []f32) gl.uint {
 ///
 /// Upload an array of positions into the GPU.
 ///
-fn positionUpload(positions: []f32) gl.uint {
+fn positionUpload(positions: []const f32) gl.uint {
     var vboPosition: gl.uint = 0;
     gl.GenBuffers(1, (&vboPosition)[0..1]);
     gl.BindBuffer(gl.ARRAY_BUFFER, vboPosition);
