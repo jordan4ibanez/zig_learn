@@ -46,10 +46,15 @@ pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indice
 ///
 /// Unbinds from the mesh VAO. Then puts it into the database.
 ///
+/// Keep in mind, this will clone the name string. So free it after you run this.
+///
 fn unbindAndAddToDatabase(name: []const u8, mesh: *Mesh) void {
     gl.BindVertexArray(0);
 
-    database.putNoClobber(name, mesh) catch |err| {
+    const nameClone = allocator.alloc(u8, name.len);
+    @memcpy(nameClone, name);
+
+    database.putNoClobber(nameClone, mesh) catch |err| {
         std.log.err("[Mesh]: Failed to store mesh {s} in database. {}", .{ name, err });
         std.process.exit(1);
     };
