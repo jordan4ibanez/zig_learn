@@ -23,7 +23,7 @@ pub fn terminate() void {
         const key = entry.key_ptr.*;
         const value = entry.value_ptr.*;
 
-        // todo: make this thing clean the GPU memory.
+        destroyMesh(key, value);
 
         allocator.free(key);
         allocator.destroy(value);
@@ -53,7 +53,54 @@ pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indice
 
 //* INTERNAL API. ==============================================
 
-// todo: mesh destroyer function.
+///
+/// A simpler way to destroy Vertex Buffer Objects.
+///
+fn unbindAndDestroyVao(vaoId: gl.uint, meshName: []const u8) void {
+    gl.BindVertexArray(0);
+    var temp = vaoId;
+    gl.DeleteVertexArrays(1, (&temp)[0..1]);
+    if (gl.IsVertexArray(vaoId) == gl.TRUE) {
+        std.log.err("[Mesh]: Failed to destroy vao for mesh {s}.", .{meshName});
+        std.process.exit(1);
+    }
+}
+
+///
+/// A simpler way to destroy Element Buffer Objects.
+///
+fn destroyEbo(eboId: gl.uint, eboName: []const u8, meshName: []const u8) void {
+    var temp = eboId;
+    gl.DeleteVertexArrays(1, (&temp)[0..1]);
+    if (gl.IsVertexArray(eboId) == gl.TRUE) {
+        std.log.err("[Mesh]: Failed to destroy ebo {s} for mesh {s}.", .{ eboName, meshName });
+        std.process.exit(1);
+    }
+}
+
+///
+/// A simpler way to destroy Vertex Buffer Objects.
+///
+fn destroyVbo(vboPosition: gl.uint, vboId: gl.uint, vboName: []const u8, meshName: []const u8) void {
+    gl.DisableVertexAttribArray(vboPosition);
+    var temp = vboId;
+    gl.DeleteBuffers(1, (&temp)[0..1]);
+    if (gl.IsBuffer(vboId) == gl.TRUE) {
+        std.log.err("[Mesh]: Failed to destroy vbo {s} for mesh {s}.", .{ vboName, meshName });
+        std.process.exit(1);
+    }
+}
+
+///
+/// Encapsulates the logic flow for destroying an OpenGL mesh.
+///
+fn destroyMesh(name: []const u8, mesh: *Mesh) void {
+    gl.BindVertexArray(mesh.vao);
+    destroyVbo(shader.POSITION_VBO_LOCATION, mesh.vboPosition, "position", name);
+    destroyVbo(shader.COLOR_VBO_LOCATION, mesh.vboColor, "color", name);
+    destroyEbo(mesh.eboIndex, "index", name);
+    unbindAndDestroyVao(mesh.vao, name);
+}
 
 ///
 /// Unbinds from the mesh VAO. Then puts it into the database.
