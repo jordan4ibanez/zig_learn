@@ -7,7 +7,7 @@ pub const Mesh = struct {
     vao: gl.uint,
     vboPosition: gl.uint,
     vboColor: gl.uint,
-    vboIndex: gl.uint,
+    eboIndex: gl.uint,
     length: usize,
 };
 
@@ -45,7 +45,7 @@ pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indice
     mesh.vao = createVao();
     mesh.vboPosition = positionUpload(positions);
     mesh.vboColor = colorUpload(colors);
-    mesh.vboIndex = indexUpload(indices);
+    mesh.eboIndex = indexUpload(indices);
     mesh.length = indices.len;
 
     unbindAndAddToDatabase(name, mesh);
@@ -86,11 +86,11 @@ fn createVao() gl.uint {
 /// Upload array of indices.
 ///
 fn indexUpload(indices: []const u32) gl.uint {
-    var vboIndex: gl.uint = 0;
-    gl.GenBuffers(1, (&vboIndex)[0..1]);
-    gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, vboIndex);
+    var eboIndex: gl.uint = 0;
+    gl.GenBuffers(1, (&eboIndex)[0..1]);
+    gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, eboIndex);
     gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, @intCast(@sizeOf(u32) * indices.len), indices.ptr, gl.STATIC_DRAW);
-    return vboIndex;
+    return eboIndex;
 }
 
 ///
