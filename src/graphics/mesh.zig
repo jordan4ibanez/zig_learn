@@ -34,6 +34,11 @@ pub fn terminate() void {
 
 //* PUBLIC API. ==============================================
 
+///
+/// Create a mesh from raw data.
+///
+/// Keep in mind, this will clone the name string. So free it after you run this.
+///
 pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indices: []const u32) void {
     std.debug.print("{any}, {any}\n", .{ positions, colors });
 
