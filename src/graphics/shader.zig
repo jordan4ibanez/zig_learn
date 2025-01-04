@@ -8,11 +8,11 @@ const Mat4 = za.Mat4;
 
 var database: std.StringHashMap(gl.uint) = undefined;
 
-pub const POSITION_VBO_LOCATION: gl.uint = 0;
-pub const COLOR_VBO_LOCATION: gl.uint = 1;
+pub const POSITION_VBO_LOCATION: gl.int = 0;
+pub const COLOR_VBO_LOCATION: gl.int = 1;
 
-pub const CAMERA_MATRIX_UNIFORM_LOCATION: gl.uint = 0;
-pub const OBJECT_MATRIX_UNIFORM_LOCATION: gl.uint = 1;
+pub const CAMERA_MATRIX_UNIFORM_LOCATION: gl.int = 0;
+pub const OBJECT_MATRIX_UNIFORM_LOCATION: gl.int = 1;
 
 pub fn initialize() void {
     database = std.StringHashMap(gl.uint).init(allocator.get());
@@ -88,7 +88,7 @@ pub fn start(name: []const u8) void {
 ///
 /// Simpler way to set Mat4 uniform data.
 ///
-pub fn setMat4Uniform(location: gl.uint, value: Mat4) void {
+pub fn setMat4Uniform(location: gl.int, value: Mat4) void {
     gl.UniformMatrix4fv(location, 1, gl.FALSE, &value.data[0][0]);
 }
 
