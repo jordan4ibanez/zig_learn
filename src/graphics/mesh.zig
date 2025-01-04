@@ -56,6 +56,30 @@ pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indice
     unbindAndAddToDatabase(name, mesh);
 }
 
+///
+/// Destroy a mesh from GPU and CPU memory.
+///
+pub fn destroy(name: []const u8) void {
+    const currentMesh = database.get(name) orelse {
+        std.log.err("[Mesh]: Failed to destroy mesh {s}. Does not exist", .{name});
+        std.process.exit(1);
+    };
+    defer allocator.destroy(currentMesh);
+
+    destroyMesh(name, currentMesh);
+
+    const key: []const u8 = database.getKey(name) orelse {
+        std.log.err("[Mesh]: Failed to free mesh {s} key. Does not exist", .{name});
+        std.process.exit(1);
+    };
+    defer allocator.free(key);
+
+    if (!database.remove(name)) {
+        std.log.err("[Mesh]: Failed to remove mesh {s} from database. Does not exist", .{name});
+        std.process.exit(1);
+    }
+}
+
 //* INTERNAL API. ==============================================
 
 ///
