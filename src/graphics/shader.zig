@@ -2,6 +2,9 @@ const std = @import("std");
 const gl = @import("gl");
 const allocator = @import("../utility/allocator.zig");
 const file = @import("../utility/file.zig");
+const za = @import("zalgebra");
+
+const Mat4 = za.Mat4;
 
 var database: std.StringHashMap(gl.uint) = undefined;
 
@@ -78,10 +81,15 @@ pub fn start(name: []const u8) void {
         std.log.err("[Shader]: Failed to start program {s}. Does not exist.", .{name});
         std.process.exit(1);
     };
-
     gl.UseProgram(currentID);
-
     std.debug.print("[Shader]: Started shader {s}.\n", .{name});
+}
+
+///
+/// Simpler way to set Mat4 uniform data.
+///
+pub fn setMat4Uniform(location: gl.uint, value: Mat4) void {
+    gl.UniformMatrix4fv(location, 1, gl.FALSE, &value.data[0][0]);
 }
 
 //* INTERNAL API. ==============================================
