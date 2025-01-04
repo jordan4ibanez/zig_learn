@@ -3,7 +3,7 @@ const gl = @import("gl");
 const allocator = @import("../utility/allocator.zig");
 const shader = @import("shader.zig");
 
-pub const Mesh = struct {
+const Mesh = struct {
     vao: gl.uint,
     vboPosition: gl.uint,
     vboColor: gl.uint,
@@ -78,6 +78,18 @@ pub fn destroy(name: []const u8) void {
         std.log.err("[Mesh]: Failed to remove mesh {s} from database. Does not exist", .{name});
         std.process.exit(1);
     }
+}
+
+///
+/// Draw a mesh.
+///
+pub fn draw(name: []const u8) void {
+    const currentMesh: *Mesh = database.get(name) orelse {
+        std.log.err("[Mesh]: Failed to draw mesh {s}. Does not exist", .{name});
+        std.process.exit(1);
+    };
+    gl.BindVertexArray(currentMesh.vao);
+    gl.DrawElements(gl.TRIANGLES, @intCast(currentMesh.length), gl.UNSIGNED_INT, 0);
 }
 
 //* INTERNAL API. ==============================================

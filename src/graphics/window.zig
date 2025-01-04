@@ -61,6 +61,10 @@ pub fn shouldClose() bool {
     return window.shouldClose();
 }
 
+pub fn close() void {
+    window.setShouldClose(true);
+}
+
 pub fn swapBuffers() void {
     window.swapBuffers();
 }
