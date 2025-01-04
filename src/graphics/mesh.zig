@@ -8,7 +8,7 @@ const Mesh = struct {
     vboPosition: gl.uint,
     vboColor: gl.uint,
     eboIndex: gl.uint,
-    length: usize,
+    length: gl.sizei,
 };
 
 var database: std.StringHashMap(*Mesh) = undefined;
@@ -51,7 +51,7 @@ pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indice
     mesh.vboPosition = positionUpload(positions);
     mesh.vboColor = colorUpload(colors);
     mesh.eboIndex = indexUpload(indices);
-    mesh.length = indices.len;
+    mesh.length = @intCast(indices.len);
 
     unbindAndAddToDatabase(name, mesh);
 }
@@ -89,7 +89,7 @@ pub fn draw(name: []const u8) void {
         std.process.exit(1);
     };
     gl.BindVertexArray(currentMesh.vao);
-    gl.DrawElements(gl.TRIANGLES, @intCast(currentMesh.length), gl.UNSIGNED_INT, 0);
+    gl.DrawElements(gl.TRIANGLES, currentMesh.length, gl.UNSIGNED_INT, 0);
 }
 
 //* INTERNAL API. ==============================================
