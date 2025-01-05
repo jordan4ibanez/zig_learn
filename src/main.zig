@@ -66,17 +66,6 @@ pub fn main() !void {
         indices[0..],
     );
 
-    // var vao: gl.uint = 0;
-    // gl.GenVertexArrays(1, (&vao)[0..1]);
-    // gl.BindVertexArray(vao);
-
-    // var vbo: gl.uint = 0;
-    // gl.GenBuffers(1, (&vbo)[0..1]);
-    // gl.BindBuffer(gl.ARRAY_BUFFER, vbo);
-    // gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * positions.len), &positions, gl.STATIC_DRAW);
-    // gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * @sizeOf(f32), 0);
-    // gl.EnableVertexAttribArray(0);
-
     var rotation: f32 = 0;
     while (!window.shouldClose()) {
         window.pollEvents();
@@ -91,8 +80,6 @@ pub fn main() !void {
         objectMatrix = objectMatrix.translate(Vec3.new(0, 0, -1));
         objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
         objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
-
-        
 
         rotation += 1.5;
 
