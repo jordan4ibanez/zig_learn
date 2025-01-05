@@ -39,7 +39,7 @@ pub fn terminate() void {
 ///
 /// Keep in mind, this will clone the name string. So free it after you run this.
 ///
-pub fn new(name: []const u8, positions: []const f32) void {//, colors: []const f32, indices: []const u32) void {
+pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indices: []const u32) void {
     // std.debug.print("{any}, {any}\n", .{ positions, colors });
 
     var mesh = allocator.create(Mesh) catch |err| {
@@ -49,9 +49,9 @@ pub fn new(name: []const u8, positions: []const f32) void {//, colors: []const f
 
     mesh.vao = createVao();
     mesh.vboPosition = positionUpload(positions);
-    // mesh.vboColor = colorUpload(colors);
-    // mesh.eboIndex = indexUpload(indices);
-    // mesh.length = @intCast(indices.len);
+    mesh.vboColor = colorUpload(colors);
+    mesh.eboIndex = indexUpload(indices);
+    mesh.length = @intCast(indices.len);
 
     unbindAndAddToDatabase(name, mesh);
 }
@@ -189,7 +189,7 @@ fn colorUpload(colors: []const f32) gl.uint {
     gl.GenBuffers(1, (&vboColor)[0..1]);
     gl.BindBuffer(gl.ARRAY_BUFFER, vboColor);
     gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * colors.len), colors.ptr, gl.STATIC_DRAW);
-    gl.VertexAttribPointer(vboColor, 3, gl.FLOAT, gl.FALSE, 0, 0);
+    gl.VertexAttribPointer(shader.COLOR_VBO_LOCATION, 3, gl.FLOAT, gl.FALSE, 3 * @sizeOf(f32), 0);
     gl.EnableVertexAttribArray(shader.COLOR_VBO_LOCATION);
     gl.BindBuffer(gl.ARRAY_BUFFER, 0);
     return vboColor;
@@ -203,8 +203,7 @@ fn positionUpload(positions: []const f32) gl.uint {
     gl.GenBuffers(1, (&vboPosition)[0..1]);
     gl.BindBuffer(gl.ARRAY_BUFFER, vboPosition);
     gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * positions.len), positions.ptr, gl.STATIC_DRAW);
-    gl.VertexAttribPointer(vboPosition, 3, gl.FLOAT, gl.FALSE, 0, 0);
-    gl.EnableVertexAttribArray(shader.POSITION_VBO_LOCATION);
-    gl.BindBuffer(gl.ARRAY_BUFFER, 0);
+    gl.VertexAttribPointer(shader.POSITION_VBO_LOCATION, 3, gl.FLOAT, gl.FALSE, 3 * @sizeOf(f32), 0);
+    gl.EnableVertexAttribArray(0);
     return vboPosition;
 }

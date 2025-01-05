@@ -29,7 +29,7 @@ pub fn main() !void {
         "shaders/fragment.frag",
     );
 
-    gl.Viewport(0, 0, 800, 600);
+    gl.Viewport(0, 0, 1024, 768);
 
     shader.start("main");
 
@@ -43,67 +43,64 @@ pub fn main() !void {
 
     _ = &positions;
 
-    // const colors = [_]f32{
-    //     1.0,
-    //     0.0,
-    //     0.0,
+    const colors = [_]f32{
+        1.0,
+        0.0,
+        0.0,
 
-    //     0.0,
-    //     1.0,
-    //     0.0,
+        0.0,
+        1.0,
+        0.0,
 
-    //     0.0,
-    //     0.0,
-    //     1.0,
-    // };
+        0.0,
+        0.0,
+        1.0,
+    };
 
-    // const indices = [_]u32{ 0, 1, 2 };
+    const indices = [_]u32{ 0, 1, 2 };
 
-    // mesh.new(
-    //     "test",
-    //     positions[0..],
-    //     // colors[0..],
-    //     // indices[0..],
-    // );
+    mesh.new(
+        "test",
+        positions[0..],
+        colors[0..],
+        indices[0..],
+    );
 
-    var vao: gl.uint = 0;
-    gl.GenVertexArrays(1, (&vao)[0..1]);
-    gl.BindVertexArray(vao);
+    // var vao: gl.uint = 0;
+    // gl.GenVertexArrays(1, (&vao)[0..1]);
+    // gl.BindVertexArray(vao);
 
-    var vbo: gl.uint = 0;
-    gl.GenBuffers(1, (&vbo)[0..1]);
-    gl.BindBuffer(gl.ARRAY_BUFFER, vbo);
-    gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * positions.len), (&positions)[0..positions.len], gl.STATIC_DRAW);
-    gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * @sizeOf(f32), 0);
-    gl.EnableVertexAttribArray(0);
+    // var vbo: gl.uint = 0;
+    // gl.GenBuffers(1, (&vbo)[0..1]);
+    // gl.BindBuffer(gl.ARRAY_BUFFER, vbo);
+    // gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * positions.len), &positions, gl.STATIC_DRAW);
+    // gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * @sizeOf(f32), 0);
+    // gl.EnableVertexAttribArray(0);
 
-    // var rotation: f32 = 0;
+    var rotation: f32 = 0;
     while (!window.shouldClose()) {
         window.pollEvents();
 
         gl.ClearColor(0.2, 0.3, 0.3, 1.0);
         gl.Clear(gl.COLOR_BUFFER_BIT);
 
-        gl.Viewport(0, 0, 800, 600);
-        // shader.start("main");
+        const cameraMatrix = Mat4.perspective(65.0, 1024.0 / 768.0, 0.1, 100.0);
+        shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 
-        gl.BindVertexArray(vao);
-        gl.DrawArrays(gl.TRIANGLES, 0, 3);
-        // const cameraMatrix = Mat4.perspective(45.0, 800.0 / 600.0, 0.1, 100.0);
-        // shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
+        var objectMatrix = Mat4.identity();
+        objectMatrix = objectMatrix.translate(Vec3.new(0, 0, -1));
+        objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
+        objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
 
-        // var objectMatrix = Mat4.identity();
-        // objectMatrix = objectMatrix.translate(Vec3.new(0, 0, -1));
-        // objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
-        // objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
+        
 
-        window.swapBuffers();
-        // rotation += 0.1;
+        rotation += 1.5;
 
-        // shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
+        shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
 
-        // mesh.draw("test");
+        mesh.draw("test");
 
         // window.close();
+        window.swapBuffers();
     }
 }
