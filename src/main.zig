@@ -111,16 +111,19 @@ pub fn main() !void {
     var vbo: gl.uint = 0;
     gl.GenBuffers(1, (&vbo)[0..1]);
     gl.BindBuffer(gl.ARRAY_BUFFER, vbo);
-    gl.BufferData(gl.ARRAY_BUFFER, 16, &positions, gl.STATIC_DRAW);
+    gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * positions.len), (&positions)[0..positions.len], gl.STATIC_DRAW);
     gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * @sizeOf(f32), 0);
     gl.EnableVertexAttribArray(0);
 
     // var rotation: f32 = 0;
     while (!window.shouldClose()) {
         window.pollEvents();
+        window.swapBuffers();
 
         gl.ClearColor(0.2, 0.3, 0.3, 1.0);
         gl.Clear(gl.COLOR_BUFFER_BIT);
+
+        gl.UseProgram(shaderProgram);
 
         gl.Viewport(0, 0, 800, 600);
         // shader.start("main");
@@ -140,8 +143,6 @@ pub fn main() !void {
         // shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
 
         // mesh.draw("test");
-
-        window.swapBuffers();
 
         // window.close();
     }
