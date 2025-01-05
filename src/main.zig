@@ -34,11 +34,10 @@ pub fn main() !void {
     shader.start("main");
 
     const positions = [_]f32{
-        -0.5, -0.5, 0.0,
-
-        0.5,  -0.5, 0.0,
-
-        0.0,  0.5,  0.0,
+        0.5, 0.5, 0.0, // top right
+        0.5, -0.5, 0.0, // bottom right
+        -0.5, -0.5, 0.0, // bottom left
+        -0.5, 0.5, 0.0, // top left
     };
 
     _ = &positions;
@@ -55,9 +54,13 @@ pub fn main() !void {
         0.0,
         0.0,
         1.0,
+
+        0.0,
+        1.0,
+        1.0,
     };
 
-    const indices = [_]u32{ 0, 1, 2 };
+    const indices = [_]u32{ 0, 1, 2, 2, 3, 0 };
 
     mesh.new(
         "test",
