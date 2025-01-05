@@ -23,53 +23,15 @@ pub fn main() !void {
     mesh.initialize();
     defer mesh.terminate();
 
-    // shader.new(
-    //     "main",
-    //     "shaders/vertex.vert",
-    //     "shaders/fragment.frag",
-    // );
+    shader.new(
+        "main",
+        "shaders/vertex.vert",
+        "shaders/fragment.frag",
+    );
 
     gl.Viewport(0, 0, 800, 600);
 
-    // shader.start("main");
-
-    const vertex: [:0]const u8 =
-        \\#version 330 core
-        \\layout (location = 0) in vec3 aPos;
-        \\void main()
-        \\{
-        \\    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-        \\}
-    ;
-    const fragment: [:0]const u8 =
-        \\#version 330 core
-        \\out vec4 FragColor;
-        \\void main()
-        \\{
-        \\    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-        \\} 
-    ;
-
-    _ = &vertex;
-    _ = &fragment;
-
-    var vertexShader: gl.uint = 0;
-    vertexShader = gl.CreateShader(gl.VERTEX_SHADER);
-    gl.ShaderSource(vertexShader, 1, (&vertex.ptr)[0..1], (&@as(c_int, @intCast(vertex.len)))[0..1]);
-    gl.CompileShader(vertexShader);
-
-    var fragmentShader: gl.uint = 0;
-    fragmentShader = gl.CreateShader(gl.FRAGMENT_SHADER);
-    gl.ShaderSource(fragmentShader, 1, (&fragment.ptr)[0..1], (&@as(c_int, @intCast(fragment.len)))[0..1]);
-    gl.CompileShader(fragmentShader);
-
-    var shaderProgram: gl.uint = 0;
-    shaderProgram = gl.CreateProgram();
-    gl.AttachShader(shaderProgram, vertexShader);
-    gl.AttachShader(shaderProgram, fragmentShader);
-    gl.LinkProgram(shaderProgram);
-
-    gl.UseProgram(shaderProgram);
+    shader.start("main");
 
     const positions = [_]f32{
         -0.5, -0.5, 0.0,
@@ -121,8 +83,6 @@ pub fn main() !void {
 
         gl.ClearColor(0.2, 0.3, 0.3, 1.0);
         gl.Clear(gl.COLOR_BUFFER_BIT);
-
-        gl.UseProgram(shaderProgram);
 
         gl.Viewport(0, 0, 800, 600);
         // shader.start("main");
