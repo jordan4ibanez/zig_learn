@@ -118,7 +118,6 @@ pub fn main() !void {
     // var rotation: f32 = 0;
     while (!window.shouldClose()) {
         window.pollEvents();
-        window.swapBuffers();
 
         gl.ClearColor(0.2, 0.3, 0.3, 1.0);
         gl.Clear(gl.COLOR_BUFFER_BIT);
@@ -138,6 +137,7 @@ pub fn main() !void {
         // objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
         // objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
 
+        window.swapBuffers();
         // rotation += 0.1;
 
         // shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
