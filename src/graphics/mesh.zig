@@ -39,8 +39,8 @@ pub fn terminate() void {
 ///
 /// Keep in mind, this will clone the name string. So free it after you run this.
 ///
-pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indices: []const u32) void {
-    std.debug.print("{any}, {any}\n", .{ positions, colors });
+pub fn new(name: []const u8, positions: []const f32) void {//, colors: []const f32, indices: []const u32) void {
+    // std.debug.print("{any}, {any}\n", .{ positions, colors });
 
     var mesh = allocator.create(Mesh) catch |err| {
         std.log.err("[Mesh]: Failed to allocate for mesh {s}. {}", .{ name, err });
@@ -49,9 +49,9 @@ pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indice
 
     mesh.vao = createVao();
     mesh.vboPosition = positionUpload(positions);
-    mesh.vboColor = colorUpload(colors);
-    mesh.eboIndex = indexUpload(indices);
-    mesh.length = @intCast(indices.len);
+    // mesh.vboColor = colorUpload(colors);
+    // mesh.eboIndex = indexUpload(indices);
+    // mesh.length = @intCast(indices.len);
 
     unbindAndAddToDatabase(name, mesh);
 }

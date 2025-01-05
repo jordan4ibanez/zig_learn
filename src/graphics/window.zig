@@ -5,6 +5,17 @@ const gl = @import("gl");
 var gl_procs: gl.ProcTable = undefined;
 var window: glfw.Window = undefined;
 
+fn debugCallback(source: gl.@"enum", @"type": gl.@"enum", id: gl.uint, severity: gl.@"enum", length: gl.sizei, message: [*:0]const gl.char, userParam: ?*const anyopaque) callconv(gl.APIENTRY) void {
+    std.debug.print("{s}\n", .{message});
+    _ = &source;
+    _ = &@"type";
+    _ = &id;
+    _ = &severity;
+    _ = &length;
+    _ = &message;
+    _ = &userParam;
+}
+
 pub fn initialize() void {
     glfw.setErrorCallback(errorCallback);
 
@@ -27,6 +38,8 @@ pub fn initialize() void {
 
     glfw.makeContextCurrent(window);
 
+    glfw.swapInterval(1);
+
     if (!gl_procs.init(glfw.getProcAddress)) {
         std.log.err("[GLFW]: Failed to get process address.", .{});
         std.process.exit(1);
@@ -40,6 +53,13 @@ pub fn initialize() void {
         std.log.err("[OpenGL]: Failed to get OpenGL version.\n", .{});
         std.process.exit(1);
     }
+
+    gl.Enable(gl.DEBUG_OUTPUT_SYNCHRONOUS);
+    gl.DebugMessageCallback(debugCallback, null);
+
+    gl.DepthMask(gl.TRUE);
+    gl.Enable(gl.DEPTH_TEST);
+    gl.DepthFunc(gl.LESS);
 }
 
 fn errorCallback(error_code: glfw.ErrorCode, description: [:0]const u8) void {

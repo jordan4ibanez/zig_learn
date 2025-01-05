@@ -149,6 +149,8 @@ fn compileAndCheckShader(id: gl.uint, name: []const u8, codePath: []const u8) vo
     gl.GetShaderiv(id, gl.COMPILE_STATUS, &success);
     if (success == gl.FALSE) {
         std.log.err("[Shader]: Failed to compile {s} shader, id {d} .", .{ name, id });
+        var infoLog: [512]u8 = std.mem.zeroes([512]u8);
+        gl.GetShaderInfoLog(id, 512, null, &infoLog);
         std.process.exit(1);
     }
 }

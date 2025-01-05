@@ -50,7 +50,6 @@ pub fn build(b: *std.Build) void {
         .api = .gl,
         .version = .@"4.6",
         .profile = .core,
-        .extensions = &.{ .ARB_clip_control, .NV_scissor_exclusive },
     });
     // Import the generated module.
     exe.root_module.addImport("gl", gl_bindings);
