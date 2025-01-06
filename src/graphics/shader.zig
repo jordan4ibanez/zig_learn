@@ -14,6 +14,8 @@ pub const COLOR_VBO_LOCATION: gl.int = 1;
 pub const CAMERA_MATRIX_UNIFORM_LOCATION: gl.int = 0;
 pub const OBJECT_MATRIX_UNIFORM_LOCATION: gl.int = 1;
 
+//* ON/OFF SWITCH. ==============================================
+
 pub fn initialize() void {
     database = std.StringHashMap(gl.uint).init(allocator.get());
 }
