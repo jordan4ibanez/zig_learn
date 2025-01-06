@@ -6,6 +6,8 @@ var gpa: std.heap.GeneralPurposeAllocator(.{}) = undefined;
 var allocator: std.mem.Allocator = undefined;
 var validPointer = false;
 
+//* ON/OFF SWITCH. ==============================================
+
 pub fn initialize() void {
     // Thanks to Eyad for notifying that this will need to be [.init]
     // instead of [{}] when 0.14 releases.
@@ -24,6 +26,8 @@ pub fn terminate() void {
     }
     validPointer = false;
 }
+
+//* PUBLIC API. ===========================================================
 
 pub fn create(comptime T: type) std.mem.Allocator.Error!*T {
     return try allocator.create(T);
