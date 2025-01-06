@@ -5,16 +5,7 @@ const gl = @import("gl");
 var gl_procs: gl.ProcTable = undefined;
 var window: glfw.Window = undefined;
 
-fn debugCallback(source: gl.@"enum", @"type": gl.@"enum", id: gl.uint, severity: gl.@"enum", length: gl.sizei, message: [*:0]const gl.char, userParam: ?*const anyopaque) callconv(gl.APIENTRY) void {
-    std.debug.print("{s}\n", .{message});
-    _ = &source;
-    _ = &@"type";
-    _ = &id;
-    _ = &severity;
-    _ = &length;
-    _ = &message;
-    _ = &userParam;
-}
+//* ON/OFF SWITCH. ==============================================
 
 pub fn initialize() void {
     glfw.setErrorCallback(errorCallback);
@@ -62,10 +53,6 @@ pub fn initialize() void {
     // gl.DepthFunc(gl.LESS);
 }
 
-fn errorCallback(error_code: glfw.ErrorCode, description: [:0]const u8) void {
-    std.log.err("glfw: {}: {s}\n", .{ error_code, description });
-}
-
 pub fn terminate() void {
     gl.makeProcTableCurrent(null);
     std.debug.print("[OpenGL]: Process pointers nullified.\n", .{});
@@ -75,7 +62,7 @@ pub fn terminate() void {
     std.debug.print("[GLFW]: Terminated.\n", .{});
 }
 
-//* PUBLIC API BEGINS HERE ===========================================================
+//* PUBLIC API. ===========================================================
 
 pub fn shouldClose() bool {
     return window.shouldClose();
@@ -91,4 +78,21 @@ pub fn swapBuffers() void {
 
 pub fn pollEvents() void {
     glfw.pollEvents();
+}
+
+//* INTERNAL API. ==============================================
+
+fn errorCallback(error_code: glfw.ErrorCode, description: [:0]const u8) void {
+    std.log.err("glfw: {}: {s}\n", .{ error_code, description });
+}
+
+fn debugCallback(source: gl.@"enum", @"type": gl.@"enum", id: gl.uint, severity: gl.@"enum", length: gl.sizei, message: [*:0]const gl.char, userParam: ?*const anyopaque) callconv(gl.APIENTRY) void {
+    std.debug.print("{s}\n", .{message});
+    _ = &source;
+    _ = &@"type";
+    _ = &id;
+    _ = &severity;
+    _ = &length;
+    _ = &message;
+    _ = &userParam;
 }
