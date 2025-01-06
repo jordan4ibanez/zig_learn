@@ -13,6 +13,8 @@ const Mesh = struct {
 
 var database: std.StringHashMap(*Mesh) = undefined;
 
+//* ON/OFF SWITCH. ==============================================
+
 pub fn initialize() void {
     database = std.StringHashMap(*Mesh).init(allocator.get());
 }
