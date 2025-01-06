@@ -38,7 +38,7 @@ pub fn build(b: *std.Build) void {
 
     //* BEGIN EXTERNAL MODULES. ==========================================================
 
-    // Use mach-glfw
+    // Use mach-glfw.
     const glfw_dep = b.dependency("mach-glfw", .{
         .target = target,
         .optimize = optimize,
@@ -51,15 +51,20 @@ pub fn build(b: *std.Build) void {
         .version = .@"4.6",
         .profile = .core,
     });
-    // Import the generated module.
     exe.root_module.addImport("gl", gl_bindings);
 
+    // Math, wow!
     const zalgebra_dep = b.dependency("zalgebra", .{
         .target = target,
         .optimize = optimize,
     });
     const zalgebra_module = zalgebra_dep.module("zalgebra");
     exe.root_module.addImport("zalgebra", zalgebra_module);
+
+    // STB.
+    const zstbi = b.dependency("zstbi", .{});
+    exe.root_module.addImport("zstbi", zstbi.module("root"));
+    exe.linkLibrary(zstbi.artifact("zstbi"));
 
     //* END EXTERNAL MODULES. ==========================================================
 
