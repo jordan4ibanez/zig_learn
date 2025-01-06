@@ -1,6 +1,8 @@
 const std = @import("std");
 const allocator = @import("allocator.zig");
 
+//* PUBLIC API. ===========================================================
+
 ///
 /// The easy way to read an entire file to a string buffer.
 ///
