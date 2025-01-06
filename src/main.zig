@@ -1,11 +1,12 @@
 const std = @import("std");
 const gl = @import("gl");
 const za = @import("zalgebra");
+const glfw = @import("mach-glfw");
 const allocator = @import("utility/allocator.zig");
+const window = @import("graphics/window.zig");
 const shader = @import("graphics/shader.zig");
 const mesh = @import("graphics/mesh.zig");
-const window = @import("graphics/window.zig");
-const glfw = @import("mach-glfw");
+const texture = @import("graphics/texture.zig");
 
 const Vec3 = za.Vec3;
 const Mat4 = za.Mat4;
@@ -22,6 +23,9 @@ pub fn main() !void {
 
     mesh.initialize();
     defer mesh.terminate();
+
+    texture.initialize();
+    defer texture.terminate();
 
     shader.new(
         "main",
