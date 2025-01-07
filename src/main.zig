@@ -94,7 +94,8 @@ pub fn main() !void {
 
         mesh.draw("test");
 
-        // window.close();
         window.swapBuffers();
+
+        window.close();
     }
 }
