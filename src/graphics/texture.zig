@@ -1,5 +1,6 @@
 const std = @import("std");
 const stbi = @import("zstbi");
+const gl = @import("gl");
 const allocator = @import("../utility/allocator.zig");
 
 var database: std.StringHashMap(u8) = undefined;
@@ -36,13 +37,23 @@ pub fn new(location: []const u8) void {
     };
     defer allocator.free(nullTerminatedLocation);
 
-    var blah = stbi.Image.loadFromFile(nullTerminatedLocation, 4) catch |err| {
+    var image = stbi.Image.loadFromFile(nullTerminatedLocation, 4) catch |err| {
         std.log.err("[Texture]: Failed to load texutre {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
-    blah.deinit();
+    defer image.deinit();
 
-    
+    var textureID: gl.uint = 0;
+    gl.GenTextures(1, (&textureID)[0..1]);
+    gl.BindTexture(gl.TEXTURE_2D, textureID);
+    gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, @intCast(image.width), @intCast(image.height), 0, gl.RGBA, gl.UNSIGNED_BYTE, image.data.ptr);
+    gl.GenerateMipmap(gl.TEXTURE_2D);
+    gl.BindTexture(gl.TEXTURE_2D, 0);
+    if (gl.IsTexture(textureID) == gl.FALSE) {
+        std.log.err("[Texture]: Failed to generate texture {s}. Not texture.", .{location});
+        std.process.exit(1);
+    }
 
-    _ = &blah;
+    _ = &textureID;
+    _ = &image;
 }
