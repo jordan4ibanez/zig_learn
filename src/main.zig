@@ -73,6 +73,8 @@ pub fn main() !void {
         indices[0..],
     );
 
+    texture.new("textures/sand.png");
+
     var rotation: f32 = 0;
     while (!window.shouldClose()) {
         window.pollEvents();
