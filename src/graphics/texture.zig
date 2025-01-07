@@ -7,6 +7,7 @@ var database: std.StringHashMap(u8) = undefined;
 //* ON/OFF SWITCH. ==============================================
 
 pub fn initialize() void {
+    stbi.setFlipVerticallyOnLoad(true);
     stbi.init(allocator.get());
     database = std.StringHashMap(u8).init(allocator.get());
 }
