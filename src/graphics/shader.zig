@@ -141,7 +141,7 @@ fn linkShader(programID: gl.uint, vertexID: gl.uint, fragmentID: gl.uint) void {
 /// Compile shader. Make sure compiled correctly.
 ///
 fn compileAndCheckShader(id: gl.uint, name: []const u8, codePath: []const u8) void {
-    const shaderCode: []const u8 = file.readToNullTerminatedString(codePath);
+    const shaderCode: [:0]const u8 = file.readToNullTerminatedString(codePath);
     defer allocator.free(shaderCode);
     // I took this part from https://github.com/slimsag/mach-glfw-opengl-example/blob/main/src/main.zig#L158
     // Ain't know way I'm gonna figure out that as a noobie.
