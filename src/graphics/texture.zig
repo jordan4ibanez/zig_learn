@@ -54,6 +54,5 @@ pub fn new(location: []const u8) void {
         std.process.exit(1);
     }
 
-    _ = &textureID;
-    _ = &image;
+    // todo: add ID to database.
 }
