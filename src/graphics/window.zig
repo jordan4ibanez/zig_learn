@@ -51,6 +51,8 @@ pub fn initialize() void {
     gl.DepthMask(gl.TRUE);
     gl.Enable(gl.DEPTH_TEST);
     gl.DepthFunc(gl.LESS);
+
+    // gl.Enable(gl.CULL_FACE);
 }
 
 pub fn terminate() void {
