@@ -38,30 +38,37 @@ pub fn main() !void {
     shader.start("main");
 
     const positions = [_]f32{
-        0.5, 0.5, 0.0, // top right
-        0.5, -0.5, 0.0, // bottom right
-        -0.5, -0.5, 0.0, // bottom left
         -0.5, 0.5, 0.0, // top left
+        -0.5, -0.5, 0.0, // bottom left
+        0.5, -0.5, 0.0, // bottom right
+        0.5, 0.5, 0.0, // top right
     };
 
     _ = &positions;
 
-    const colors = [_]f32{
-        1.0,
-        0.0,
-        0.0,
+    // const colors = [_]f32{
+    //     1.0,
+    //     0.0,
+    //     0.0,
 
-        0.0,
-        1.0,
-        0.0,
+    //     0.0,
+    //     1.0,
+    //     0.0,
 
-        0.0,
-        0.0,
-        1.0,
+    //     0.0,
+    //     0.0,
+    //     1.0,
 
-        0.0,
-        1.0,
-        1.0,
+    //     0.0,
+    //     1.0,
+    //     1.0,
+    // };
+
+    const textureCoords = [_]f32{
+        0.0, 0.0, // top left
+        0.0, 1.0, // bottom left
+        1.0, 1.0, // bottom right
+        1.0, 0.0, // top right
     };
 
     const indices = [_]u32{ 0, 1, 2, 2, 3, 0 };
@@ -69,11 +76,13 @@ pub fn main() !void {
     mesh.new(
         "test",
         positions[0..],
-        colors[0..],
+        textureCoords[0..],
         indices[0..],
     );
 
     texture.new("textures/sand.png");
+
+    texture.use("sand.png");
 
     var rotation: f32 = 0;
     while (!window.shouldClose()) {
