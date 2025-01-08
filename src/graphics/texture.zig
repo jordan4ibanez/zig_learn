@@ -73,7 +73,7 @@ pub fn destroy(name: []const u8) void {
 ///
 pub fn use(name: []const u8) void {
     const id = database.get(name) orelse {
-        std.log.err("[Texture]: Failed to destroy texture {s}. Does not exist.", .{name});
+        std.log.err("[Texture]: Failed to use texture {s}. Does not exist.", .{name});
         std.process.exit(1);
     };
     gl.BindTexture(gl.TEXTURE_2D, id);
