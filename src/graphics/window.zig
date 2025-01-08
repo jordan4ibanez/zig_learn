@@ -48,9 +48,9 @@ pub fn initialize() void {
     gl.Enable(gl.DEBUG_OUTPUT_SYNCHRONOUS);
     gl.DebugMessageCallback(debugCallback, null);
 
-    // gl.DepthMask(gl.TRUE);
-    // gl.Enable(gl.DEPTH_TEST);
-    // gl.DepthFunc(gl.LESS);
+    gl.DepthMask(gl.TRUE);
+    gl.Enable(gl.DEPTH_TEST);
+    gl.DepthFunc(gl.LESS);
 }
 
 pub fn terminate() void {
