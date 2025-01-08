@@ -88,6 +88,10 @@ fn generateTexture(image: stbi.Image, location: []const u8) gl.uint {
     var textureID: gl.uint = 0;
     gl.GenTextures(1, (&textureID)[0..1]);
     gl.BindTexture(gl.TEXTURE_2D, textureID);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, @intCast(image.width), @intCast(image.height), 0, gl.RGBA, gl.UNSIGNED_BYTE, image.data.ptr);
     gl.GenerateMipmap(gl.TEXTURE_2D);
     gl.BindTexture(gl.TEXTURE_2D, 0);
