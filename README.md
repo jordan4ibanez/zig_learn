@@ -8,3 +8,6 @@ copy memory into buffer:
 ```
 
 Note: this is written as a conventional OpenGL project. Nothing new here.
+
+Great article on ps1 style graphics
+https://www.hawkjames.com/indiedev/update/2022/06/02/rendering-ps1.html
