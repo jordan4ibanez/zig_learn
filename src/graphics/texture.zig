@@ -42,16 +42,7 @@ pub fn new(location: []const u8) void {
     };
     defer image.deinit();
 
-    var textureID: gl.uint = 0;
-    gl.GenTextures(1, (&textureID)[0..1]);
-    gl.BindTexture(gl.TEXTURE_2D, textureID);
-    gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, @intCast(image.width), @intCast(image.height), 0, gl.RGBA, gl.UNSIGNED_BYTE, image.data.ptr);
-    gl.GenerateMipmap(gl.TEXTURE_2D);
-    gl.BindTexture(gl.TEXTURE_2D, 0);
-    if (gl.IsTexture(textureID) == gl.FALSE) {
-        std.log.err("[Texture]: Failed to generate texture {s}. Not texture.", .{location});
-        std.process.exit(1);
-    }
+    const textureID = generateTexture(image, location);
 
     const fileName = string.getFileName(location);
 
@@ -62,3 +53,17 @@ pub fn new(location: []const u8) void {
 }
 
 //* INTERNAL API. ==============================================
+
+fn generateTexture(image: stbi.Image, location: []const u8) gl.uint {
+    var textureID: gl.uint = 0;
+    gl.GenTextures(1, (&textureID)[0..1]);
+    gl.BindTexture(gl.TEXTURE_2D, textureID);
+    gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, @intCast(image.width), @intCast(image.height), 0, gl.RGBA, gl.UNSIGNED_BYTE, image.data.ptr);
+    gl.GenerateMipmap(gl.TEXTURE_2D);
+    gl.BindTexture(gl.TEXTURE_2D, 0);
+    if (gl.IsTexture(textureID) == gl.FALSE) {
+        std.log.err("[Texture]: Failed to generate texture {s}. Not texture.", .{location});
+        std.process.exit(1);
+    }
+    return textureID;
+}
