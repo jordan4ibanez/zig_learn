@@ -1,7 +1,7 @@
 #version 460
 
-in vec3 pixel_color;
-in vec3 rgb;
+noperspective in vec3 pixel_color;
+noperspective in vec3 rgb;
 // in vec2 output_texture_coordinate;
 
 // uniform sampler2D texture_sampler;
