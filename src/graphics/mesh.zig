@@ -6,7 +6,7 @@ const shader = @import("shader.zig");
 const Mesh = struct {
     vao: gl.uint,
     vboPosition: gl.uint,
-    vboColor: gl.uint,
+    vboTexture: gl.uint,
     eboIndex: gl.uint,
     length: gl.sizei,
 };
@@ -41,14 +41,12 @@ pub fn terminate() void {
 ///
 /// Keep in mind, this will clone the name string. So free it after you run this.
 ///
-pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indices: []const u32) void {
-    // std.debug.print("{any}, {any}\n", .{ positions, colors });
-
+pub fn new(name: []const u8, positions: []const f32, textureCoords: []const f32, indices: []const u32) void {
     var mesh = allocator.create(Mesh);
 
     mesh.vao = createVao();
     mesh.vboPosition = positionUpload(positions);
-    mesh.vboColor = colorUpload(colors);
+    mesh.vboTexture = textureUpload(textureCoords);
     mesh.eboIndex = indexUpload(indices);
     mesh.length = @intCast(indices.len);
 
@@ -137,7 +135,7 @@ fn destroyVbo(vboPosition: gl.uint, vboId: gl.uint, vboName: []const u8, meshNam
 fn destroyMesh(name: []const u8, mesh: *Mesh) void {
     gl.BindVertexArray(mesh.vao);
     destroyVbo(shader.POSITION_VBO_LOCATION, mesh.vboPosition, "position", name);
-    destroyVbo(shader.COLOR_VBO_LOCATION, mesh.vboColor, "color", name);
+    destroyVbo(shader.TEXTURE_VBO_LOCATION, mesh.vboTexture, "texture coordinates", name);
     destroyEbo(mesh.eboIndex, "index", name);
     unbindAndDestroyVao(mesh.vao, name);
 }
@@ -181,17 +179,17 @@ fn indexUpload(indices: []const u32) gl.uint {
 }
 
 ///
-/// Upload an array of colors into the GPU.
+/// Upload an array of texture coordinates into the GPU.
 ///
-fn colorUpload(colors: []const f32) gl.uint {
-    var vboColor: gl.uint = 0;
-    gl.GenBuffers(1, (&vboColor)[0..1]);
-    gl.BindBuffer(gl.ARRAY_BUFFER, vboColor);
-    gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * colors.len), colors.ptr, gl.STATIC_DRAW);
-    gl.VertexAttribPointer(shader.COLOR_VBO_LOCATION, 3, gl.FLOAT, gl.FALSE, 3 * @sizeOf(f32), 0);
-    gl.EnableVertexAttribArray(shader.COLOR_VBO_LOCATION);
+fn textureUpload(textureCoords: []const f32) gl.uint {
+    var vboTexture: gl.uint = 0;
+    gl.GenBuffers(1, (&vboTexture)[0..1]);
+    gl.BindBuffer(gl.ARRAY_BUFFER, vboTexture);
+    gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * textureCoords.len), textureCoords.ptr, gl.STATIC_DRAW);
+    gl.VertexAttribPointer(shader.TEXTURE_VBO_LOCATION, 2, gl.FLOAT, gl.FALSE, 2 * @sizeOf(f32), 0);
+    gl.EnableVertexAttribArray(shader.TEXTURE_VBO_LOCATION);
     gl.BindBuffer(gl.ARRAY_BUFFER, 0);
-    return vboColor;
+    return vboTexture;
 }
 
 ///
