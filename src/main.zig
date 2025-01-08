@@ -2,6 +2,7 @@ const std = @import("std");
 const gl = @import("gl");
 const za = @import("zalgebra");
 const glfw = @import("mach-glfw");
+const stbi = @import("zstbi");
 const allocator = @import("utility/allocator.zig");
 const window = @import("graphics/window.zig");
 const shader = @import("graphics/shader.zig");
@@ -20,6 +21,9 @@ pub fn main() !void {
 
     shader.initialize();
     defer shader.terminate();
+
+    stbi.init(allocator.get());
+    defer stbi.deinit();
 
     mesh.initialize();
     defer mesh.terminate();

@@ -9,14 +9,10 @@ var database: std.StringHashMap(gl.uint) = undefined;
 //* ON/OFF SWITCH. ==============================================
 
 pub fn initialize() void {
-    stbi.setFlipVerticallyOnLoad(true);
-    stbi.init(allocator.get());
     database = std.StringHashMap(gl.uint).init(allocator.get());
 }
 
 pub fn terminate() void {
-    stbi.deinit();
-
     var databaseIterator = database.iterator();
     while (databaseIterator.next()) |entry| {
         const key = entry.key_ptr.*;
