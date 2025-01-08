@@ -30,10 +30,7 @@ pub fn terminate() void {
 /// This will take in your /path/to/image.png and create a new string as the key image.png.
 ///
 pub fn new(location: []const u8) void {
-    const nullTerminatedLocation: [:0]const u8 = std.fmt.allocPrintZ(allocator.get(), "{s}", .{location}) catch |err| {
-        std.log.err("[Texture]: Failed to null terminate string {s}. {s}", .{ location, @errorName(err) });
-        std.process.exit(1);
-    };
+    const nullTerminatedLocation = string.nullTerminate(location);
     defer allocator.free(nullTerminatedLocation);
 
     var image = stbi.Image.loadFromFile(nullTerminatedLocation, 4) catch |err| {
