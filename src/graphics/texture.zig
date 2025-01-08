@@ -19,6 +19,16 @@ pub fn terminate() void {
 
     //todo: free the gpu memory.
 
+    var databaseIterator = database.iterator();
+    while (databaseIterator.next()) |entry| {
+        const key = entry.key_ptr.*;
+        const value = entry.value_ptr.*;
+
+        destroyTexture(value);
+
+        allocator.free(key);
+    }
+
     database.clearAndFree();
 }
 
@@ -51,6 +61,9 @@ pub fn new(location: []const u8) void {
 
 //* INTERNAL API. ==============================================
 
+///
+/// Generates a GPU texture. Returns ID.
+///
 fn generateTexture(image: stbi.Image, location: []const u8) gl.uint {
     var textureID: gl.uint = 0;
     gl.GenTextures(1, (&textureID)[0..1]);
@@ -63,4 +76,12 @@ fn generateTexture(image: stbi.Image, location: []const u8) gl.uint {
         std.process.exit(1);
     }
     return textureID;
+}
+
+///
+/// Destroys a GPU texture.
+///
+fn destroyTexture(id: gl.uint) void {
+    var temp = id;
+    gl.DeleteTextures(1, (&temp)[0..1]);
 }
