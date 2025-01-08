@@ -29,8 +29,11 @@ pub fn terminate() void {
 
 //* PUBLIC API. ===========================================================
 
-pub fn create(comptime T: type) std.mem.Allocator.Error!*T {
-    return try allocator.create(T);
+pub fn create(comptime T: type) *T {
+    return allocator.create(T) catch |err| {
+        std.log.err("{}", .{err});
+        std.process.exit(1);
+    };
 }
 
 pub fn destroy(ptr: anytype) void {
