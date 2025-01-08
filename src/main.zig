@@ -98,6 +98,6 @@ pub fn main() !void {
 
         window.swapBuffers();
 
-        window.close();
+        // window.close();
     }
 }
