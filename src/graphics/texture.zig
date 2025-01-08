@@ -57,6 +57,28 @@ pub fn new(location: []const u8) void {
     };
 }
 
+///
+/// Destroy a texture.
+///
+pub fn destroy(name: []const u8) void {
+    const id = database.get(name) orelse {
+        std.log.err("[Texture]: Failed to destroy texture {s}. Does not exist.", .{name});
+        std.process.exit(1);
+    };
+    destroyTexture(id);
+}
+
+///
+/// Use a texture
+///
+pub fn use(name: []const u8) void {
+    const id = database.get(name) orelse {
+        std.log.err("[Texture]: Failed to destroy texture {s}. Does not exist.", .{name});
+        std.process.exit(1);
+    };
+    gl.BindTexture(gl.TEXTURE_2D, id);
+}
+
 //* INTERNAL API. ==============================================
 
 ///
