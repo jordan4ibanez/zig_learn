@@ -17,8 +17,6 @@ pub fn initialize() void {
 pub fn terminate() void {
     stbi.deinit();
 
-    //todo: free the gpu memory.
-
     var databaseIterator = database.iterator();
     while (databaseIterator.next()) |entry| {
         const key = entry.key_ptr.*;
