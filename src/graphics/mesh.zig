@@ -44,10 +44,7 @@ pub fn terminate() void {
 pub fn new(name: []const u8, positions: []const f32, colors: []const f32, indices: []const u32) void {
     // std.debug.print("{any}, {any}\n", .{ positions, colors });
 
-    var mesh = allocator.create(Mesh) catch |err| {
-        std.log.err("[Mesh]: Failed to allocate for mesh {s}. {}", .{ name, err });
-        std.process.exit(1);
-    };
+    var mesh = allocator.create(Mesh);
 
     mesh.vao = createVao();
     mesh.vboPosition = positionUpload(positions);
