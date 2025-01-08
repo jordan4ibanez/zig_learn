@@ -2,6 +2,7 @@ const std = @import("std");
 const stbi = @import("zstbi");
 const gl = @import("gl");
 const allocator = @import("../utility/allocator.zig");
+const string = @import("../utility//string.zig");
 
 var database: std.StringHashMap(gl.uint) = undefined;
 
@@ -52,37 +53,12 @@ pub fn new(location: []const u8) void {
         std.process.exit(1);
     }
 
-    // Getting the file name here. //todo: This should probably be in a string library.
-
-    var indexOfFileName: usize = 0;
-    var stringIterator = std.mem.split(u8, location, "/");
-
-    while (stringIterator.next()) |val| {
-        _ = &val;
-        indexOfFileName += 1;
-    }
-
-    stringIterator.reset();
-
-    var fileName = allocator.alloc(u8, 0);
-
-    var j: usize = 0;
-    while (stringIterator.next()) |val| {
-        j += 1;
-
-        if (j == indexOfFileName) {
-            fileName = allocator.realloc(fileName, val.len);
-            @memcpy(fileName, val);
-        }
-    }
-
-    if (fileName.len == 0) {
-        std.log.err("[Texture]: Failed to find file name for {s}.", .{location});
-        std.process.exit(1);
-    }
+    const fileName = string.getFileName(location);
 
     database.putNoClobber(fileName, textureID) catch |err| {
         std.log.err("[Texture]: Failed store texture {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
 }
+
+//* INTERNAL API. ==============================================
