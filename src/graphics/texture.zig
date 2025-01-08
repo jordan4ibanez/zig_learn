@@ -93,7 +93,7 @@ fn generateTexture(image: stbi.Image, location: []const u8) gl.uint {
     gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, @intCast(image.width), @intCast(image.height), 0, gl.RGBA, gl.UNSIGNED_BYTE, image.data.ptr);
-    gl.GenerateMipmap(gl.TEXTURE_2D);
+    // gl.GenerateMipmap(gl.TEXTURE_2D);
     gl.BindTexture(gl.TEXTURE_2D, 0);
     if (gl.IsTexture(textureID) == gl.FALSE) {
         std.log.err("[Texture]: Failed to generate texture {s}. Not texture.", .{location});
