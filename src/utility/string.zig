@@ -38,3 +38,15 @@ pub fn getFileName(location: []const u8) []const u8 {
 
     return fileName;
 }
+
+///
+/// Null terminate a zig string.
+///
+/// This allocates. Ensure you free.
+///
+pub fn nullTerminate(input: []const u8) [:0]const u8 {
+    return std.fmt.allocPrintZ(allocator.get(), "{s}", .{input}) catch |err| {
+        std.log.err("[String]: Failed to null terminate string {s}. {s}", .{ input, @errorName(err) });
+        std.process.exit(1);
+    };
+}
