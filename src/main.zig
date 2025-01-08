@@ -80,9 +80,9 @@ pub fn main() !void {
         indices[0..],
     );
 
-    texture.new("textures/sand.png");
+    texture.new("textures/test.png");
 
-    texture.use("sand.png");
+    texture.use("test.png");
 
     var rotation: f32 = 0;
     while (!window.shouldClose()) {
