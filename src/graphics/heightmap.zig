@@ -12,7 +12,7 @@ pub const HeightMap = struct {
 
 //* PUBLIC API. ==============================================
 
-pub fn create(location: []const u8) HeightMap {
+pub fn new(location: []const u8) HeightMap {
     const nullTerminatedLocation = string.nullTerminate(location);
     defer allocator.free(nullTerminatedLocation);
 
@@ -54,7 +54,7 @@ pub fn create(location: []const u8) HeightMap {
 }
 
 ///
-/// Destroy a created map.
+/// Destroy a height map.
 ///
 pub fn destroy(map: HeightMap) void {
     for (map.data) |element| {
