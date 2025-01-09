@@ -34,9 +34,6 @@ pub fn new(location: []const u8) HeightMap {
     var i: usize = 0;
     for (0..image.width) |x| {
         for (0..image.height) |y| {
-            map.data[y][x] = 1;
-            std.debug.print("{d}, {d}\n", .{ x, y });
-
             const index = i * image.bytes_per_component;
 
             const byteData = [2]u8{ image.data[index], image.data[index + 1] };
@@ -46,13 +43,16 @@ pub fn new(location: []const u8) HeightMap {
             const floatingLiteral: f32 = @floatFromInt(rawValue);
             const converted = floatingLiteral / 65535.0;
 
+            const flippedY = (image.height - 1) - y;
+
             // this might need to be inverted on the Y axis.
-            map.data[y][x] = converted;
+            map.data[x][flippedY] = converted;
+
+            // std.debug.print("{d}, {d} = {d}\n", .{ x, flippedY, converted });
 
             i += 1;
         }
     }
-    
 
     return map;
 }
