@@ -31,24 +31,28 @@ pub fn new(location: []const u8) HeightMap {
         map.data[i] = allocator.alloc(f32, image.width);
     }
 
-    // std.debug.print("{d}, {d}, {d}, {d}\n", .{ image.width, image.height, image.data.len, image.bytes_per_component });
+    var i: usize = 0;
+    for (0..image.width) |x| {
+        for (0..image.height) |y| {
+            map.data[y][x] = 1;
+            std.debug.print("{d}, {d}\n", .{ x, y });
 
-    const len = image.data.len / image.bytes_per_component;
+            const index = i * image.bytes_per_component;
 
-    for (0..len) |i| {
-        const index = i * image.bytes_per_component;
+            const byteData = [2]u8{ image.data[index], image.data[index + 1] };
+            const rawValue: u16 = std.mem.readInt(u16, &byteData, NATIVE_ENDIAN);
 
-        const byteData = [2]u8{ image.data[index], image.data[index + 1] };
-        const rawValue: u16 = std.mem.readInt(u16, &byteData, NATIVE_ENDIAN);
+            // Heightmap data is of scalar [0.0 - 1.0]
+            const floatingLiteral: f32 = @floatFromInt(rawValue);
+            const converted = floatingLiteral / 65535.0;
 
-        // Heightmap data is of scalar [0.0 - 1.0]
-        const floatingLiteral: f32 = @floatFromInt(rawValue);
-        const converted = floatingLiteral / 65535.0;
+            // this might need to be inverted on the Y axis.
+            map.data[y][x] = converted;
 
-        std.debug.print("{d} {d}\n", .{ floatingLiteral, converted });
-
-        // std.debug.print("{s}, {d}, {d}, {d}, {d}\n", .{ location, rawBytes, index, floatingValue, image.num_components });
+            i += 1;
+        }
     }
+    
 
     return map;
 }
