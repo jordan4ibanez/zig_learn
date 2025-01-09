@@ -18,7 +18,7 @@ pub fn load(location: []const u8) HeightMap {
     const nullTerminatedLocation = string.nullTerminate(location);
     defer allocator.free(nullTerminatedLocation);
 
-    var image = stbi.Image.loadFromFile(nullTerminatedLocation, 1) catch |err| {
+    var image = stbi.Image.loadFromFile(nullTerminatedLocation, 2) catch |err| {
         std.log.err("[Texture]: Failed to load texture {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
@@ -29,15 +29,12 @@ pub fn load(location: []const u8) HeightMap {
     const len = image.data.len / image.bytes_per_component;
     for (0..len) |i| {
         const index = i * image.bytes_per_component;
-        _ = &i;
 
         const boof = [2]u8{ image.data[index], image.data[index + 1] };
-        const value: u16 = std.mem.readInt(u16, &boof, .little);
+        const value: u16 = std.mem.readInt(u16, &boof, .big);
         const fef: f16 = @bitCast(value);
 
-        // _ = &fef;
-
-        std.debug.print("{d}, {d}\n", .{ fef, image.num_components });
+        std.debug.print("{d}, {d}, {d}\n", .{ index, fef, image.num_components });
     }
 
     _ = &map;
