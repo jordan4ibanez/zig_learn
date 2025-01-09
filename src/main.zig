@@ -42,7 +42,7 @@ pub fn main() !void {
 
     shader.start("main");
 
-    _ = heightmap.load("levels/test_height_map.png");
+    _ = heightmap.load("levels/4square.png");
 
     const positions = [_]f32{
         -0.5, 0.5, 0.0, // top left
@@ -115,6 +115,6 @@ pub fn main() !void {
 
         window.swapBuffers();
 
-        // window.close();
+        window.close();
     }
 }
