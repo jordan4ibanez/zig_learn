@@ -45,47 +45,44 @@ pub fn main() !void {
     const map = heightmap.new("levels/4square.png");
     defer heightmap.destroy(map);
 
-    const positions = [_]f32{
-        -0.5, 0.5, 0.0, // top left
-        -0.5, -0.5, 0.0, // bottom left
-        0.5, -0.5, 0.0, // bottom right
-        0.5, 0.5, 0.0, // top right
-    };
+    var positions: []f32 = allocator.alloc(f32, 0);
+    var textureCoords: []f32 = allocator.alloc(f32, 0);
+    var indices: []u32 = allocator.alloc(u32, 0);
+
+    for (0..map.width) |x| {
+        for (0..map.height) |y| {
+            _ = &x;
+            _ = &y;
+
+            //todo: build heightmap here.
+        }
+    }
 
     _ = &positions;
+    _ = &textureCoords;
+    _ = &indices;
 
-    // const colors = [_]f32{
-    //     1.0,
-    //     0.0,
-    //     0.0,
-
-    //     0.0,
-    //     1.0,
-    //     0.0,
-
-    //     0.0,
-    //     0.0,
-    //     1.0,
-
-    //     0.0,
-    //     1.0,
-    //     1.0,
+    // positions []f32{
+    //     -0.5, 0.5, 0.0, // top left
+    //     -0.5, -0.5, 0.0, // bottom left
+    //     0.5, -0.5, 0.0, // bottom right
+    //     0.5, 0.5, 0.0, // top right
     // };
 
-    const textureCoords = [_]f32{
-        0.0, 0.0, // top left
-        0.0, 1.0, // bottom left
-        1.0, 1.0, // bottom right
-        1.0, 0.0, // top right
-    };
+    // const textureCoords = [_]f32{
+    //     0.0, 0.0, // top left
+    //     0.0, 1.0, // bottom left
+    //     1.0, 1.0, // bottom right
+    //     1.0, 0.0, // top right
+    // };
 
-    const indices = [_]u32{ 0, 1, 2, 2, 3, 0 };
+    // const indices = [_]u32{ 0, 1, 2, 2, 3, 0 };
 
     mesh.new(
         "test",
-        positions[0..],
-        textureCoords[0..],
-        indices[0..],
+        positions,
+        textureCoords,
+        indices,
     );
 
     texture.new("textures/test.png");

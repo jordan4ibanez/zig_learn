@@ -22,9 +22,11 @@ pub fn new(location: []const u8) HeightMap {
     };
     defer image.deinit();
 
+    // Height map gets -1 width and height because the edges are vertex points.
+    // (You make tiles out of each pixel quadrant)
     var map = HeightMap{
-        .width = image.width,
-        .height = image.height,
+        .width = image.width - 1,
+        .height = image.height - 1,
         .data = allocator.alloc([]f32, image.height),
     };
     for (0..image.height) |i| {
