@@ -12,9 +12,7 @@ pub const HeightMap = struct {
 
 //* PUBLIC API. ==============================================
 
-pub fn load(location: []const u8) HeightMap {
-    var map: HeightMap = undefined;
-
+pub fn create(location: []const u8) HeightMap {
     const nullTerminatedLocation = string.nullTerminate(location);
     defer allocator.free(nullTerminatedLocation);
 
@@ -24,9 +22,19 @@ pub fn load(location: []const u8) HeightMap {
     };
     defer image.deinit();
 
+    var map = HeightMap{
+        .width = image.width,
+        .height = image.height,
+        .data = allocator.alloc([]f32, image.height),
+    };
+    for (0..image.height) |i| {
+        map.data[i] = allocator.alloc(f32, image.width);
+    }
+
     // std.debug.print("{d}, {d}, {d}, {d}\n", .{ image.width, image.height, image.data.len, image.bytes_per_component });
 
     const len = image.data.len / image.bytes_per_component;
+
     for (0..len) |i| {
         const index = i * image.bytes_per_component;
 
@@ -35,15 +43,24 @@ pub fn load(location: []const u8) HeightMap {
 
         // Heightmap data is of scalar [0.0 - 1.0]
         const floatingLiteral: f32 = @floatFromInt(rawValue);
+        const converted = floatingLiteral / 65535.0;
 
-        // const converted
-        _ = &floatingLiteral;
+        std.debug.print("{d} {d}\n", .{ floatingLiteral, converted });
 
         // std.debug.print("{s}, {d}, {d}, {d}, {d}\n", .{ location, rawBytes, index, floatingValue, image.num_components });
     }
 
-    _ = &map;
     return map;
+}
+
+///
+/// Destroy a created map.
+///
+pub fn destroy(map: HeightMap) void {
+    for (map.data) |element| {
+        allocator.free(element);
+    }
+    allocator.free(map.data);
 }
 
 //* INTERNAL API. ==============================================
