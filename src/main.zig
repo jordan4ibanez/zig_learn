@@ -8,6 +8,7 @@ const window = @import("graphics/window.zig");
 const shader = @import("graphics/shader.zig");
 const mesh = @import("graphics/mesh.zig");
 const texture = @import("graphics/texture.zig");
+const heightmap = @import("graphics/heightmap.zig");
 
 const Vec3 = za.Vec3;
 const Mat4 = za.Mat4;
@@ -40,6 +41,8 @@ pub fn main() !void {
     gl.Viewport(0, 0, 1024, 768);
 
     shader.start("main");
+
+    _ = heightmap.load("levels/test_height_map.png");
 
     const positions = [_]f32{
         -0.5, 0.5, 0.0, // top left
