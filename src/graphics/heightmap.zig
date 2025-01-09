@@ -31,6 +31,8 @@ pub fn load(location: []const u8) HeightMap {
         const index = i * image.bytes_per_component;
 
         const boof = [2]u8{ image.data[index], image.data[index + 1] };
+
+        // todo: try memcpy hack here
         const value: u16 = std.mem.readInt(u16, &boof, .big);
         const fef: f16 = @bitCast(value);
 
