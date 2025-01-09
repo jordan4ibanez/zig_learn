@@ -42,7 +42,8 @@ pub fn main() !void {
 
     shader.start("main");
 
-    _ = heightmap.load("levels/4square.png");
+    const map = heightmap.create("levels/4square.png");
+    defer heightmap.destroy(map);
 
     const positions = [_]f32{
         -0.5, 0.5, 0.0, // top left
