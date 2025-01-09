@@ -14,5 +14,4 @@ https://www.hawkjames.com/indiedev/update/2022/06/02/rendering-ps1.html
 
 note:
 map will be a greyscale texture map.
-// todo: fix the gimp export as an f32, it's currently f16.
-map will be exported from gimp as 32 bit floating point.
+export gimp as ``16 bpc GRAY`` png.
