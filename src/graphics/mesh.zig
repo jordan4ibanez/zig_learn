@@ -5,8 +5,7 @@ const shader = @import("shader.zig");
 
 const Mesh = struct {
     vao: gl.uint,
-    vboPosition: gl.uint,
-    vboTexture: gl.uint,
+    vboVertexData: gl.uint,
     eboIndex: gl.uint,
     length: gl.sizei,
 };
@@ -41,12 +40,11 @@ pub fn terminate() void {
 ///
 /// Keep in mind, this will clone the name string. So free it after you run this.
 ///
-pub fn new(name: []const u8, positions: []const f32, textureCoords: []const f32, indices: []const u32) void {
+pub fn new(name: []const u8, vertexData: []const f32, indices: []const u32) void {
     var mesh = allocator.create(Mesh);
 
     mesh.vao = createVao();
-    mesh.vboPosition = positionUpload(positions);
-    mesh.vboTexture = textureUpload(textureCoords);
+    mesh.vboVertexData = vertexUpload(vertexData);
     mesh.eboIndex = indexUpload(indices);
     mesh.length = @intCast(indices.len);
 
@@ -119,8 +117,9 @@ fn destroyEbo(eboId: gl.uint, eboName: []const u8, meshName: []const u8) void {
 ///
 /// A simpler way to destroy Vertex Buffer Objects.
 ///
-fn destroyVbo(vboPosition: gl.uint, vboId: gl.uint, vboName: []const u8, meshName: []const u8) void {
-    gl.DisableVertexAttribArray(vboPosition);
+fn destroyVbo(vboId: gl.uint, vboName: []const u8, meshName: []const u8) void {
+    gl.DisableVertexAttribArray(shader.POSITION_ATTRIBUTE_LOCATION);
+    gl.DisableVertexAttribArray(shader.TEXTURE_ATTRIBUTE_LOCATION);
     var temp = vboId;
     gl.DeleteBuffers(1, (&temp)[0..1]);
     if (gl.IsBuffer(vboId) == gl.TRUE) {
@@ -134,8 +133,7 @@ fn destroyVbo(vboPosition: gl.uint, vboId: gl.uint, vboName: []const u8, meshNam
 ///
 fn destroyMesh(name: []const u8, mesh: *Mesh) void {
     gl.BindVertexArray(mesh.vao);
-    destroyVbo(shader.POSITION_VBO_LOCATION, mesh.vboPosition, "position", name);
-    destroyVbo(shader.TEXTURE_VBO_LOCATION, mesh.vboTexture, "texture coordinates", name);
+    destroyVbo(mesh.vboVertexData, "vertex data", name);
     destroyEbo(mesh.eboIndex, "index", name);
     unbindAndDestroyVao(mesh.vao, name);
 }
@@ -179,28 +177,19 @@ fn indexUpload(indices: []const u32) gl.uint {
 }
 
 ///
-/// Upload an array of texture coordinates into the GPU.
+/// Upload an array of vertex data into the GPU.
 ///
-fn textureUpload(textureCoords: []const f32) gl.uint {
-    var vboTexture: gl.uint = 0;
-    gl.GenBuffers(1, (&vboTexture)[0..1]);
-    gl.BindBuffer(gl.ARRAY_BUFFER, vboTexture);
-    gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * textureCoords.len), textureCoords.ptr, gl.STATIC_DRAW);
-    gl.VertexAttribPointer(shader.TEXTURE_VBO_LOCATION, 2, gl.FLOAT, gl.FALSE, 2 * @sizeOf(f32), 0);
-    gl.EnableVertexAttribArray(shader.TEXTURE_VBO_LOCATION);
-    gl.BindBuffer(gl.ARRAY_BUFFER, 0);
-    return vboTexture;
-}
+fn vertexUpload(vertexData: []const f32) gl.uint {
+    var vboVertex: gl.uint = 0;
+    gl.GenBuffers(1, (&vboVertex)[0..1]);
+    gl.BindBuffer(gl.ARRAY_BUFFER, vboVertex);
+    gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * vertexData.len), vertexData.ptr, gl.STATIC_DRAW);
+    // Position data.
+    gl.VertexAttribPointer(shader.POSITION_ATTRIBUTE_LOCATION, 3, gl.FLOAT, gl.FALSE, 5 * @sizeOf(f32), 0);
+    gl.EnableVertexAttribArray(shader.POSITION_ATTRIBUTE_LOCATION);
+    // Texture Coordinate data.
+    gl.VertexAttribPointer(shader.TEXTURE_ATTRIBUTE_LOCATION, 2, gl.FLOAT, gl.FALSE, 5 * @sizeOf(f32), 3 * @sizeOf(f32));
+    gl.EnableVertexAttribArray(shader.TEXTURE_ATTRIBUTE_LOCATION);
 
-///
-/// Upload an array of positions into the GPU.
-///
-fn positionUpload(positions: []const f32) gl.uint {
-    var vboPosition: gl.uint = 0;
-    gl.GenBuffers(1, (&vboPosition)[0..1]);
-    gl.BindBuffer(gl.ARRAY_BUFFER, vboPosition);
-    gl.BufferData(gl.ARRAY_BUFFER, @intCast(@sizeOf(f32) * positions.len), positions.ptr, gl.STATIC_DRAW);
-    gl.VertexAttribPointer(shader.POSITION_VBO_LOCATION, 3, gl.FLOAT, gl.FALSE, 3 * @sizeOf(f32), 0);
-    gl.EnableVertexAttribArray(0);
-    return vboPosition;
+    return vboVertex;
 }
