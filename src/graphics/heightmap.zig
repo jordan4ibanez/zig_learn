@@ -12,7 +12,7 @@ pub const HeightMap = struct {
 
 //* PUBLIC API. ==============================================
 
-pub fn new(location: []const u8) HeightMap {
+pub fn new(location: []const u8, yScale: f32) HeightMap {
     const nullTerminatedLocation = string.nullTerminate(location);
     defer allocator.free(nullTerminatedLocation);
 
@@ -41,9 +41,9 @@ pub fn new(location: []const u8) HeightMap {
             const byteData = [2]u8{ image.data[index], image.data[index + 1] };
             const rawValue: u16 = std.mem.readInt(u16, &byteData, NATIVE_ENDIAN);
 
-            // Heightmap data is of scalar [0.0 - 1.0]
+            // Heightmap data is of scalar [-0.5 - 0.5]
             const floatingLiteral: f32 = @floatFromInt(rawValue);
-            const converted = floatingLiteral / 65535.0;
+            const converted = ((floatingLiteral / 65535.0) - 0.5) * yScale;
 
             const flippedY = (image.height - 1) - y;
 

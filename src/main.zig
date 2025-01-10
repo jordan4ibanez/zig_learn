@@ -58,7 +58,9 @@ pub fn main() !void {
 
     shader.start("main");
 
-    const map = heightmap.new("levels/4square.png");
+    //* Start heightmap into map data.
+
+    const map = heightmap.new("levels/test_height_map.png", 1);
     defer heightmap.destroy(map);
 
     var vertexData: []f32 = allocator.alloc(f32, 0);
@@ -73,7 +75,24 @@ pub fn main() !void {
             const indexVertexData = vertexData.len;
             vertexData = allocator.realloc(vertexData, vertexData.len + 20);
 
-            // todo: vertexdata into the thing
+            const heightTopLeft = map.data[x][y + 1];
+            const heightBottomLeft = map.data[x][y];
+            const heightBottomRight = map.data[x + 1][y];
+            const heightTopRight = map.data[x + 1][y + 1];
+
+            // todo: map texture to texture map with some kind of data type etc.
+            // zig fmt: off
+            const currentTile = [_]f32{
+                
+                @floatFromInt(x), heightTopLeft,     @floatFromInt(y + 1),   0.0, 0.0, // top left
+                @floatFromInt(x), heightBottomLeft,  @floatFromInt(y),   0.0, 1.0, // bottom left
+                @floatFromInt(x + 1), heightBottomRight, @floatFromInt(y),   1.0, 1.0, // bottom right
+                @floatFromInt(x + 1), heightTopRight,    @floatFromInt(y + 1),   1.0, 0.0, // top right
+                
+            };
+            // zig fmt: on
+
+            @memcpy(vertexData[indexVertexData..], &currentTile);
 
             const indexIndices = indices.len;
             indices = allocator.realloc(indices, indices.len + 6);
@@ -85,6 +104,7 @@ pub fn main() !void {
                 indicesTemplate[i] += 4;
             }
 
+            _ = &currentTile;
             _ = &x;
             _ = &y;
             _ = &indexVertexData;
@@ -94,20 +114,20 @@ pub fn main() !void {
             _ = &indices;
         }
     }
-
-    std.debug.print("{any}\n", .{indices});
+    // std.debug.print("{any}\n", .{vertexData});
+    // std.debug.print("{any}\n", .{indices});
 
     // _ = &positions;
     // _ = &textureCoords;
     // _ = &indices;
 
     // const vertexData = [_]f32{
-    //     // zig fmt: off
+
     //     -0.5, 0.5, 0.0,   0.0, 0.0, // top left
     //     -0.5, -0.5, 0.0,  0.0, 1.0, // bottom left
     //     0.5, -0.5, 0.0,   1.0, 1.0, // bottom right
     //     0.5, 0.5, 0.0,    1.0, 0.0, // top right
-    //     // zig fmt: on
+
     // };
 
     mesh.new(
@@ -116,11 +136,15 @@ pub fn main() !void {
         indices,
     );
 
-    texture.new("textures/test.png");
+    //* End heightmap into map data.
 
-    texture.use("test.png");
+    texture.new("textures/sand.png");
 
-    var rotation: f32 = 0;
+    texture.use("sand.png");
+
+    const rotation: f32 = -30;
+    var translation: f32 = 0;
+
     while (!window.shouldClose()) {
         window.pollEvents();
 
@@ -128,15 +152,21 @@ pub fn main() !void {
         gl.Clear(gl.COLOR_BUFFER_BIT);
         gl.Clear(gl.DEPTH_BUFFER_BIT);
 
-        const cameraMatrix = Mat4.perspective(65.0, 1024.0 / 768.0, 0.1, 100.0);
+        var cameraMatrix = Mat4.perspective(65.0, 1024.0 / 768.0, 0.1, 100.0);
+
+        cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
+
+        cameraMatrix = cameraMatrix.rotate(rotation, Vec3.new(1, 0, 0));
+        cameraMatrix = cameraMatrix.rotate(-45.0, Vec3.new(0, 1, 0));
+        // rotation -= 0.1;
         shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 
-        var objectMatrix = Mat4.identity();
-        objectMatrix = objectMatrix.translate(Vec3.new(0, 0, -1));
-        objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
-        objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
+        translation += 0.001;
 
-        rotation += 1.5;
+        var objectMatrix = Mat4.identity();
+        objectMatrix = objectMatrix.translate(Vec3.new(0, -1.0, translation));
+        // objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
+        objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
 
         shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
 
