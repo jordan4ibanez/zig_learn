@@ -13,6 +13,22 @@ const heightmap = @import("graphics/heightmap.zig");
 const Vec3 = za.Vec3;
 const Mat4 = za.Mat4;
 
+// const positions = [_]f32{
+//     -0.5, 0.5, 0.0, // top left
+//     -0.5, -0.5, 0.0, // bottom left
+//     0.5, -0.5, 0.0, // bottom right
+//     0.5, 0.5, 0.0, // top right
+// };
+
+// const textureCoords = [_]f32{
+//     0.0, 0.0, // top left
+//     0.0, 1.0, // bottom left
+//     1.0, 1.0, // bottom right
+//     1.0, 0.0, // top right
+// };
+
+// const indices = [_]u32{ 0, 1, 2, 2, 3, 0 };
+
 pub fn main() !void {
     allocator.initialize();
     defer allocator.terminate();
