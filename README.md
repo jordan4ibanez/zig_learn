@@ -7,6 +7,11 @@ copy memory into buffer:
 @memcpy(dest[start_index..], source);
 ```
 
+```zig
+// Freakman and fri3dnstuff note now to copy an array to an array:
+myArray[10..20].* = other[0..10].*;
+```
+
 Note: this is written as a conventional OpenGL project. Nothing new here.
 
 Great article on ps1 style graphics
@@ -15,3 +20,4 @@ https://www.hawkjames.com/indiedev/update/2022/06/02/rendering-ps1.html
 note:
 map will be a greyscale texture map.
 export gimp as ``16 bpc GRAY`` png.
+
