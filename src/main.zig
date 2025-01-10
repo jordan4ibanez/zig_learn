@@ -71,7 +71,9 @@ pub fn main() !void {
     for (0..map.width) |x| {
         for (0..map.height) |y| {
             const indexVertexData = vertexData.len;
-            // positions = allocator.realloc(positions, positions.len + 12);
+            vertexData = allocator.realloc(vertexData, vertexData.len + 20);
+
+            // todo: vertexdata into the thing
 
             const indexIndices = indices.len;
             indices = allocator.realloc(indices, indices.len + 6);
