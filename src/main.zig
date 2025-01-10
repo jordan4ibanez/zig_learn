@@ -66,7 +66,7 @@ pub fn main() !void {
     var indices: []u32 = allocator.alloc(u32, 0);
     defer allocator.free(indices);
 
-    const indicesTemplate = [_]u32{ 0, 1, 2, 2, 3, 0 };
+    var indicesTemplate = [_]u32{ 0, 1, 2, 2, 3, 0 };
 
     for (0..map.width) |x| {
         for (0..map.height) |y| {
@@ -74,7 +74,14 @@ pub fn main() !void {
             // positions = allocator.realloc(positions, positions.len + 12);
 
             const indexIndices = indices.len;
-            // indices = allocator.realloc(indices, indices.len + 6);
+            indices = allocator.realloc(indices, indices.len + 6);
+
+            @memcpy(indices[indexIndices..], &indicesTemplate);
+
+            // fixme: This is a workaround for the zig compiler being unfinished.
+            for (0..indicesTemplate.len) |i| {
+                indicesTemplate[i] += 4;
+            }
 
             _ = &x;
             _ = &y;
@@ -85,6 +92,8 @@ pub fn main() !void {
             _ = &indices;
         }
     }
+
+    std.debug.print("{any}\n", .{indices});
 
     // _ = &positions;
     // _ = &textureCoords;
