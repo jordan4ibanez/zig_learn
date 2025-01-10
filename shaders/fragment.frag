@@ -7,7 +7,10 @@
 // noperspective in vec3 pixel_color;
 // noperspective in vec3 rgb;
 
-in vec2 textureCoordinate;
+noperspective in vec2 textureCoordinate;
+
+// in vec2 textureCoordinate;
+
 in vec4 fogColor;
 in float fogAmount;
 
