@@ -8,11 +8,15 @@
 // noperspective in vec3 rgb;
 
 in vec2 textureCoordinate;
+in vec4 fogColor;
+in float fogAmount;
 
 uniform sampler2D textureSampler;
 
 out vec4 frag_color;
 
 void main() {
-   frag_color = texture(textureSampler, textureCoordinate); //* vec4(pixel_color, 1.0);
+   frag_color = texture(textureSampler, textureCoordinate), 
+   frag_color = mix(frag_color, fogColor, fogAmount); 
+   frag_color.rgb /= frag_color.a;
 }

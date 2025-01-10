@@ -161,7 +161,7 @@ pub fn main() !void {
         // rotation -= 0.1;
         shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 
-        translation += 0.001;
+        translation += 0.01;
 
         var objectMatrix = Mat4.identity();
         objectMatrix = objectMatrix.translate(Vec3.new(0, -1.0, translation));

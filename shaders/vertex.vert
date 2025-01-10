@@ -18,6 +18,15 @@ layout (location = 1) uniform mat4 object_matrix;
 
 out vec2 textureCoordinate;
 
+const float fogStart = 4.0;
+const float fogEnd = 5.0;
+out vec4 fogColor;
+out float fogAmount;
+
+// Gives ps1 style fog.
+float fogginess(const float dist) {
+  return 1.0 - clamp((fogEnd - dist) / (fogEnd - fogStart), 0.0, 1.0);
+}
 
 // The lower this value is, the blockier the graphics get.
 // todo: make this a uniform lol.
@@ -27,7 +36,10 @@ const float ps1Blockiness = 50.0;
 void main() {
   gl_Position = camera_matrix * object_matrix * vec4(position.x, position.y, position.z, 1.0f);
   
+  fogAmount = fogginess(length(gl_Position.xyz));
+
   textureCoordinate = texturePos;
-  // rgb = color;
+
+  fogColor = vec4(0.2, 0.3, 0.3, 1.0); 
 }
 
