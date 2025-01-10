@@ -45,44 +45,57 @@ pub fn main() !void {
     const map = heightmap.new("levels/4square.png");
     defer heightmap.destroy(map);
 
-    var positions: []f32 = allocator.alloc(f32, 0);
-    var textureCoords: []f32 = allocator.alloc(f32, 0);
-    var indices: []u32 = allocator.alloc(u32, 0);
+    // var positions: []f32 = allocator.alloc(f32, 0);
+    // defer allocator.free(positions);
+    // var textureCoords: []f32 = allocator.alloc(f32, 0);
+    // defer allocator.free(textureCoords);
+    // var indices: []u32 = allocator.alloc(u32, 0);
+    // defer allocator.free(indices);
 
     for (0..map.width) |x| {
         for (0..map.height) |y| {
+            // const indexPositions = positions.len;
+            // positions = allocator.realloc(positions, positions.len + 12);
+
+            // const indexTextureCoords = textureCoords.len;
+            // textureCoords = allocator.realloc(textureCoords, textureCoords.len + 8);
+
+            // const indexIndices = indices.len;
+            // indices = allocator.realloc(indices, indices.len + 6);
+
             _ = &x;
             _ = &y;
-
-            //todo: build heightmap here.
+            // _ = &indexPositions;
+            // _ = &indexTextureCoords;
+            // _ = &indexIndices;
         }
     }
 
-    _ = &positions;
-    _ = &textureCoords;
-    _ = &indices;
+    // _ = &positions;
+    // _ = &textureCoords;
+    // _ = &indices;
 
-    // positions []f32{
-    //     -0.5, 0.5, 0.0, // top left
-    //     -0.5, -0.5, 0.0, // bottom left
-    //     0.5, -0.5, 0.0, // bottom right
-    //     0.5, 0.5, 0.0, // top right
-    // };
+    const positions = [_]f32{
+        -0.5, 0.5, 0.0, // top left
+        -0.5, -0.5, 0.0, // bottom left
+        0.5, -0.5, 0.0, // bottom right
+        0.5, 0.5, 0.0, // top right
+    };
 
-    // const textureCoords = [_]f32{
-    //     0.0, 0.0, // top left
-    //     0.0, 1.0, // bottom left
-    //     1.0, 1.0, // bottom right
-    //     1.0, 0.0, // top right
-    // };
+    const textureCoords = [_]f32{
+        0.0, 0.0, // top left
+        0.0, 1.0, // bottom left
+        1.0, 1.0, // bottom right
+        1.0, 0.0, // top right
+    };
 
-    // const indices = [_]u32{ 0, 1, 2, 2, 3, 0 };
+    const indices = [_]u32{ 0, 1, 2, 2, 3, 0 };
 
     mesh.new(
         "test",
-        positions,
-        textureCoords,
-        indices,
+        &positions,
+        &textureCoords,
+        &indices,
     );
 
     texture.new("textures/test.png");
@@ -113,6 +126,6 @@ pub fn main() !void {
 
         window.swapBuffers();
 
-        window.close();
+        // window.close();
     }
 }
