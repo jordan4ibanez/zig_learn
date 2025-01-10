@@ -8,7 +8,7 @@ var window: glfw.Window = undefined;
 //* ON/OFF SWITCH. ==============================================
 
 pub fn initialize() void {
-    glfw.setErrorCallback(errorCallback);
+    glfw.setErrorCallback(glfwErrorCallback);
 
     if (!glfw.init(.{})) {
         std.log.err("[GLFW] Error: Failed to initialize. {?s}", .{glfw.getErrorString()});
@@ -45,12 +45,17 @@ pub fn initialize() void {
         std.process.exit(1);
     }
 
+    // Allow debugging output for OpenGL.
+    gl.Enable(gl.DEBUG_OUTPUT);
     gl.Enable(gl.DEBUG_OUTPUT_SYNCHRONOUS);
-    gl.DebugMessageCallback(debugCallback, null);
+    gl.DebugMessageCallback(openglDebugCallback, null);
+    gl.DebugMessageControl(gl.DONT_CARE, gl.DONT_CARE, gl.DONT_CARE, 0, null, gl.TRUE);
 
     gl.DepthMask(gl.TRUE);
     gl.Enable(gl.DEPTH_TEST);
     gl.DepthFunc(gl.LESS);
+
+    gl.DebugMessageInsert(gl.DEBUG_SOURCE_APPLICATION, gl.DEBUG_TYPE_ERROR, 0, gl.DEBUG_SEVERITY_MEDIUM, -1, "Test error. :)");
 
     // gl.Enable(gl.CULL_FACE);
 }
@@ -84,12 +89,12 @@ pub fn pollEvents() void {
 
 //* INTERNAL API. ==============================================
 
-fn errorCallback(error_code: glfw.ErrorCode, description: [:0]const u8) void {
-    std.log.err("glfw: {}: {s}\n", .{ error_code, description });
+fn glfwErrorCallback(error_code: glfw.ErrorCode, description: [:0]const u8) void {
+    std.log.err("[GLFW]: {}: {s}\n", .{ error_code, description });
 }
 
-fn debugCallback(source: gl.@"enum", @"type": gl.@"enum", id: gl.uint, severity: gl.@"enum", length: gl.sizei, message: [*:0]const gl.char, userParam: ?*const anyopaque) callconv(gl.APIENTRY) void {
-    std.debug.print("{s}\n", .{message});
+fn openglDebugCallback(source: gl.@"enum", @"type": gl.@"enum", id: gl.uint, severity: gl.@"enum", length: gl.sizei, message: [*:0]const gl.char, userParam: ?*const anyopaque) callconv(gl.APIENTRY) void {
+    std.debug.print("[OpenGL]: {s}\n", .{message});
     _ = &source;
     _ = &@"type";
     _ = &id;
