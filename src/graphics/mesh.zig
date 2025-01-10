@@ -118,10 +118,6 @@ fn destroyEbo(eboId: gl.uint, eboName: []const u8, meshName: []const u8) void {
 /// A simpler way to destroy Vertex Buffer Objects.
 ///
 fn destroyVbo(vboId: gl.uint, vboName: []const u8, meshName: []const u8) void {
-    gl.BindBuffer(gl.ARRAY_BUFFER, vboId);
-    gl.DisableVertexAttribArray(shader.POSITION_ATTRIBUTE_LOCATION);
-    gl.DisableVertexAttribArray(shader.TEXTURE_ATTRIBUTE_LOCATION);
-    gl.BindBuffer(gl.ARRAY_BUFFER, 0);
     var temp = vboId;
     gl.DeleteBuffers(1, (&temp)[0..1]);
     if (gl.IsBuffer(vboId) == gl.TRUE) {
