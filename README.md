@@ -10,6 +10,8 @@ copy memory into buffer:
 ```zig
 // Freakman and fri3dnstuff note now to copy an array to an array:
 myArray[10..20].* = other[0..10].*;
+// cloudef notes:
+// the reason is that [a..b] is a slicing operator which returns slice and .* deferences it
 ```
 
 Note: this is written as a conventional OpenGL project. Nothing new here.
