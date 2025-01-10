@@ -60,7 +60,7 @@ pub fn main() !void {
 
     //* Start heightmap into map data.
 
-    const map = heightmap.new("levels/test_height_map.png", 1);
+    const map = heightmap.new("levels/big_map_test.png", 2.0);
     defer heightmap.destroy(map);
 
     var vertexData: []f32 = allocator.alloc(f32, 0);
@@ -157,14 +157,14 @@ pub fn main() !void {
         cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
 
         cameraMatrix = cameraMatrix.rotate(rotation, Vec3.new(1, 0, 0));
-        cameraMatrix = cameraMatrix.rotate(-45.0, Vec3.new(0, 1, 0));
+        cameraMatrix = cameraMatrix.rotate(-45.7, Vec3.new(0, 1, 0));
         // rotation -= 0.1;
         shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 
-        translation += 0.01;
+        translation -= 0.005;
 
         var objectMatrix = Mat4.identity();
-        objectMatrix = objectMatrix.translate(Vec3.new(0, -1.0, translation));
+        objectMatrix = objectMatrix.translate(Vec3.new(-2, -1.0, translation));
         // objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
         objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
 
