@@ -61,29 +61,28 @@ pub fn main() !void {
     const map = heightmap.new("levels/4square.png");
     defer heightmap.destroy(map);
 
-    // var positions: []f32 = allocator.alloc(f32, 0);
-    // defer allocator.free(positions);
-    // var textureCoords: []f32 = allocator.alloc(f32, 0);
-    // defer allocator.free(textureCoords);
-    // var indices: []u32 = allocator.alloc(u32, 0);
-    // defer allocator.free(indices);
+    var vertexData: []f32 = allocator.alloc(f32, 0);
+    defer allocator.free(vertexData);
+    var indices: []u32 = allocator.alloc(u32, 0);
+    defer allocator.free(indices);
+
+    const indicesTemplate = [_]u32{ 0, 1, 2, 2, 3, 0 };
 
     for (0..map.width) |x| {
         for (0..map.height) |y| {
-            // const indexPositions = positions.len;
+            const indexVertexData = vertexData.len;
             // positions = allocator.realloc(positions, positions.len + 12);
 
-            // const indexTextureCoords = textureCoords.len;
-            // textureCoords = allocator.realloc(textureCoords, textureCoords.len + 8);
-
-            // const indexIndices = indices.len;
+            const indexIndices = indices.len;
             // indices = allocator.realloc(indices, indices.len + 6);
 
             _ = &x;
             _ = &y;
-            // _ = &indexPositions;
-            // _ = &indexTextureCoords;
-            // _ = &indexIndices;
+            _ = &indexVertexData;
+            _ = &indexIndices;
+            _ = &indicesTemplate;
+            _ = &vertexData;
+            _ = &indices;
         }
     }
 
@@ -91,21 +90,19 @@ pub fn main() !void {
     // _ = &textureCoords;
     // _ = &indices;
 
-    const vertexData = [_]f32{
-        // zig fmt: off
-        -0.5, 0.5, 0.0,   0.0, 0.0, // top left
-        -0.5, -0.5, 0.0,  0.0, 1.0, // bottom left
-        0.5, -0.5, 0.0,   1.0, 1.0, // bottom right
-        0.5, 0.5, 0.0,    1.0, 0.0, // top right
-        // zig fmt: on 
-    };
-
-    const indices = [_]u32{ 0, 1, 2, 2, 3, 0 };
+    // const vertexData = [_]f32{
+    //     // zig fmt: off
+    //     -0.5, 0.5, 0.0,   0.0, 0.0, // top left
+    //     -0.5, -0.5, 0.0,  0.0, 1.0, // bottom left
+    //     0.5, -0.5, 0.0,   1.0, 1.0, // bottom right
+    //     0.5, 0.5, 0.0,    1.0, 0.0, // top right
+    //     // zig fmt: on
+    // };
 
     mesh.new(
         "test",
-        &vertexData,
-        &indices,
+        vertexData,
+        indices,
     );
 
     texture.new("textures/test.png");
