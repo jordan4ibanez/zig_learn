@@ -8,8 +8,8 @@ const Mat4 = za.Mat4;
 
 var database: std.StringHashMap(gl.uint) = undefined;
 
-pub const POSITION_VBO_LOCATION: gl.int = 0;
-pub const TEXTURE_VBO_LOCATION: gl.int = 1;
+pub const POSITION_ATTRIBUTE_LOCATION: gl.int = 0;
+pub const TEXTURE_ATTRIBUTE_LOCATION: gl.int = 1;
 
 pub const CAMERA_MATRIX_UNIFORM_LOCATION: gl.int = 0;
 pub const OBJECT_MATRIX_UNIFORM_LOCATION: gl.int = 1;
