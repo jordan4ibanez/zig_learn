@@ -33,7 +33,7 @@ pub fn main() !void {
     allocator.initialize();
     defer allocator.terminate();
 
-    window.initialize();
+    window.initialize(800, 600);
     defer window.terminate();
 
     shader.initialize();
