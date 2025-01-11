@@ -13,6 +13,7 @@ pub const TEXTURE_ATTRIBUTE_LOCATION: gl.int = 1;
 
 pub const CAMERA_MATRIX_UNIFORM_LOCATION: gl.int = 0;
 pub const OBJECT_MATRIX_UNIFORM_LOCATION: gl.int = 1;
+pub const PS1_BLOCKINESS_UNIFORM_LOCATION: gl.int = 2;
 
 //* ON/OFF SWITCH. ==============================================
 
@@ -92,6 +93,12 @@ pub fn start(name: []const u8) void {
 ///
 pub fn setMat4Uniform(location: gl.int, value: Mat4) void {
     gl.UniformMatrix4fv(location, 1, gl.FALSE, &value.data[0][0]);
+}
+
+///
+/// Simpler way to set f32 uniform data.
+pub fn setF32Uniform(location: gl.int, value: f32) void {
+    gl.Uniform1f(location, value);
 }
 
 //* INTERNAL API. ==============================================
