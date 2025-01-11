@@ -6,6 +6,7 @@ layout (location = 1) in vec2 texturePos;
 
 layout (location = 0) uniform mat4 camera_matrix;
 layout (location = 1) uniform mat4 object_matrix;
+// The lower this value is, the blockier the graphics get.
 layout (location = 2) uniform float ps1_blockiness;
 
 // out vec3 pixel_color;
@@ -28,11 +29,6 @@ out float fogAmount;
 float fogginess(const float dist) {
   return 1.0 - clamp((fogEnd - dist) / (fogEnd - fogStart), 0.0, 1.0);
 }
-
-// The lower this value is, the blockier the graphics get.
-// todo: make this a uniform lol.
-// todo: make a separate shader that doesn't have this at all for performance.
-// const float ps1Blockiness = 40.0;
 
 void main() {
   gl_Position = camera_matrix * object_matrix * vec4(position.x, position.y, position.z, 1.0f);
