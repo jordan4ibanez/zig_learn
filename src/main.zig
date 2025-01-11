@@ -152,7 +152,7 @@ pub fn main() !void {
         gl.Clear(gl.COLOR_BUFFER_BIT);
         gl.Clear(gl.DEPTH_BUFFER_BIT);
 
-        var cameraMatrix = Mat4.perspective(65.0, 1024.0 / 768.0, 0.1, 100.0);
+        var cameraMatrix = Mat4.perspective(65.0, window.getAspectRatio(), 0.1, 100.0);
 
         cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
 
