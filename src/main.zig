@@ -58,6 +58,10 @@ pub fn main() !void {
 
     shader.start("main");
 
+    // Set up the initial ps1 blockiness.
+    // todo: make this a settings menu element.
+    window.setPs1Blockiness(40.0);
+
     //* Start heightmap into map data.
 
     const map = heightmap.new("levels/big_map_test.png", 2.0);
