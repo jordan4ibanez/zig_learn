@@ -20,8 +20,8 @@ noperspective out vec2 textureCoordinate;
 
 // out vec2 textureCoordinate;
 
-const float fogStart = 4.0;
-const float fogEnd = 5.0;
+const float fogStart = 3.0;
+const float fogEnd = 4.0;
 out vec4 fogColor;
 out float fogAmount;
 
@@ -30,10 +30,11 @@ float fogginess(const float dist) {
   return 1.0 - clamp((fogEnd - dist) / (fogEnd - fogStart), 0.0, 1.0);
 }
 
+
 void main() {
   gl_Position = camera_matrix * object_matrix * vec4(position.x, position.y, position.z, 1.0f);
 
-  gl_Position = (ceil(gl_Position * ps1_blockiness)) / ps1_blockiness;
+  // gl_Position = (ceil(gl_Position * ps1_blockiness)) / ps1_blockiness;
   
   fogAmount = fogginess(length(gl_Position.xyz));
 
