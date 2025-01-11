@@ -1,13 +1,18 @@
 const std = @import("std");
 const glfw = @import("mach-glfw");
 const gl = @import("gl");
+const za = @import("zalgebra");
+
+const Vec2_usize = za.Vec2_usize;
 
 var gl_procs: gl.ProcTable = undefined;
 var window: glfw.Window = undefined;
 
+var viewPortSize: Vec2_usize = Vec2_usize.new(0, 0);
+
 //* ON/OFF SWITCH. ==============================================
 
-pub fn initialize() void {
+pub fn initialize(width: u32, height: u32) void {
     glfw.setErrorCallback(glfwErrorCallback);
 
     if (!glfw.init(.{})) {
@@ -16,18 +21,13 @@ pub fn initialize() void {
         std.debug.print("[GLFW]: Successfully initialized.\n", .{});
     }
 
-    window = glfw.Window.create(1024, 768, "Program", null, null, .{
-        .context_version_major = gl.info.version_major,
-        .context_version_minor = gl.info.version_minor,
-        .opengl_profile = .opengl_core_profile,
-        .opengl_forward_compat = true,
-    }) orelse {
-        std.log.err("[GLFW] Error: Failed to create glfw window. {?s}", .{glfw.getErrorString()});
-        std.process.exit(1);
-    };
+    makeWindow(width, height);
+
     std.debug.print("[GLFW]: Created window.\n", .{});
 
     glfw.makeContextCurrent(window);
+
+    window.setFramebufferSizeCallback(glfwFramebufferSizeCallback);
 
     glfw.swapInterval(1);
 
@@ -87,7 +87,38 @@ pub fn pollEvents() void {
     glfw.pollEvents();
 }
 
+pub fn getAspectRatio() f32 {
+    const width: f32 = @floatFromInt(viewPortSize.x());
+    const height: f32 = @floatFromInt(viewPortSize.y());
+    return width / height;
+}
+
+pub fn getSize() Vec2_usize {
+    return viewPortSize;
+}
+
 //* INTERNAL API. ==============================================
+
+fn makeWindow(width: u32, height: u32) void {
+    window = glfw.Window.create(width, height, "Program", null, null, .{
+        .context_version_major = gl.info.version_major,
+        .context_version_minor = gl.info.version_minor,
+        .opengl_profile = .opengl_core_profile,
+        .opengl_forward_compat = true,
+    }) orelse {
+        std.log.err("[GLFW] Error: Failed to create glfw window. {?s}", .{glfw.getErrorString()});
+        std.process.exit(1);
+    };
+    viewPortSize = Vec2_usize.new(width, height);
+}
+
+fn glfwFramebufferSizeCallback(win: glfw.Window, width: u32, height: u32) void {
+    gl.Viewport(0, 0, @intCast(width), @intCast(height));
+    viewPortSize = Vec2_usize.new(width, height);
+    _ = &win;
+    _ = &width;
+    _ = &height;
+}
 
 fn glfwErrorCallback(error_code: glfw.ErrorCode, description: [:0]const u8) void {
     std.log.err("[GLFW]: {}: {s}\n", .{ error_code, description });
