@@ -60,7 +60,7 @@ pub fn main() !void {
 
     // Set up the initial ps1 blockiness.
     // todo: make this a settings menu element.
-    window.setPs1Blockiness(40.0);
+    // window.setPs1Blockiness(40.0);
 
     //* Start heightmap into map data.
 
