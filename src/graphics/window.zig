@@ -2,6 +2,7 @@ const std = @import("std");
 const glfw = @import("mach-glfw");
 const gl = @import("gl");
 const za = @import("zalgebra");
+const shader = @import("shader.zig");
 
 const Vec2_usize = za.Vec2_usize;
 
@@ -95,6 +96,17 @@ pub fn getAspectRatio() f32 {
 
 pub fn getSize() Vec2_usize {
     return viewPortSize;
+}
+
+///
+/// Set the wobbly vertices like the PS1.
+///
+/// The lower this value is, the wobblier things get.
+///
+/// Good range: 20-40.
+///
+pub fn setPs1Blockiness(blockiness: f32) void {
+    shader.setF32Uniform(shader.PS1_BLOCKINESS_UNIFORM_LOCATION, blockiness);
 }
 
 //* INTERNAL API. ==============================================
