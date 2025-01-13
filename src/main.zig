@@ -66,7 +66,7 @@ pub fn main() !void {
 
     //* Start heightmap into map data.
 
-    const map = heightmap.new("levels/big_map_test.png", 2.0);
+    const map = heightmap.new("levels/big_map_test.png", 5.0);
     defer heightmap.destroy(map);
 
     var vertexData: []f32 = allocator.alloc(f32, 0);
