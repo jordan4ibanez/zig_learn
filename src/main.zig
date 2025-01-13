@@ -164,7 +164,7 @@ pub fn main() !void {
             camera.setCameraRotation(-45.7, -30);
             camera.updateCameraMatrix();
 
-            camera.updateObjectMatrix(0, 0, translation, 0, 0);
+            camera.updateObjectMatrix(0, 0, translation, 0, 0, 1.0);
         } else {
             var cameraMatrix = Mat4.perspective(65.0, window.getAspectRatio(), 0.1, 100.0);
             cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));

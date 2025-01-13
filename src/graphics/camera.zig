@@ -77,7 +77,7 @@ pub fn updateCameraMatrix() void {
     shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 }
 
-pub fn updateObjectMatrix(x: f32, y: f32, z: f32, pitch: f32, yaw: f32) void {
+pub fn updateObjectMatrix(x: f32, y: f32, z: f32, pitch: f32, yaw: f32, scale: f32) void {
     var objectMatrix = Mat4.identity();
 
     objectMatrix = objectMatrix.translate(Vec3.new(x, y, z).sub(cameraPosition));
@@ -85,7 +85,7 @@ pub fn updateObjectMatrix(x: f32, y: f32, z: f32, pitch: f32, yaw: f32) void {
     objectMatrix = objectMatrix.rotate(yaw, Vec3.new(1, 0, 0));
     objectMatrix = objectMatrix.rotate(pitch, Vec3.new(0, 1, 0));
 
-    objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
+    objectMatrix = objectMatrix.scale(Vec3.new(scale, scale, scale));
     shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
 }
 
