@@ -66,6 +66,10 @@ pub fn build(b: *std.Build) void {
     exe.root_module.addImport("zstbi", zstbi.module("root"));
     exe.linkLibrary(zstbi.artifact("zstbi"));
 
+    // zgltf.
+    const zgltf = b.dependency("zgltf", .{});
+    exe.root_module.addImport("zgltf", zgltf.module("zgltf"));
+
     //* END EXTERNAL MODULES. ==========================================================
 
     // This declares intent for the executable to be installed into the
