@@ -36,7 +36,8 @@ void main() {
 
   // gl_Position = (ceil(gl_Position * ps1_blockiness)) / ps1_blockiness;
   
-  fogAmount = fogginess(length(gl_Position.xyz));
+  // fogAmount = fogginess(length(gl_Position.xyz));
+  fogAmount = 0.0;
 
   textureCoordinate = texturePos;
 
