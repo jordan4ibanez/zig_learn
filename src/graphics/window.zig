@@ -109,6 +109,13 @@ pub fn setPs1Blockiness(blockiness: f32) void {
     shader.setF32Uniform(shader.PS1_BLOCKINESS_UNIFORM_LOCATION, blockiness);
 }
 
+///
+/// Get the current state of a key.
+///
+pub fn getKey(key: glfw.Key) glfw.Action {
+    return window.getKey(key);
+}
+
 //* INTERNAL API. ==============================================
 
 fn makeWindow(width: u32, height: u32) void {
