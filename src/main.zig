@@ -147,8 +147,10 @@ pub fn main() !void {
 
     texture.use("sand.png");
 
-    const rotation: f32 = -30;
-    var translation: f32 = 0;
+    // const rotation: f32 = -30;
+    const translation: f32 = 0;
+    var timer: f32 = 0.0;
+    var one = false;
 
     while (!window.shouldClose()) {
         window.pollEvents();
@@ -157,16 +159,32 @@ pub fn main() !void {
         camera.clearColorBuffer();
         camera.clearDepthBuffer();
 
-        var cameraMatrix = Mat4.perspective(65.0, window.getAspectRatio(), 0.1, 100.0);
+        if (one) {
+            camera.setCameraPosition(0, 0, 0);
+            camera.setCameraRotation(-45.7, -30);
+            camera.updateCameraMatrix();
 
-        cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
+        } else {
+            var cameraMatrix = Mat4.perspective(65.0, window.getAspectRatio(), 0.1, 100.0);
+            cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
+            cameraMatrix = cameraMatrix.rotate(-30, Vec3.new(1, 0, 0));
+            cameraMatrix = cameraMatrix.rotate(-45.7, Vec3.new(0, 1, 0));
+            shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 
-        cameraMatrix = cameraMatrix.rotate(rotation, Vec3.new(1, 0, 0));
-        cameraMatrix = cameraMatrix.rotate(-45.7, Vec3.new(0, 1, 0));
-        // rotation -= 0.1;
-        shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
+            
+        }
 
-        translation -= 0.005;
+        timer += 0.01;
+        if (timer > 0.4) {
+            one = !one;
+            timer = 0.0;
+            if (one) {
+                std.debug.print("tick\n", .{});
+            } else {
+                std.debug.print("tock\n", .{});
+            }
+        }
+        // translation -= 0.005;
 
         var objectMatrix = Mat4.identity();
         objectMatrix = objectMatrix.translate(Vec3.new(-2, -1.0, translation));
