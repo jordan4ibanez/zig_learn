@@ -148,7 +148,7 @@ pub fn main() !void {
     texture.use("sand.png");
 
     // const rotation: f32 = -30;
-    const translation: f32 = 0;
+    var translation: f32 = 0;
     var timer: f32 = 0.0;
     var one = false;
 
@@ -160,9 +160,11 @@ pub fn main() !void {
         camera.clearDepthBuffer();
 
         if (one) {
-            camera.setCameraPosition(0, 0, 0);
+            camera.setCameraPosition(0, 2, 0);
             camera.setCameraRotation(-45.7, -30);
             camera.updateCameraMatrix();
+
+            camera.updateObjectMatrix(0, 0, translation, 0, 0);
         } else {
             var cameraMatrix = Mat4.perspective(65.0, window.getAspectRatio(), 0.1, 100.0);
             cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
@@ -171,7 +173,7 @@ pub fn main() !void {
             shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 
             var objectMatrix = Mat4.identity();
-            objectMatrix = objectMatrix.translate(Vec3.new(-2, -1.0, translation));
+            objectMatrix = objectMatrix.translate(Vec3.new(0, -2.0, translation));
             // objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
             objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
             shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
@@ -187,7 +189,7 @@ pub fn main() !void {
                 std.debug.print("tock\n", .{});
             }
         }
-        // translation -= 0.005;
+        translation -= 0.005;
 
         mesh.draw("test");
 

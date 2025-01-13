@@ -9,7 +9,8 @@ const Mat4 = za.Mat4;
 
 var clearColor: Vec3 = Vec3.new(0, 0, 0);
 var cameraPosition: Vec3 = Vec3.new(0, 0, 0);
-var cameraRotation: Vec3 = Vec3.new(0, 0, 0);
+var cameraPitch: f32 = 0;
+var cameraYaw: f32 = 0;
 var cameraFOV: f32 = 65.0;
 
 //* PUBLIC API. ===========================================================
@@ -56,7 +57,8 @@ pub fn setCameraPosition(x: f32, y: f32, z: f32) void {
 /// No Z component, will get to that if needed.
 ///
 pub fn setCameraRotation(pitch: f32, yaw: f32) void {
-    cameraRotation = Vec3.new(pitch, yaw, 0.0);
+    cameraPitch = pitch;
+    cameraYaw = yaw;
 }
 
 ///
@@ -69,14 +71,24 @@ pub fn updateCameraMatrix() void {
     // Note: This is first rotated into +z so I can debug this as I go.
     cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
 
-    cameraMatrix = cameraMatrix.rotate(cameraRotation.y(), Vec3.new(1, 0, 0));
-    cameraMatrix = cameraMatrix.rotate(cameraRotation.x(), Vec3.new(0, 1, 0));
+    cameraMatrix = cameraMatrix.rotate(cameraYaw, Vec3.new(1, 0, 0));
+    cameraMatrix = cameraMatrix.rotate(cameraPitch, Vec3.new(0, 1, 0));
 
     shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 }
 
+pub fn updateObjectMatrix(x: f32, y: f32, z: f32, pitch: f32, yaw: f32) void {
+    var objectMatrix = Mat4.identity();
+
+    objectMatrix = objectMatrix.translate(Vec3.new(x, y, z).sub(cameraPosition));
+
+    objectMatrix = objectMatrix.rotate(yaw, Vec3.new(1, 0, 0));
+    objectMatrix = objectMatrix.rotate(pitch, Vec3.new(0, 1, 0));
+
+    objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
+    shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
+}
 
 // todo: maybe make a lookat function :)
-
 
 //* INTERNAL API. ==============================================
