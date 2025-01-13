@@ -13,3 +13,8 @@ const glfw = @import("mach-glfw");
 ///
 /// Check if a key is up.
 ///
+// pub fn isUp(key: glfw.Key) bool {
+//     return (window.getKey(key) == glfw.Action.release);
+// }
+
+pub fn _keyCallback(window: glfw.Window, key: glfw.Key, scancode: i32, action: glfw.Action, mods: glfw.Mods) void {}
