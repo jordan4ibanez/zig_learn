@@ -17,4 +17,11 @@ const glfw = @import("mach-glfw");
 //     return (window.getKey(key) == glfw.Action.release);
 // }
 
-pub fn _keyCallback(window: glfw.Window, key: glfw.Key, scancode: i32, action: glfw.Action, mods: glfw.Mods) void {}
+pub fn _keyCallback(window: glfw.Window, key: glfw.Key, scancode: i32, action: glfw.Action, mods: glfw.Mods) void {
+    std.debug.print("{any}\n", .{key});
+    _ = &window;
+    _ = &key;
+    _ = &scancode;
+    _ = &action;
+    _ = &mods;
+}
