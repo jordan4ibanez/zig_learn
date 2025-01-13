@@ -11,6 +11,7 @@ const texture = @import("graphics/texture.zig");
 const heightmap = @import("graphics/heightmap.zig");
 const camera = @import("graphics/camera.zig");
 const keyboard = @import("input/keyboard.zig");
+const gltf = @import("zgltf");
 
 const Vec3 = za.Vec3;
 const Mat4 = za.Mat4;
@@ -59,6 +60,9 @@ pub fn main() !void {
         "shaders/fragment.frag",
     );
 
+    var blah = gltf.init(allocator.get());
+    defer blah.deinit();
+    _ = &blah;
 
     shader.start("main");
 
