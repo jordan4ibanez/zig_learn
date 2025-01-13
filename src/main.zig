@@ -9,6 +9,7 @@ const shader = @import("graphics/shader.zig");
 const mesh = @import("graphics/mesh.zig");
 const texture = @import("graphics/texture.zig");
 const heightmap = @import("graphics/heightmap.zig");
+const camera = @import("graphics/camera.zig");
 
 const Vec3 = za.Vec3;
 const Mat4 = za.Mat4;
@@ -152,9 +153,9 @@ pub fn main() !void {
     while (!window.shouldClose()) {
         window.pollEvents();
 
-        gl.ClearColor(0.2, 0.3, 0.3, 1.0);
-        gl.Clear(gl.COLOR_BUFFER_BIT);
-        gl.Clear(gl.DEPTH_BUFFER_BIT);
+        camera.setClearColor(0.2, 0.3, 0.3);
+        camera.clearColorBuffer();
+        camera.clearDepthBuffer();
 
         var cameraMatrix = Mat4.perspective(65.0, window.getAspectRatio(), 0.1, 100.0);
 
