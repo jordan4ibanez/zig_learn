@@ -1,4 +1,4 @@
 beauty flow = main menu
 delightful d = fishing shop
-special spotlight = map select
+special spotlight = map select - but cut the intro out
 motivator = new area unlocked
