@@ -163,7 +163,6 @@ pub fn main() !void {
             camera.setCameraPosition(0, 0, 0);
             camera.setCameraRotation(-45.7, -30);
             camera.updateCameraMatrix();
-
         } else {
             var cameraMatrix = Mat4.perspective(65.0, window.getAspectRatio(), 0.1, 100.0);
             cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
@@ -171,7 +170,11 @@ pub fn main() !void {
             cameraMatrix = cameraMatrix.rotate(-45.7, Vec3.new(0, 1, 0));
             shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 
-            
+            var objectMatrix = Mat4.identity();
+            objectMatrix = objectMatrix.translate(Vec3.new(-2, -1.0, translation));
+            // objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
+            objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
+            shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
         }
 
         timer += 0.01;
@@ -185,13 +188,6 @@ pub fn main() !void {
             }
         }
         // translation -= 0.005;
-
-        var objectMatrix = Mat4.identity();
-        objectMatrix = objectMatrix.translate(Vec3.new(-2, -1.0, translation));
-        // objectMatrix = objectMatrix.rotate(rotation, Vec3.new(0, 1, 0));
-        objectMatrix = objectMatrix.scale(Vec3.new(1, 1, 1));
-
-        shader.setMat4Uniform(shader.OBJECT_MATRIX_UNIFORM_LOCATION, objectMatrix);
 
         mesh.draw("test");
 
