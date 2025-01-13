@@ -59,7 +59,6 @@ pub fn main() !void {
         "shaders/fragment.frag",
     );
 
-    gl.Viewport(0, 0, 1024, 768);
 
     shader.start("main");
 

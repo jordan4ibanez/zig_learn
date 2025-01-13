@@ -47,6 +47,9 @@ pub fn initialize(width: u32, height: u32) void {
         std.process.exit(1);
     }
 
+    // Update the initial window size.
+    gl.Viewport(0, 0, @intCast(width), @intCast(height));
+
     // Allow debugging output for OpenGL.
     gl.Enable(gl.DEBUG_OUTPUT);
     gl.Enable(gl.DEBUG_OUTPUT_SYNCHRONOUS);
