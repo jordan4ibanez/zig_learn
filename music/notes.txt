@@ -1,0 +1,4 @@
+beauty flow = main menu
+delightful d = fishing shop
+special spotlight = map select
+motivator = new area unlocked
