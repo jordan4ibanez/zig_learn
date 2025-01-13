@@ -19,7 +19,10 @@ uniform sampler2D textureSampler;
 out vec4 frag_color;
 
 void main() {
-   frag_color = texture(textureSampler, textureCoordinate), 
+   frag_color = texture(textureSampler, textureCoordinate);
+   if (frag_color.a == 0.0) {
+      discard;
+   }
    frag_color = mix(frag_color, fogColor, fogAmount); 
    frag_color.rgb /= frag_color.a;
 }
