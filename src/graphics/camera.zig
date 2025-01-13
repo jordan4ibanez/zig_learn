@@ -64,7 +64,6 @@ pub fn updateCameraMatrix() void {
     var cameraMatrix = Mat4.perspective(65.0, window.getAspectRatio(), 0.1, 100.0);
 
     // Note: This is first rotated into +z so I can debug this as I go.
-    // todo: remove this, and probably switch this to lookAt()
     cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
 
     cameraMatrix = cameraMatrix.rotate(cameraRotation.y(), Vec3.new(1, 0, 0));
