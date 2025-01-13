@@ -25,3 +25,6 @@ export gimp as ``16 bpc GRAY`` png.
 
 
 zig fetch --save git+(github address here)
+
+was researching:
+https://github.com/kooparse/zgltf
