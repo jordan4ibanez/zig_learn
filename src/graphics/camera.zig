@@ -53,14 +53,17 @@ pub fn setCameraPosition(x: f32, y: f32, z: f32) void {
 ///
 /// Set the camera's rotation.
 ///
-pub fn setCameraRotation(x: f32, y: f32, z: f32) void {
-    cameraRotation = Vec3.new(x, y, z);
+/// No Z component, will get to that if needed.
+///
+pub fn setCameraRotation(pitch: f32, yaw: f32) void {
+    cameraRotation = Vec3.new(pitch, yaw, 0.0);
 }
 
 ///
 /// Flushes the matrix into the shader's uniform.
 ///
 pub fn updateCameraMatrix() void {
+    // Long story short, the world moves around the camera.
     var cameraMatrix = Mat4.perspective(65.0, window.getAspectRatio(), 0.1, 100.0);
 
     // Note: This is first rotated into +z so I can debug this as I go.
@@ -71,5 +74,7 @@ pub fn updateCameraMatrix() void {
 
     shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 }
+
+
 
 //* INTERNAL API. ==============================================
