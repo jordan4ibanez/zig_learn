@@ -169,21 +169,11 @@ pub fn main() !void {
 
         mesh.draw("test");
 
+        if (keyboard.isPressed(glfw.Key.escape)) {
+            window.close();
+        }
+
         window.swapBuffers();
-
-        if (keyboard.isDown(glfw.Key.space)) {
-            std.debug.print("spacey\n", .{});
-        }
-
-        if (keyboard.isPressed(glfw.Key.c)) {
-            std.debug.print("I C wat u mean\n", .{});
-        }
-
-        if (keyboard.isReleased(glfw.Key.c)) {
-            std.debug.print("C u l8r\n", .{});
-        }
-
-        // window.close();
 
         // Make sure this is always last.
         keyboard._pressReleaseMemoryReset();
