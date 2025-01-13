@@ -3,6 +3,7 @@ const glfw = @import("mach-glfw");
 const gl = @import("gl");
 const za = @import("zalgebra");
 const shader = @import("shader.zig");
+const keyboard = @import("../input/keyboard.zig");
 
 const Vec2_usize = za.Vec2_usize;
 
@@ -59,6 +60,9 @@ pub fn initialize(width: u32, height: u32) void {
     gl.DebugMessageInsert(gl.DEBUG_SOURCE_APPLICATION, gl.DEBUG_TYPE_ERROR, 0, gl.DEBUG_SEVERITY_MEDIUM, -1, "Test error. :)");
 
     // gl.Enable(gl.CULL_FACE);
+
+    // keyboard/mouse/controller callbacks.
+    window.setKeyCallback(keyboard._keyCallback);
 }
 
 pub fn terminate() void {
