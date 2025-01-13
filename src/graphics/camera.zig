@@ -71,8 +71,8 @@ pub fn updateCameraMatrix() void {
     // Note: This is first rotated into +z so I can debug this as I go.
     cameraMatrix = cameraMatrix.rotate(180.0, Vec3.new(0, 1, 0));
 
-    cameraMatrix = cameraMatrix.rotate(cameraYaw, Vec3.new(1, 0, 0));
-    cameraMatrix = cameraMatrix.rotate(cameraPitch, Vec3.new(0, 1, 0));
+    cameraMatrix = cameraMatrix.rotate(cameraPitch, Vec3.new(1, 0, 0));
+    cameraMatrix = cameraMatrix.rotate(cameraYaw, Vec3.new(0, 1, 0));
 
     shader.setMat4Uniform(shader.CAMERA_MATRIX_UNIFORM_LOCATION, cameraMatrix);
 }
