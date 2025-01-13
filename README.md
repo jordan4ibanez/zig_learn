@@ -23,3 +23,5 @@ note:
 map will be a greyscale texture map.
 export gimp as ``16 bpc GRAY`` png.
 
+
+zig fetch --save git+(github address here)
