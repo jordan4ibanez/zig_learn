@@ -61,10 +61,7 @@ pub fn load(location: []const u8) void {
 
             
 
-            // fixme: This is a workaround for the zig compiler being unfinished.
-            for (0..indicesTemplate.len) |i| {
-                indicesTemplate[i] += 4;
-            }
+            i += 4;
 
             _ = &currentTile;
             _ = &x;
