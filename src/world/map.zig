@@ -45,12 +45,10 @@ pub fn load(location: []const u8) void {
             // todo: map texture to texture map with some kind of data type etc.
             // zig fmt: off
             const currentTile = [_]f32{
-                
-                @floatFromInt(x), heightTopLeft,     @floatFromInt(y + 1),   0.0, 0.0, // top left
-                @floatFromInt(x), heightBottomLeft,  @floatFromInt(y),   0.0, 1.0, // bottom left
-                @floatFromInt(x + 1), heightBottomRight, @floatFromInt(y),   1.0, 1.0, // bottom right
-                @floatFromInt(x + 1), heightTopRight,    @floatFromInt(y + 1),   1.0, 0.0, // top right
-                
+                @floatFromInt(x),     heightTopLeft,     @floatFromInt(y + 1), 0.0, 0.0, // top left
+                @floatFromInt(x),     heightBottomLeft,  @floatFromInt(y),     0.0, 1.0, // bottom left
+                @floatFromInt(x + 1), heightBottomRight, @floatFromInt(y),     1.0, 1.0, // bottom right
+                @floatFromInt(x + 1), heightTopRight,    @floatFromInt(y + 1), 1.0, 0.0, // top right
             };
             // zig fmt: on
 
