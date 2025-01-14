@@ -59,8 +59,6 @@ pub fn load(location: []const u8) void {
             const indexIndices = indices.len;
             indices = allocator.realloc(indices, indices.len + 6);
 
-            std.debug.print("curretN: {d}\n", .{i});
-
             const indexData = [_]u32{
                 0 + i,
                 1 + i,
