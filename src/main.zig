@@ -11,7 +11,7 @@ const texture = @import("graphics/texture.zig");
 const map = @import("world/map.zig");
 const camera = @import("graphics/camera.zig");
 const keyboard = @import("input/keyboard.zig");
-const gltf = @import("zgltf");
+const modelLoader = @import("graphics/model_loader.zig");
 
 const Vec3 = za.Vec3;
 const Mat4 = za.Mat4;
@@ -59,10 +59,6 @@ pub fn main() !void {
         "shaders/vertex.vert",
         "shaders/fragment.frag",
     );
-
-    var blah = gltf.init(allocator.get());
-    defer blah.deinit();
-    _ = &blah;
 
     shader.start("main");
 
