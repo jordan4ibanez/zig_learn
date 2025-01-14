@@ -7,7 +7,7 @@ pub fn loadModel(location: []const u8) void {
 
     const buffer = std.fs.cwd().readFileAllocOptions(
         allocator.get(),
-        "test-samples/rigged_simple/RiggedSimple.gltf",
+        location,
         512_000,
         null,
         4,
@@ -16,11 +16,15 @@ pub fn loadModel(location: []const u8) void {
         std.log.err("[Model Loader]: Failed to load file {s}. {s}", .{ location, @errorName(err) });
         std.process.exit(1);
     };
+    defer allocator.free(buffer);
 
-    var blah = gltf.init(allocator.get());
+    var loader = gltf.init(allocator.get());
+    defer loader.deinit();
 
-    defer blah.deinit();
+    const boof = loader.parse(buffer);
 
-    _ = &blah;
+    _ = &boof;
+
+    _ = &loader;
     _ = &buffer;
 }
