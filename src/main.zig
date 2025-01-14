@@ -8,7 +8,7 @@ const window = @import("graphics/window.zig");
 const shader = @import("graphics/shader.zig");
 const mesh = @import("graphics/mesh.zig");
 const texture = @import("graphics/texture.zig");
-const heightmap = @import("graphics/heightmap.zig");
+const map = @import("world/map.zig");
 const camera = @import("graphics/camera.zig");
 const keyboard = @import("input/keyboard.zig");
 const gltf = @import("zgltf");
@@ -70,85 +70,7 @@ pub fn main() !void {
     // todo: make this a settings menu element.
     // window.setPs1Blockiness(40.0);
 
-    //* Start heightmap into map data.
-
-    const map = heightmap.new("levels/big_map_test.png", 5.0);
-    defer heightmap.destroy(map);
-
-    var vertexData: []f32 = allocator.alloc(f32, 0);
-    defer allocator.free(vertexData);
-    var indices: []u32 = allocator.alloc(u32, 0);
-    defer allocator.free(indices);
-
-    var indicesTemplate = [_]u32{ 0, 1, 2, 2, 3, 0 };
-
-    for (0..map.width) |x| {
-        for (0..map.height) |y| {
-            const indexVertexData = vertexData.len;
-            vertexData = allocator.realloc(vertexData, vertexData.len + 20);
-
-            const heightTopLeft = map.data[x][y + 1];
-            const heightBottomLeft = map.data[x][y];
-            const heightBottomRight = map.data[x + 1][y];
-            const heightTopRight = map.data[x + 1][y + 1];
-
-            // todo: map texture to texture map with some kind of data type etc.
-            // zig fmt: off
-            const currentTile = [_]f32{
-                
-                @floatFromInt(x), heightTopLeft,     @floatFromInt(y + 1),   0.0, 0.0, // top left
-                @floatFromInt(x), heightBottomLeft,  @floatFromInt(y),   0.0, 1.0, // bottom left
-                @floatFromInt(x + 1), heightBottomRight, @floatFromInt(y),   1.0, 1.0, // bottom right
-                @floatFromInt(x + 1), heightTopRight,    @floatFromInt(y + 1),   1.0, 0.0, // top right
-                
-            };
-            // zig fmt: on
-
-            @memcpy(vertexData[indexVertexData..], &currentTile);
-
-            const indexIndices = indices.len;
-            indices = allocator.realloc(indices, indices.len + 6);
-
-            @memcpy(indices[indexIndices..], &indicesTemplate);
-
-            // fixme: This is a workaround for the zig compiler being unfinished.
-            for (0..indicesTemplate.len) |i| {
-                indicesTemplate[i] += 4;
-            }
-
-            _ = &currentTile;
-            _ = &x;
-            _ = &y;
-            _ = &indexVertexData;
-            _ = &indexIndices;
-            _ = &indicesTemplate;
-            _ = &vertexData;
-            _ = &indices;
-        }
-    }
-    // std.debug.print("{any}\n", .{vertexData});
-    // std.debug.print("{any}\n", .{indices});
-
-    // _ = &positions;
-    // _ = &textureCoords;
-    // _ = &indices;
-
-    // const vertexData = [_]f32{
-
-    //     -0.5, 0.5, 0.0,   0.0, 0.0, // top left
-    //     -0.5, -0.5, 0.0,  0.0, 1.0, // bottom left
-    //     0.5, -0.5, 0.0,   1.0, 1.0, // bottom right
-    //     0.5, 0.5, 0.0,    1.0, 0.0, // top right
-
-    // };
-
-    mesh.new(
-        "test",
-        vertexData,
-        indices,
-    );
-
-    //* End heightmap into map data.
+    map.load("levels/big_map_test.png");
 
     texture.new("textures/sand.png");
 
@@ -170,7 +92,7 @@ pub fn main() !void {
 
         camera.updateObjectMatrix(0, 0, translation, 0, 0, 1.0);
 
-        mesh.draw("test");
+        mesh.draw("ground");
 
         if (keyboard.isPressed(glfw.Key.escape)) {
             window.close();
