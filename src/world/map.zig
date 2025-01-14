@@ -30,6 +30,8 @@ pub fn load(location: []const u8) void {
     var indices: []u32 = allocator.alloc(u32, 0);
     defer allocator.free(indices);
 
+    var i: u32 = 0;
+
     for (0..map.width) |x| {
         for (0..map.height) |y| {
             const indexVertexData = vertexData.len;
