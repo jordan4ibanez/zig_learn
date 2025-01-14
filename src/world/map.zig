@@ -3,7 +3,7 @@ const allocator = @import("../utility/allocator.zig");
 const heightmap = @import("../graphics/heightmap.zig");
 const mesh = @import("../graphics/mesh.zig");
 
-// The map doesn't really have an on/off switch, it is loaded or it isn't.
+//? The map doesn't really have an on/off switch, it is loaded or it isn't.
 
 const indicesTemplate = [_]u32{ 0, 1, 2, 2, 3, 0 };
 
