@@ -92,6 +92,7 @@ pub fn main() !void {
 
         camera.updateObjectMatrix(0, 0, translation, 0, 0, 1.0);
 
+        // todo: the map should have a function to draw this lol. This is anarchic.
         mesh.draw("ground");
 
         if (keyboard.isPressed(glfw.Key.escape)) {
