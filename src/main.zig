@@ -75,7 +75,7 @@ pub fn main() !void {
     const rotation: f32 = -30;
     const translation: f32 = 0;
 
-    while (!window.shouldClose()) {
+    while (window.shouldClose()) {
         window.pollEvents();
 
         camera.setClearColor(0.2, 0.3, 0.3);
