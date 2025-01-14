@@ -44,6 +44,7 @@ pub fn load(location: []const u8) void {
 
             // todo: map texture to texture map with some kind of data type etc.
             // todo: I think just using an 8 bit png should work.
+            // todo: and the json data could hold what each color data represents
             // zig fmt: off
             const currentTile = [_]f32{
                 @floatFromInt(x),     heightTopLeft,     @floatFromInt(y + 1), 0.0, 0.0, // top left
