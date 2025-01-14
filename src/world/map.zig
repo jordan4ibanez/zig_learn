@@ -71,7 +71,6 @@ pub fn load(location: []const u8) void {
             _ = &y;
             _ = &indexVertexData;
             _ = &indexIndices;
-            _ = &indicesTemplate;
             _ = &vertexData;
             _ = &indices;
         }
