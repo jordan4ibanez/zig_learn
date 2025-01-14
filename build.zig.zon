@@ -40,8 +40,8 @@
             .hash = "12208b7d15a730294a7d8ee3a9d3ef145e109f94d0a68be7f0ee282e0630ede093d5",
         },
         .zgltf = .{
-            .url = "git+https://github.com/kooparse/zgltf#c05471bfcd49d2a2bcbc4e1273e2cb4f972461d1",
-            .hash = "1220531a8e6b1e3f45fae01cda2621e1c714694dffd93c97f21b74bea277be479a11",
+            .url = "git+https://github.com/jordan4ibanez/zgltf#9a2af14f1571539522c2f3cf9c55735afad5eb08",
+            .hash = "1220137d374bcd4bb5abd697307171ec7412f9aba140bd509bf8fc596d5c752e4028",
         },
     },
     .paths = .{
