@@ -28,3 +28,6 @@ zig fetch --save git+(github address here)
 
 was researching:
 https://github.com/kooparse/zgltf
+
+zigimg:
+https://github.com/zigimg/zigimg/tree/cbb0c64caffd5b02863aadd62bab48cef7f86ceb
