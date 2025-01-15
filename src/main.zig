@@ -2,13 +2,15 @@ const std = @import("std");
 const za = @import("zalgebra");
 const allocator = @import("utility/allocator.zig");
 const rl = @import("raylib");
+const heightMap = @import("graphics/heightmap.zig");
+// const texture = @import("graphics/texture.zig");
 // const glfw = @import("mach-glfw");
-// const stbi = @import("zstbi");
+
 // const gl = @import("gl");
 // const window = @import("graphics/window.zig");
 // const shader = @import("graphics/shader.zig");
 // const mesh = @import("graphics/mesh.zig");
-// const texture = @import("graphics/texture.zig");
+
 // const map = @import("world/map.zig");
 // const camera = @import("graphics/camera.zig");
 // const keyboard = @import("input/keyboard.zig");
@@ -37,18 +39,22 @@ pub fn main() !void {
     allocator.initialize();
     defer allocator.terminate();
 
+    rl.setTraceLogLevel(rl.TraceLogLevel.err);
+
     rl.initWindow(800, 800, "hi");
     defer rl.closeWindow();
 
     rl.setTargetFPS(60);
 
-    // var mesh = allocator.create(rl.Mesh);
-    
+    heightMap.new("levels/big_map_test.png", 1.0);
 
+    // _ = &boof;
+
+    // var mesh = allocator.create(rl.Mesh);
 
     // rl.drawModel()
 
-    while (!rl.windowShouldClose()) {
+    while (rl.windowShouldClose()) {
         rl.beginDrawing();
         defer rl.endDrawing();
 
@@ -61,9 +67,6 @@ pub fn main() !void {
 
     // shader.initialize();
     // defer shader.terminate();
-
-    // stbi.init(allocator.get());
-    // defer stbi.deinit();
 
     // mesh.initialize();
     // defer mesh.terminate();
