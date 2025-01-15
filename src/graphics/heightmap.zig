@@ -1,6 +1,6 @@
-const NATIVE_ENDIAN = @import("builtin").target.cpu.arch.endian();
 const std = @import("std");
 const rl = @import("raylib");
+const zigimg = @import("zigimg");
 const allocator = @import("../utility/allocator.zig");
 const string = @import("../utility/string.zig");
 
@@ -15,6 +15,17 @@ pub const HeightMap = struct {
 pub fn new(location: []const u8, yScale: f32) void {
     _ = &location;
     _ = &yScale;
+
+    var image = zigimg.Image.fromFilePath(allocator.get(), location) catch |err| {
+        std.log.err("[HeightMap]: Failed to load heightmap texture {s}. {s}", .{ location, @errorName(err) });
+        std.process.exit(1);
+    };
+    defer image.deinit();
+
+    // _ = &image;
+
+    // std.debug.print("form: {any}", .{5});
+
     // stbi.init(allocator.get());
     // defer stbi.deinit();
 
