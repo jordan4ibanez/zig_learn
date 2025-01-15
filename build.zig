@@ -59,6 +59,13 @@ pub fn build(b: *std.Build) void {
     exe.root_module.addImport("raylib", raylib);
     exe.root_module.addImport("raygui", raygui);
 
+    const zigimg_dependency = b.dependency("zigimg", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
+    exe.root_module.addImport("zigimg", zigimg_dependency.module("zigimg"));
+
     //* END EXTERNAL MODULES. ==========================================================
 
     // This declares intent for the executable to be installed into the
