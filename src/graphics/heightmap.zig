@@ -1,10 +1,8 @@
-// const NATIVE_ENDIAN = @import("builtin").target.cpu.arch.endian();
+const NATIVE_ENDIAN = @import("builtin").target.cpu.arch.endian();
 const std = @import("std");
+const rl = @import("raylib");
 const allocator = @import("../utility/allocator.zig");
-
-// const stbi = @import("zstbi");
-// const string = @import("../utility/string.zig");
-
+const string = @import("../utility/string.zig");
 
 pub const HeightMap = struct {
     width: u32,
@@ -15,8 +13,10 @@ pub const HeightMap = struct {
 //* PUBLIC API. ==============================================
 
 pub fn new(location: []const u8, yScale: f32) void {
-
-
+    _ = &location;
+    _ = &yScale;
+    // stbi.init(allocator.get());
+    // defer stbi.deinit();
 
     // const nullTerminatedLocation = string.nullTerminate(location);
     // defer allocator.free(nullTerminatedLocation);
