@@ -72,7 +72,7 @@ pub fn main() !void {
 
     texture.use("sand.png");
 
-    const rotation: f32 = -30;
+    var rotation: f32 = -30;
     const translation: f32 = 0;
 
     modelLoader.loadModel("models/largemouth.glb");
@@ -88,10 +88,14 @@ pub fn main() !void {
         camera.setCameraRotation(-20.0, rotation);
         camera.updateCameraMatrix();
 
-        camera.updateObjectMatrix(0, 0, translation, 0, 0, 1.0);
+        rotation += 1;
+
+        camera.updateObjectMatrix(50, 0, translation, 0, 0, 1);
 
         // todo: the map should have a function to draw this lol. This is anarchic.
-        mesh.draw("ground");
+        // mesh.draw("ground");
+
+        mesh.draw("model");
 
         if (keyboard.isPressed(glfw.Key.escape)) {
             window.close();
