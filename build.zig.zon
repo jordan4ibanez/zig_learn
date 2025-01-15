@@ -23,26 +23,10 @@
     // Once all dependencies are fetched, `zig build` no longer requires
     // internet connectivity.
     .dependencies = .{
-        // .@"mach-glfw" = .{
-        //     .url = "https://pkg.machengine.org/mach-glfw/affdd6ae6f2ac2c3b9162784bdad345c561eeeea.tar.gz",
-        //     .hash = "122022ea6df16700e521078c20d7d01f894c6f967e6c6ce1ea166426b4fc61667de3",
-        // },
-        // .zigglgen = .{
-        //     .url = "git+https://github.com/castholm/zigglgen#1c901bef6d312ef1814b8fce3c5a9e9e8e61ac2d",
-        //     .hash = "12209d8a018832bee15d9da29a12fa753d89b56cd843cdf1f39501546c6467e38ba1",
-        // },
         .zalgebra = .{
             .url = "git+https://github.com/kooparse/zalgebra#0ff2b6093a410b26a294d4ed53985882256072a1",
             .hash = "1220fbbcfa859f668d69b4f7d2aa621d13b128a77b46965e6c4aae35f9c1d7b85eb8",
         },
-        // .zstbi = .{
-        //     .url = "git+https://github.com/zig-gamedev/zstbi#bcbd249f3f57fb84d6d76f1bc621c7bd3bfaa4a2",
-        //     .hash = "12208b7d15a730294a7d8ee3a9d3ef145e109f94d0a68be7f0ee282e0630ede093d5",
-        // },
-        // .zgltf = .{
-        //     .url = "git+https://github.com/jordan4ibanez/zgltf#9a2af14f1571539522c2f3cf9c55735afad5eb08",
-        //     .hash = "1220137d374bcd4bb5abd697307171ec7412f9aba140bd509bf8fc596d5c752e4028",
-        // },
         .@"raylib-zig" = .{
             .url = "git+https://github.com/Not-Nik/raylib-zig?ref=devel#1ef4995f82686fda7c2eff1c76f26d1200d74760",
             .hash = "12206cf18aea41dc1e61b697c36ef627752e84fe9a9362b800240fce7dea3665094d",
