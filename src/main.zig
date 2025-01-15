@@ -75,7 +75,7 @@ pub fn main() !void {
     const rotation: f32 = -30;
     const translation: f32 = 0;
 
-    modelLoader.loadModel("models/largemouth.gltf");
+    modelLoader.loadModel("models/largemouth.glb");
 
     while (window.shouldClose()) {
         window.pollEvents();
