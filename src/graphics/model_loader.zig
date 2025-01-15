@@ -34,7 +34,8 @@ pub fn loadModel(location: []const u8) void {
         std.process.exit(1);
     }
 
-    // Only loading the first node.
+    // Only loading the first node, the first primitive.
+    // todo: animation of the first node, the first primitive.
 
     std.debug.print("{}\n", .{loader.data.nodes.items.len});
 
@@ -45,7 +46,6 @@ pub fn loadModel(location: []const u8) void {
     for (loader.data.nodes.items) |node| {
         // I am terrible at using blender so I have to get rid of Empty.
         if (!std.mem.eql(u8, node.name, "Empty")) {
-            // std.debug.print("HOOPLAH {s}\n", .{node.name});
             modelNode = node;
             found = true;
             break;
@@ -57,11 +57,16 @@ pub fn loadModel(location: []const u8) void {
         std.process.exit(1);
     }
 
-    for (loader.data.meshes.items) |mesh| {
-        for (mesh.primitives.items) |primitive| {
+    const mainPrimitive: gltf.Primitive = loader.data.meshes.items[0].primitives.items[0];
 
-        }
-    }
+    mainPrimitive.indices
+
+    _ = &mainPrimitive;
+    // for () |mesh| {
+    //     for (mesh.primitives.items) |p| {
+    //         std.debug.print("{any}\n", .{p.mode});
+    //     }
+    // }
 
     // var meshIndex: isize = @intCast(modelNode.mesh orelse {
     //     std.log.err("[Model Loader]: Cannot find mesh index {s}.", .{location});
