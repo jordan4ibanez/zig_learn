@@ -77,7 +77,7 @@ pub fn main() !void {
 
     modelLoader.loadModel("models/largemouth.glb");
 
-    while (window.shouldClose()) {
+    while (!window.shouldClose()) {
         window.pollEvents();
 
         camera.setClearColor(0.2, 0.3, 0.3);

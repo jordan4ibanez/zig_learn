@@ -119,6 +119,8 @@ pub fn loadModel(location: []const u8) void {
     };
 
     var positionData = std.ArrayList(f32).init(allocator.get());
+    defer positionData.clearAndFree();
+
     loader.getDataFromBufferView(f32, &positionData, loader.data.accessors.items[@intCast(meshIndex)], buffer);
     // for (boof.items) |i| {
     //     std.debug.print("{}", .{i});
@@ -126,7 +128,47 @@ pub fn loadModel(location: []const u8) void {
 
     // ! Fake data for now.
 
-    
+    var vertexData = std.ArrayList(f32).init(allocator.get());
+    defer vertexData.clearAndFree();
+
+    for (0..positionData.items.len / 3) |i| {
+        const offset = i * 3;
+
+        const xIndex = offset + 0;
+        const yIndex = offset + 1;
+        const zIndex = offset + 2;
+
+        const x = positionData.items[xIndex];
+        const y = positionData.items[yIndex];
+        const z = positionData.items[zIndex];
+
+        vertexData.append(x) catch |err| {
+            std.log.err("[Model Loader]: x failure {s}. {s}", .{ location, @errorName(err) });
+            std.process.exit(1);
+        };
+        vertexData.append(y) catch |err| {
+            std.log.err("[Model Loader]: y failure {s}. {s}", .{ location, @errorName(err) });
+            std.process.exit(1);
+        };
+        vertexData.append(z) catch |err| {
+            std.log.err("[Model Loader]: z failure {s}. {s}", .{ location, @errorName(err) });
+            std.process.exit(1);
+        };
+
+        // ! Fake texture data for now.
+
+        vertexData.append(0.0) catch |err| {
+            std.log.err("[Model Loader]: fake x failure {s}. {s}", .{ location, @errorName(err) });
+            std.process.exit(1);
+        };
+
+        vertexData.append(0.0) catch |err| {
+            std.log.err("[Model Loader]: fake y failure {s}. {s}", .{ location, @errorName(err) });
+            std.process.exit(1);
+        };
+
+        std.debug.print("{}, {}, {}\n", .{ x, y, z });
+    }
 
     // modelNode.
 
@@ -140,7 +182,7 @@ pub fn loadModel(location: []const u8) void {
         };
     }
 
-    positionData.clearAndFree();
+    mesh.new("model", vertexData.items, indexData.items);
 
     // _ = &boof;
     _ = &meshIndex;
