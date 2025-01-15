@@ -22,9 +22,10 @@ pub fn new(location: []const u8, yScale: f32) void {
     };
     defer image.deinit();
 
-    // _ = &image;
-
-    // std.debug.print("form: {any}", .{5});
+    if (image.pixelFormat() != zigimg.PixelFormat.grayscale16) {
+        std.log.err("[HeightMap]: Heightmap must be 16 bit grayscale {s}. ", .{location});
+        std.process.exit(1);
+    }
 
     // stbi.init(allocator.get());
     // defer stbi.deinit();
