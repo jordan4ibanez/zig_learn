@@ -46,6 +46,10 @@ pub fn main() !void {
 
     rl.setTargetFPS(60);
 
+    if (true) {
+        std.debug.print("was turning this thing into a heightmap!\n", .{});
+        std.process.exit(0);
+    }
     heightMap.new("levels/big_map_test.png", 1.0);
 
     // _ = &boof;
