@@ -57,22 +57,27 @@ pub fn loadModel(location: []const u8) void {
         std.process.exit(1);
     }
 
-    var meshIndex: isize = @intCast(modelNode.mesh orelse {
-        std.log.err("[Model Loader]: Cannot find mesh index {s}.", .{location});
-        std.process.exit(1);
-    });
+    for (loader.data.meshes.items) |mesh| {
+        for (mesh.primitives.items) |primitive| {
 
-    
-
-    var boof = std.ArrayList(f32).init(allocator.get());
-    loader.getDataFromBufferView(f32, &boof, loader.data.accessors.items[@intCast(meshIndex)], buffer);
-    for (boof.items) |i| {
-        std.debug.print("{}", .{i});
+        }
     }
 
-    boof.clearAndFree();
-    _ = &boof;
-    _ = &meshIndex;
+    // var meshIndex: isize = @intCast(modelNode.mesh orelse {
+    //     std.log.err("[Model Loader]: Cannot find mesh index {s}.", .{location});
+    //     std.process.exit(1);
+    // });
+    // var boof = std.ArrayList(f32).init(allocator.get());
+    // loader.getDataFromBufferView(f32, &boof, loader.data.accessors.items[@intCast(meshIndex)], buffer);
+    // for (boof.items) |i| {
+    //     std.debug.print("{}", .{i});
+    // }
+
+    // modelNode.
+
+    // boof.clearAndFree();
+    // _ = &boof;
+    // _ = &meshIndex;
     _ = &modelNode;
     _ = &loader;
     _ = &buffer;
