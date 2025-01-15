@@ -38,37 +38,37 @@ pub fn build(b: *std.Build) void {
 
     //* BEGIN EXTERNAL MODULES. ==========================================================
 
-    // Use mach-glfw.
-    const glfw_dep = b.dependency("mach-glfw", .{
-        .target = target,
-        .optimize = optimize,
-    });
-    exe.root_module.addImport("mach-glfw", glfw_dep.module("mach-glfw"));
+    // // Use mach-glfw.
+    // const glfw_dep = b.dependency("mach-glfw", .{
+    //     .target = target,
+    //     .optimize = optimize,
+    // });
+    // exe.root_module.addImport("mach-glfw", glfw_dep.module("mach-glfw"));
 
-    // Choose the OpenGL API, version, profile and extensions you want to generate bindings for.
-    const gl_bindings = @import("zigglgen").generateBindingsModule(b, .{
-        .api = .gl,
-        .version = .@"4.6",
-        .profile = .core,
-    });
-    exe.root_module.addImport("gl", gl_bindings);
+    // // Choose the OpenGL API, version, profile and extensions you want to generate bindings for.
+    // const gl_bindings = @import("zigglgen").generateBindingsModule(b, .{
+    //     .api = .gl,
+    //     .version = .@"4.6",
+    //     .profile = .core,
+    // });
+    // exe.root_module.addImport("gl", gl_bindings);
 
-    // Math, wow!
-    const zalgebra_dep = b.dependency("zalgebra", .{
-        .target = target,
-        .optimize = optimize,
-    });
-    const zalgebra_module = zalgebra_dep.module("zalgebra");
-    exe.root_module.addImport("zalgebra", zalgebra_module);
+    // // Math, wow!
+    // const zalgebra_dep = b.dependency("zalgebra", .{
+    //     .target = target,
+    //     .optimize = optimize,
+    // });
+    // const zalgebra_module = zalgebra_dep.module("zalgebra");
+    // exe.root_module.addImport("zalgebra", zalgebra_module);
 
-    // STB.
-    const zstbi = b.dependency("zstbi", .{});
-    exe.root_module.addImport("zstbi", zstbi.module("root"));
-    exe.linkLibrary(zstbi.artifact("zstbi"));
+    // // STB.
+    // const zstbi = b.dependency("zstbi", .{});
+    // exe.root_module.addImport("zstbi", zstbi.module("root"));
+    // exe.linkLibrary(zstbi.artifact("zstbi"));
 
-    // zgltf.
-    const zgltf = b.dependency("zgltf", .{});
-    exe.root_module.addImport("zgltf", zgltf.module("zgltf"));
+    // // zgltf.
+    // const zgltf = b.dependency("zgltf", .{});
+    // exe.root_module.addImport("zgltf", zgltf.module("zgltf"));
 
     //* END EXTERNAL MODULES. ==========================================================
 
