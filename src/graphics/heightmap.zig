@@ -27,51 +27,44 @@ pub fn new(location: []const u8, yScale: f32) void {
         std.process.exit(1);
     }
 
-    // stbi.init(allocator.get());
-    // defer stbi.deinit();
+    // Height map gets -1 width and height because the edges are vertex points.
+    // (You make tiles out of each pixel quadrant)
+    const w: u32 = @intCast(image.width);
+    const h: u32 = @intCast(image.height);
+    var map = HeightMap{
+        .width = w - 1,
+        .height = h - 1,
+        .data = allocator.alloc([]f32, image.height),
+    };
+    defer destroy(map);
+    for (0..image.height) |i| {
+        map.data[i] = allocator.alloc(f32, image.width);
+    }
 
-    // const nullTerminatedLocation = string.nullTerminate(location);
-    // defer allocator.free(nullTerminatedLocation);
+    //* This is set up to have the bottom left of the image be the origin.
 
-    // var image = stbi.Image.loadFromFile(nullTerminatedLocation, 1) catch |err| {
-    //     std.log.err("[Texture]: Failed to load texture {s}. {s}", .{ location, @errorName(err) });
-    //     std.process.exit(1);
-    // };
-    // defer image.deinit();
+    var i: usize = 0;
+    for (0..image.width) |x| {
+        for (0..image.height) |y| {
+            const rawValue = image.pixels.grayscale16[i].value;
 
-    // // Height map gets -1 width and height because the edges are vertex points.
-    // // (You make tiles out of each pixel quadrant)
-    // var map = HeightMap{
-    //     .width = image.width - 1,
-    //     .height = image.height - 1,
-    //     .data = allocator.alloc([]f32, image.height),
-    // };
-    // for (0..image.height) |i| {
-    //     map.data[i] = allocator.alloc(f32, image.width);
-    // }
+            // Heightmap data is of scalar [-0.5 - 0.5]
+            const floatingLiteral: f32 = @floatFromInt(rawValue);
+            const converted = ((floatingLiteral / 65535.0) - 0.5) * yScale;
 
-    // var i: usize = 0;
-    // for (0..image.width) |x| {
-    //     for (0..image.height) |y| {
-    //         const index = i * image.bytes_per_component;
+            const flippedX = (image.width - 1) - x;
 
-    //         const byteData = [2]u8{ image.data[index], image.data[index + 1] };
-    //         const rawValue: u16 = std.mem.readInt(u16, &byteData, NATIVE_ENDIAN);
+            map.data[y][flippedX] = converted;
 
-    //         // Heightmap data is of scalar [-0.5 - 0.5]
-    //         const floatingLiteral: f32 = @floatFromInt(rawValue);
-    //         const converted = ((floatingLiteral / 65535.0) - 0.5) * yScale;
+            i += 1;
+        }
+    }
 
-    //         const flippedY = (image.height - 1) - y;
-
-    //         // this might need to be inverted on the Y axis.
-    //         map.data[x][flippedY] = converted;
-
-    //         // std.debug.print("{d}, {d} = {d}\n", .{ x, flippedY, converted });
-
-    //         i += 1;
-    //     }
-    // }
+    for (0..map.width + 1) |x| {
+        for (0..map.height + 1) |y| {
+            std.debug.print("x: {} | y: {} | data: {d}\n", .{ x, y, map.data[x][y] });
+        }
+    }
 
     // return map;
 }
