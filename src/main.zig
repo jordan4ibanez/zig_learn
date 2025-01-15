@@ -1,9 +1,10 @@
 const std = @import("std");
-// const gl = @import("gl");
 const za = @import("zalgebra");
+const allocator = @import("utility/allocator.zig");
+const rl = @import("raylib");
 // const glfw = @import("mach-glfw");
 // const stbi = @import("zstbi");
-const allocator = @import("utility/allocator.zig");
+// const gl = @import("gl");
 // const window = @import("graphics/window.zig");
 // const shader = @import("graphics/shader.zig");
 // const mesh = @import("graphics/mesh.zig");
@@ -35,6 +36,25 @@ const Mat4 = za.Mat4;
 pub fn main() !void {
     allocator.initialize();
     defer allocator.terminate();
+
+    rl.initWindow(800, 800, "hi");
+    defer rl.closeWindow();
+
+    rl.setTargetFPS(60);
+
+    // var mesh = allocator.create(rl.Mesh);
+    
+
+
+    // rl.drawModel()
+
+    while (!rl.windowShouldClose()) {
+        rl.beginDrawing();
+        defer rl.endDrawing();
+
+        rl.clearBackground(rl.Color.white);
+        rl.drawText("Congrats! You created your first window!", 190, 200, 20, rl.Color.light_gray);
+    }
 
     // window.initialize(800, 600);
     // defer window.terminate();
