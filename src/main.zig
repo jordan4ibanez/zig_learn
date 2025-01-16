@@ -2,7 +2,7 @@ const std = @import("std");
 const za = @import("zalgebra");
 const allocator = @import("utility/allocator.zig");
 const rl = @import("raylib");
-const heightMap = @import("graphics/heightmap.zig");
+const map = @import("world/map.zig");
 // const texture = @import("graphics/texture.zig");
 // const glfw = @import("mach-glfw");
 
@@ -46,11 +46,7 @@ pub fn main() !void {
 
     rl.setTargetFPS(60);
 
-    if (true) {
-        std.debug.print("was turning this thing into a heightmap!\n", .{});
-        std.process.exit(0);
-    }
-    heightMap.new("levels/big_map_test.png", 1.0);
+    map.load("levels/big_map_test.png");
 
     // _ = &boof;
 
