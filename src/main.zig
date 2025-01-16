@@ -9,7 +9,7 @@ const map = @import("world/map.zig");
 // const gl = @import("gl");
 // const window = @import("graphics/window.zig");
 // const shader = @import("graphics/shader.zig");
-// const mesh = @import("graphics/mesh.zig");
+const mesh = @import("graphics/mesh.zig");
 
 // const map = @import("world/map.zig");
 // const camera = @import("graphics/camera.zig");
@@ -39,6 +39,9 @@ pub fn main() !void {
     allocator.initialize();
     defer allocator.terminate();
 
+    mesh.initialize();
+    defer mesh.terminate();
+
     // rl.setTraceLogLevel(rl.TraceLogLevel.err);
 
     rl.initWindow(800, 800, "hi");
@@ -62,14 +65,8 @@ pub fn main() !void {
         rl.drawText("Congrats! You created your first window!", 190, 200, 20, rl.Color.light_gray);
     }
 
-    // window.initialize(800, 600);
-    // defer window.terminate();
-
     // shader.initialize();
     // defer shader.terminate();
-
-    // mesh.initialize();
-    // defer mesh.terminate();
 
     // texture.initialize();
     // defer texture.terminate();
