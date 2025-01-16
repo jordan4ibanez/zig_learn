@@ -1,21 +1,14 @@
 const std = @import("std");
-const gl = @import("gl");
+const rl = @import("raylib");
 const allocator = @import("../utility/allocator.zig");
 const shader = @import("shader.zig");
 
-const Mesh = struct {
-    vao: gl.uint,
-    vboVertexData: gl.uint,
-    eboIndex: gl.uint,
-    length: gl.sizei,
-};
-
-var database: std.StringHashMap(*Mesh) = undefined;
+var database: std.StringHashMap(*rl.Mesh) = undefined;
 
 //* ON/OFF SWITCH. ==============================================
 
 pub fn initialize() void {
-    database = std.StringHashMap(*Mesh).init(allocator.get());
+    database = std.StringHashMap(*rl.Mesh).init(allocator.get());
 }
 
 pub fn terminate() void {
@@ -41,7 +34,7 @@ pub fn terminate() void {
 /// Keep in mind, this will clone the name string. So free it after you run this.
 ///
 pub fn new(name: []const u8, vertexData: []const f32, indices: []const u32) void {
-    var mesh = allocator.create(Mesh);
+    var mesh = allocator.create(rl.Mesh);
 
     mesh.vao = createVao();
     mesh.vboVertexData = vertexUpload(vertexData);
@@ -79,12 +72,13 @@ pub fn destroy(name: []const u8) void {
 /// Draw a mesh.
 ///
 pub fn draw(name: []const u8) void {
-    const currentMesh: *Mesh = database.get(name) orelse {
+    const currentMesh: *rl.Mesh = database.get(name) orelse {
         std.log.err("[Mesh]: Failed to draw mesh {s}. Does not exist", .{name});
         std.process.exit(1);
     };
-    gl.BindVertexArray(currentMesh.vao);
-    gl.DrawElements(gl.TRIANGLES, currentMesh.length, gl.UNSIGNED_INT, 0);
+
+    // gl.BindVertexArray(currentMesh.vao);
+    // gl.DrawElements(gl.TRIANGLES, currentMesh.length, gl.UNSIGNED_INT, 0);
 }
 
 //* INTERNAL API. ==============================================
