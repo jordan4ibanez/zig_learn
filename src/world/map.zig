@@ -22,44 +22,61 @@ const mesh = @import("../graphics/mesh.zig");
 ///! note: Water should have a resolution of 0.25 x and y
 ///
 pub fn load(location: []const u8) void {
+
+    // todo: map texture to texture map with some kind of data type etc.
+    // todo: I think just using an 8 bit png should work.
+    // todo: and the json data could hold what each color data represents.
+
     const map = heightmap.new(location, 5.0);
+    // todo: don't destroy this. Store it.
     defer heightmap.destroy(map);
 
-    var vertexData: []f32 = allocator.alloc(f32, 0);
-    defer allocator.free(vertexData);
-    var indices: []u32 = allocator.alloc(u32, 0);
-    defer allocator.free(indices);
+    var vertices = std.ArrayList(f32).init(allocator.get());
+    defer vertices.clearAndFree();
+
+    var textureCoordinates = std.ArrayList(f32).init(allocator.get());
+    defer textureCoordinates.clearAndFree();
+
+    var indices = std.ArrayList(u32).init(allocator.get());
+    defer indices.clearAndFree();
 
     var i: u32 = 0;
 
     for (0..map.width) |x| {
         for (0..map.height) |y| {
-            const indexVertexData = vertexData.len;
-            vertexData = allocator.realloc(vertexData, vertexData.len + 20);
+            // const indexVertexData = vertices.len;
+            // vertices = allocator.realloc(vertices, vertices.len + 20);
 
             const heightTopLeft = map.data[x][y + 1];
             const heightBottomLeft = map.data[x][y];
             const heightBottomRight = map.data[x + 1][y];
             const heightTopRight = map.data[x + 1][y + 1];
 
-            // todo: map texture to texture map with some kind of data type etc.
-            // todo: I think just using an 8 bit png should work.
-            // todo: and the json data could hold what each color data represents.
-            // zig fmt: off
-            const currentTile = [_]f32{
-                @floatFromInt(x),     heightTopLeft,     @floatFromInt(y + 1), 0.0, 0.0, // top left
-                @floatFromInt(x),     heightBottomLeft,  @floatFromInt(y),     0.0, 1.0, // bottom left
-                @floatFromInt(x + 1), heightBottomRight, @floatFromInt(y),     1.0, 1.0, // bottom right
-                @floatFromInt(x + 1), heightTopRight,    @floatFromInt(y + 1), 1.0, 0.0, // top right
+            const currentTileVertices = [_]f32{
+                @floatFromInt(x), heightTopLeft, @floatFromInt(y + 1), // top left.
+                @floatFromInt(x), heightBottomLeft, @floatFromInt(y), // bottom left.
+                @floatFromInt(x + 1), heightBottomRight, @floatFromInt(y), // bottom right.
+                @floatFromInt(x + 1), heightTopRight, @floatFromInt(y + 1), // top right.
             };
-            // zig fmt: on
 
-            @memcpy(vertexData[indexVertexData..], &currentTile);
+            vertices.appendSlice(&currentTileVertices) catch |err| {
+                std.log.err("[Map]: Failed to append vertices {s}. {s}", .{ location, @errorName(err) });
+                std.process.exit(1);
+            };
 
-            const indexIndices = indices.len;
-            indices = allocator.realloc(indices, indices.len + 6);
+            const currentTileTextureCoordinates = [_]f32{
+                0.0, 0.0, // top left.
+                0.0, 1.0, // bottom left
+                1.0, 1.0, // bottom right.
+                1.0, 0.0, // top right.
+            };
 
-            const indexData = [_]u32{
+            textureCoordinates.appendSlice(&currentTileTextureCoordinates) catch |err| {
+                std.log.err("[Map]: Failed to append texture coordinates {s}. {s}", .{ location, @errorName(err) });
+                std.process.exit(1);
+            };
+
+            const currentIndices = [_]u32{
                 0 + i,
                 1 + i,
                 2 + i,
@@ -68,25 +85,22 @@ pub fn load(location: []const u8) void {
                 0 + i,
             };
 
-            @memcpy(indices[indexIndices..], &indexData);
+            indices.appendSlice(&currentIndices) catch |err| {
+                std.log.err("[Map]: Failed to append indices {s}. {s}", .{ location, @errorName(err) });
+                std.process.exit(1);
+            };
 
             i += 4;
-
-            _ = &currentTile;
-            _ = &x;
-            _ = &y;
-            _ = &indexVertexData;
-            _ = &indexIndices;
-            _ = &vertexData;
-            _ = &indices;
         }
     }
 
     mesh.new(
         "ground",
-        vertexData,
-        indices,
+        vertices.items,
+        textureCoordinates.items,
+        indices.items,
     );
+    
 }
 
 // std.debug.print("{any}\n", .{vertexData});

@@ -33,11 +33,17 @@ pub fn terminate() void {
 ///
 /// Keep in mind, this will clone the name string. So free it after you run this.
 ///
-pub fn new(name: []const u8, vertexData: []const f32, indices: []const u32) void {
+pub fn new(name: []const u8, vertices: []const f32, textureCoords: []const f32, indices: []const u32) void {
     // var mesh = allocator.create(rl.Mesh);
 
+    var mesh = allocator.create(rl.Mesh);
+
+    mesh.vertexCount = @intCast(vertices.len);
+    mesh.
+
     _ = &name;
-    _ = &vertexData;
+    _ = &vertices;
+    _ = &textureCoords;
     _ = &indices;
 
     // mesh.vao = createVao();
