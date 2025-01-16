@@ -1,6 +1,6 @@
 const std = @import("std");
 const allocator = @import("../utility/allocator.zig");
-const heightmap = @import("../graphics/heightmap.zig");
+const heightmap = @import("heightmap.zig");
 const mesh = @import("../graphics/mesh.zig");
 
 //? The map doesn't really have an on/off switch, it is loaded or it isn't.
