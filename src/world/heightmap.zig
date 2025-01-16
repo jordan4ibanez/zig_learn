@@ -12,7 +12,7 @@ pub const HeightMap = struct {
 
 //* PUBLIC API. ==============================================
 
-pub fn new(location: []const u8, yScale: f32) void {
+pub fn new(location: []const u8, yScale: f32) HeightMap {
     _ = &location;
     _ = &yScale;
 
@@ -36,7 +36,7 @@ pub fn new(location: []const u8, yScale: f32) void {
         .height = h - 1,
         .data = allocator.alloc([]f32, image.height),
     };
-    defer destroy(map);
+
     for (0..image.height) |i| {
         map.data[i] = allocator.alloc(f32, image.width);
     }
@@ -66,7 +66,7 @@ pub fn new(location: []const u8, yScale: f32) void {
         }
     }
 
-    // return map;
+    return map;
 }
 
 ///
