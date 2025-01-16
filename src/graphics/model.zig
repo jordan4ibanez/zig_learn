@@ -91,19 +91,10 @@ pub fn new(name: []const u8, vertices: std.ArrayList(f32), textureCoords: std.Ar
 
     // std.debug.print("hi\n", .{});
 
-    // todo: set a texture somehow.
+    // todo: make this go into the texture library.
+    // model.model.materials[0].maps[rl.MATERIAL_MAP_DIFFUSE].texture = here
 
-    _ = &model;
-    _ = &name;
-    _ = &vertices;
-    _ = &textureCoords;
-    _ = &indices;
-
-    // mesh.vao = createVao();
-    // mesh.vboVertexData = vertexUpload(vertexData);
-    // mesh.eboIndex = indexUpload(indices);
-    // mesh.length = @intCast(indices.len);
-
+    _ = &textureName;
 }
 
 ///
