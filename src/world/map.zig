@@ -32,13 +32,13 @@ pub fn load(location: []const u8) void {
     defer heightmap.destroy(map);
 
     var vertices = std.ArrayList(f32).init(allocator.get());
-    defer vertices.clearAndFree();
+    // defer vertices.clearAndFree();
 
     var textureCoordinates = std.ArrayList(f32).init(allocator.get());
-    defer textureCoordinates.clearAndFree();
+    // defer textureCoordinates.clearAndFree();
 
     var indices = std.ArrayList(u32).init(allocator.get());
-    defer indices.clearAndFree();
+    // defer indices.clearAndFree();
 
     var i: u32 = 0;
 
@@ -100,7 +100,6 @@ pub fn load(location: []const u8) void {
         textureCoordinates.items,
         indices.items,
     );
-    
 }
 
 // std.debug.print("{any}\n", .{vertexData});
