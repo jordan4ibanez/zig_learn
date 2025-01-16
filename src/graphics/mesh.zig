@@ -38,6 +38,26 @@ pub fn new(name: []const u8, vertices: []f32, textureCoords: []f32, indices: []u
 
     var mesh = allocator.create(rl.Mesh);
 
+    // Zig does not 0 out anything so we have to do that first.
+    mesh.vertexCount = 0;
+    mesh.triangleCount = 0;
+    mesh.vertices = 0;
+    mesh.texcoords = 0;
+    mesh.texcoords2 = 0;
+    mesh.normals = 0;
+    mesh.tangents = 0;
+    mesh.colors = 0;
+    mesh.indices = 0;
+    mesh.animVertices = 0;
+    mesh.animNormals = 0;
+    mesh.boneIds = 0;
+    mesh.boneWeights = 0;
+    mesh.boneMatrices = 0;
+    mesh.boneCount = 0;
+    mesh.vaoId = 0;
+    mesh.vboId = 0;
+    // Done.
+
     // const verticesMutable = vertices.ptr;
     // const textureCoordsMutable = textureCoords.ptr;
     // var indicesMutable = indices;
