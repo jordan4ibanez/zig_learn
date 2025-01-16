@@ -44,7 +44,7 @@ pub fn terminate() void {
 ///
 /// Keep in mind, this will clone the name string. So free it after you run this.
 ///
-pub fn new(name: []const u8, vertices: std.ArrayList(f32), textureCoords: std.ArrayList(f32), indices: std.ArrayList(u16)) void {
+pub fn new(name: []const u8, textureName: []const u8, vertices: std.ArrayList(f32), textureCoords: std.ArrayList(f32), indices: std.ArrayList(u16)) void {
     // var mesh = allocator.create(rl.Mesh);
 
     var model = allocator.create(Model);
