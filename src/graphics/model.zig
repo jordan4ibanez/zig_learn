@@ -73,7 +73,7 @@ pub fn new(name: []const u8, vertices: std.ArrayList(f32), textureCoords: std.Ar
     rl.uploadMesh(mesh, false);
 
     const model = rl.loadModelFromMesh(mesh.*) catch |err| {
-        std.log.err("[Mesh]: Failed to create model {s}. {s}", .{ name, @errorName(err) });
+        std.log.err("[Model]: Failed to create model {s}. {s}", .{ name, @errorName(err) });
         std.process.exit(1);
     };
 
@@ -99,7 +99,7 @@ pub fn new(name: []const u8, vertices: std.ArrayList(f32), textureCoords: std.Ar
 ///
 pub fn destroy(name: []const u8) void {
     const currentMesh = database.get(name) orelse {
-        std.log.err("[Mesh]: Failed to destroy mesh {s}. Does not exist", .{name});
+        std.log.err("[Model]: Failed to destroy mesh {s}. Does not exist", .{name});
         std.process.exit(1);
     };
     defer allocator.destroy(currentMesh);
@@ -107,13 +107,13 @@ pub fn destroy(name: []const u8) void {
     // destroyMesh(name, currentMesh);
 
     const key: []const u8 = database.getKey(name) orelse {
-        std.log.err("[Mesh]: Failed to free mesh {s} key. Does not exist", .{name});
+        std.log.err("[Model]: Failed to free mesh {s} key. Does not exist", .{name});
         std.process.exit(1);
     };
     defer allocator.free(key);
 
     if (!database.remove(name)) {
-        std.log.err("[Mesh]: Failed to remove mesh {s} from database. Does not exist", .{name});
+        std.log.err("[Model]: Failed to remove mesh {s} from database. Does not exist", .{name});
         std.process.exit(1);
     }
 }
@@ -123,7 +123,7 @@ pub fn destroy(name: []const u8) void {
 ///
 pub fn draw(name: []const u8) void {
     const currentMesh: *rl.Mesh = database.get(name) orelse {
-        std.log.err("[Mesh]: Failed to draw mesh {s}. Does not exist", .{name});
+        std.log.err("[Model]: Failed to draw mesh {s}. Does not exist", .{name});
         std.process.exit(1);
     };
 
