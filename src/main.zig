@@ -46,7 +46,7 @@ pub fn main() !void {
 
     rl.setTargetFPS(60);
 
-    map.load("levels/big_map_test.png");
+    map.load("levels/4square.png");
 
     // _ = &boof;
 

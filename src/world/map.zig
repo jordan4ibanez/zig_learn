@@ -37,10 +37,10 @@ pub fn load(location: []const u8) void {
     var textureCoordinates = std.ArrayList(f32).init(allocator.get());
     // defer textureCoordinates.clearAndFree();
 
-    var indices = std.ArrayList(u32).init(allocator.get());
+    var indices = std.ArrayList(u16).init(allocator.get());
     // defer indices.clearAndFree();
 
-    var i: u32 = 0;
+    var i: u16 = 0;
 
     for (0..map.width) |x| {
         for (0..map.height) |y| {
@@ -76,7 +76,7 @@ pub fn load(location: []const u8) void {
                 std.process.exit(1);
             };
 
-            const currentIndices = [_]u32{
+            const currentIndices = [_]u16{
                 0 + i,
                 1 + i,
                 2 + i,

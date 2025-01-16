@@ -33,18 +33,38 @@ pub fn terminate() void {
 ///
 /// Keep in mind, this will clone the name string. So free it after you run this.
 ///
-pub fn new(name: []const u8, vertices: []const f32, textureCoords: []const f32, indices: []const u32) void {
+pub fn new(name: []const u8, vertices: []f32, textureCoords: []f32, indices: []u16) void {
     // var mesh = allocator.create(rl.Mesh);
 
     var mesh = allocator.create(rl.Mesh);
 
-    mesh.vertexCount = @intCast(vertices.len);
-    mesh.
+    // const verticesMutable = vertices.ptr;
+    // const textureCoordsMutable = textureCoords.ptr;
+    // var indicesMutable = indices;
 
-    _ = &name;
-    _ = &vertices;
-    _ = &textureCoords;
-    _ = &indices;
+    mesh.vertexCount = @intCast(vertices.len);
+    mesh.triangleCount = @intCast(indices.len / 3);
+
+    std.debug.print("Mesh count: {}\nindices tris: {}\n", .{ mesh.vertexCount, mesh.triangleCount });
+
+    mesh.vertices = vertices.ptr;
+    mesh.texcoords = textureCoords.ptr;
+    mesh.indices = indices.ptr;
+
+    rl.uploadMesh(mesh, false);
+
+    const model = rl.loadModelFromMesh(mesh.*) catch |err| {
+        std.log.err("[Mesh]: Failed to create model {s}. {s}", .{ name, @errorName(err) });
+        std.process.exit(1);
+    };
+
+    // todo: set a texture somehow.
+
+    _ = &model;
+    // _ = &name;
+    // _ = &vertices;
+    // _ = &textureCoords;
+    // _ = &indices;
 
     // mesh.vao = createVao();
     // mesh.vboVertexData = vertexUpload(vertexData);
