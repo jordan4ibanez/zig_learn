@@ -8,7 +8,7 @@ const shader = @import("shader.zig");
 // it can easily work with Zig.
 pub const Model = struct {
     mesh: *rl.Mesh,
-    model: rl.Model,
+    model: *rl.Model,
     vertices: std.ArrayList(f32),
     textureCoords: std.ArrayList(f32),
     indices: std.ArrayList(u16),
@@ -84,7 +84,9 @@ pub fn new(name: []const u8, vertices: std.ArrayList(f32), textureCoords: std.Ar
 
     rl.uploadMesh(model.mesh, false);
 
-    model.model = rl.loadModelFromMesh(model.mesh.*) catch |err| {
+    model.model = allocator.create(rl.Model);
+
+    model.model.* = rl.loadModelFromMesh(model.mesh.*) catch |err| {
         std.log.err("[Model]: Failed to create model {s}. {s}", .{ name, @errorName(err) });
         std.process.exit(1);
     };
