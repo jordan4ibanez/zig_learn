@@ -96,9 +96,9 @@ pub fn load(location: []const u8) void {
 
     mesh.new(
         "ground",
-        vertices.items,
-        textureCoordinates.items,
-        indices.items,
+        vertices,
+        textureCoordinates,
+        indices,
     );
 }
 
