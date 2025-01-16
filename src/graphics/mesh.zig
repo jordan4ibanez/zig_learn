@@ -17,7 +17,7 @@ pub fn terminate() void {
         const key = entry.key_ptr.*;
         const value = entry.value_ptr.*;
 
-        rl.unloadModel(value);
+        rl.unloadModel(value.*);
 
         allocator.free(key);
         allocator.destroy(value);
@@ -70,23 +70,18 @@ pub fn new(name: []const u8, vertices: std.ArrayList(f32), textureCoords: std.Ar
     mesh.texcoords = textureCoords.items.ptr;
     mesh.indices = indices.items.ptr;
 
-    // _ = &textureCoords;
-    // _ = &indices;
-
     rl.uploadMesh(mesh, false);
 
-    // std.debug.print("old: {}, new: {}", .{ x, mesh.vaoId });
-
-    // const model = rl.loadModelFromMesh(mesh.*) catch |err| {
-    //     std.log.err("[Mesh]: Failed to create model {s}. {s}", .{ name, @errorName(err) });
-    //     std.process.exit(1);
-    // };
+    const model = rl.loadModelFromMesh(mesh.*) catch |err| {
+        std.log.err("[Mesh]: Failed to create model {s}. {s}", .{ name, @errorName(err) });
+        std.process.exit(1);
+    };
 
     // std.debug.print("hi\n", .{});
 
     // todo: set a texture somehow.
 
-    // _ = &model;
+    _ = &model;
     _ = &name;
     _ = &vertices;
     _ = &textureCoords;
