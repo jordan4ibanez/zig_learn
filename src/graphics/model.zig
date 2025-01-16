@@ -3,12 +3,23 @@ const rl = @import("raylib");
 const allocator = @import("../utility/allocator.zig");
 const shader = @import("shader.zig");
 
-var database: std.StringHashMap(*rl.Model) = undefined;
+// This looks redundant, but this type is designed like this for a very
+// specific reason. It encapsulates the data in such a manor that
+// it can easily work with Zig.
+pub const Model = struct {
+    mesh: *rl.Mesh,
+    model: rl.Model,
+    vertices: std.ArrayList(f32),
+    textureCoords: std.ArrayList(f32),
+    indices: std.ArrayList(u16),
+};
+
+var database: std.StringHashMap(*Model) = undefined;
 
 //* ON/OFF SWITCH. ==============================================
 
 pub fn initialize() void {
-    database = std.StringHashMap(*rl.Model).init(allocator.get());
+    database = std.StringHashMap(*Model).init(allocator.get());
 }
 
 pub fn terminate() void {
@@ -17,7 +28,7 @@ pub fn terminate() void {
         const key = entry.key_ptr.*;
         const value = entry.value_ptr.*;
 
-        rl.unloadModel(value.*);
+        destroyModel(value);
 
         allocator.free(key);
         allocator.destroy(value);
@@ -36,43 +47,44 @@ pub fn terminate() void {
 pub fn new(name: []const u8, vertices: std.ArrayList(f32), textureCoords: std.ArrayList(f32), indices: std.ArrayList(u16)) void {
     // var mesh = allocator.create(rl.Mesh);
 
-    var mesh = allocator.create(rl.Mesh);
-    defer destroyMesh(mesh);
+    var model = allocator.create(Model);
+
+    model.vertices = vertices;
+    model.textureCoords = textureCoords;
+    model.indices = indices;
+
+    model.mesh = allocator.create(rl.Mesh);
 
     // Zig does not 0 out anything so we have to do that first.
-    mesh.vertexCount = 0;
-    mesh.triangleCount = 0;
-    mesh.vertices = 0;
-    mesh.texcoords = 0;
-    mesh.texcoords2 = 0;
-    mesh.normals = 0;
-    mesh.tangents = 0;
-    mesh.colors = 0;
-    mesh.indices = 0;
-    mesh.animVertices = 0;
-    mesh.animNormals = 0;
-    mesh.boneIds = 0;
-    mesh.boneWeights = 0;
-    mesh.boneMatrices = 0;
-    mesh.boneCount = 0;
-    mesh.vaoId = 0;
-    mesh.vboId = 0;
+    model.mesh.vertexCount = 0;
+    model.mesh.triangleCount = 0;
+    model.mesh.vertices = 0;
+    model.mesh.texcoords = 0;
+    model.mesh.texcoords2 = 0;
+    model.mesh.normals = 0;
+    model.mesh.tangents = 0;
+    model.mesh.colors = 0;
+    model.mesh.indices = 0;
+    model.mesh.animVertices = 0;
+    model.mesh.animNormals = 0;
+    model.mesh.boneIds = 0;
+    model.mesh.boneWeights = 0;
+    model.mesh.boneMatrices = 0;
+    model.mesh.boneCount = 0;
+    model.mesh.vaoId = 0;
+    model.mesh.vboId = 0;
     // Done.
 
-    mesh.vertexCount = @intCast(vertices.items.len / 3);
-    mesh.triangleCount = @intCast(indices.items.len / 3);
+    model.mesh.vertexCount = @intCast(vertices.items.len / 3);
+    model.mesh.triangleCount = @intCast(indices.items.len / 3);
 
-    std.debug.print("Mesh count: {}\nindices tris: {}\n", .{ mesh.vertexCount, mesh.triangleCount });
+    model.mesh.vertices = vertices.items.ptr;
+    model.mesh.texcoords = textureCoords.items.ptr;
+    model.mesh.indices = indices.items.ptr;
 
-    std.debug.print("{any}\n", .{vertices});
+    rl.uploadMesh(model.mesh, false);
 
-    mesh.vertices = vertices.items.ptr;
-    mesh.texcoords = textureCoords.items.ptr;
-    mesh.indices = indices.items.ptr;
-
-    rl.uploadMesh(mesh, false);
-
-    const model = rl.loadModelFromMesh(mesh.*) catch |err| {
+    model.model = rl.loadModelFromMesh(model.mesh.*) catch |err| {
         std.log.err("[Model]: Failed to create model {s}. {s}", .{ name, @errorName(err) });
         std.process.exit(1);
     };
@@ -136,6 +148,10 @@ pub fn draw(name: []const u8) void {
 }
 
 //* INTERNAL API. ==============================================
+
+fn destroyModel(model: *Model) void {
+    _ = &model;
+}
 
 fn destroyMesh(mesh: *rl.Mesh) void {
     // Overriding the destruction method for a mesh.

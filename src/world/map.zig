@@ -1,7 +1,7 @@
 const std = @import("std");
 const allocator = @import("../utility/allocator.zig");
 const heightmap = @import("heightmap.zig");
-const mesh = @import("../graphics/mesh.zig");
+const model = @import("../graphics/model.zig");
 
 //? The map doesn't really have an on/off switch, it is loaded or it isn't.
 
@@ -94,7 +94,7 @@ pub fn load(location: []const u8) void {
         }
     }
 
-    mesh.new(
+    model.new(
         "ground",
         vertices,
         textureCoordinates,
