@@ -2,6 +2,7 @@ const std = @import("std");
 const rl = @import("raylib");
 const allocator = @import("../utility/allocator.zig");
 const shader = @import("shader.zig");
+const string = @import("../utility/string.zig");
 
 // This looks redundant, but this type is designed like this for a very
 // specific reason. It encapsulates the data in such a manor that
@@ -28,7 +29,7 @@ pub fn terminate() void {
         const key = entry.key_ptr.*;
         const value = entry.value_ptr.*;
 
-        destroyModel(value);
+        destroyModelComponents(value);
 
         allocator.free(key);
         allocator.destroy(value);
@@ -97,6 +98,13 @@ pub fn new(name: []const u8, textureName: []const u8, vertices: std.ArrayList(f3
     // model.model.materials[0].maps[rl.MATERIAL_MAP_DIFFUSE].texture = here
 
     _ = &textureName;
+
+    const nameClone = allocator.alloc(u8, name.len);
+    @memcpy(nameClone, name);
+    database.put(nameClone, model) catch |err| {
+        std.log.err("[Model]: Failed to add to database {s}. {s}", .{ name, @errorName(err) });
+        std.process.exit(1);
+    };
 }
 
 ///
@@ -142,8 +150,27 @@ pub fn draw(name: []const u8) void {
 
 //* INTERNAL API. ==============================================
 
-fn destroyModel(model: *Model) void {
+fn destroyModelComponents(model: *Model) void {
     _ = &model;
+
+    std.debug.print("destroying!!!\n", .{});
+
+    model.vertices.clearAndFree();
+    model.textureCoords.clearAndFree();
+    model.indices.clearAndFree();
+
+    destroyModel(model.model);
+
+    destroyMesh(model.mesh);
+    // model.model.meshes = 0;
+
+    // allocator.destroy(model.model);
+}
+
+fn destroyModel(model: *rl.Model) void {
+    model.meshCount = 0;
+    rl.unloadModel(model.*);
+    allocator.destroy(model);
 }
 
 fn destroyMesh(mesh: *rl.Mesh) void {
@@ -162,7 +189,11 @@ fn destroyMesh(mesh: *rl.Mesh) void {
     mesh.boneIds = 0;
     mesh.boneWeights = 0;
     mesh.boneMatrices = 0;
+    mesh.vaoId = 0;
 
-    rl.unloadMesh(mesh.*);
+    std.debug.print("vao? {}\n", .{mesh.*.vaoId});
+
+    // rl.unloadMesh(mesh.*);
+
     allocator.destroy(mesh);
 }
