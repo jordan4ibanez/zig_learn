@@ -39,7 +39,7 @@ pub fn main() !void {
     allocator.initialize();
     defer allocator.terminate();
 
-    rl.setTraceLogLevel(rl.TraceLogLevel.err);
+    // rl.setTraceLogLevel(rl.TraceLogLevel.err);
 
     rl.initWindow(800, 800, "hi");
     defer rl.closeWindow();
