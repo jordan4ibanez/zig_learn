@@ -96,6 +96,7 @@ pub fn load(location: []const u8) void {
 
     model.new(
         "ground",
+        "sand.png",
         vertices,
         textureCoordinates,
         indices,
