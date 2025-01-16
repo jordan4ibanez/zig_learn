@@ -33,10 +33,11 @@ pub fn terminate() void {
 ///
 /// Keep in mind, this will clone the name string. So free it after you run this.
 ///
-pub fn new(name: []const u8, vertices: []f32, textureCoords: []f32, indices: []u16) void {
+pub fn new(name: []const u8, vertices: std.ArrayList(f32), textureCoords: std.ArrayList(f32), indices: std.ArrayList(u16)) void {
     // var mesh = allocator.create(rl.Mesh);
 
     var mesh = allocator.create(rl.Mesh);
+    defer destroyMesh(mesh);
 
     // Zig does not 0 out anything so we have to do that first.
     mesh.vertexCount = 0;
@@ -58,33 +59,38 @@ pub fn new(name: []const u8, vertices: []f32, textureCoords: []f32, indices: []u
     mesh.vboId = 0;
     // Done.
 
-    // const verticesMutable = vertices.ptr;
-    // const textureCoordsMutable = textureCoords.ptr;
-    // var indicesMutable = indices;
-
-    mesh.vertexCount = @intCast(vertices.len);
-    mesh.triangleCount = @intCast(indices.len / 3);
+    mesh.vertexCount = @intCast(vertices.items.len / 3);
+    mesh.triangleCount = @intCast(indices.items.len / 3);
 
     std.debug.print("Mesh count: {}\nindices tris: {}\n", .{ mesh.vertexCount, mesh.triangleCount });
 
-    mesh.vertices = vertices.ptr;
-    mesh.texcoords = textureCoords.ptr;
-    mesh.indices = indices.ptr;
+    std.debug.print("{any}\n", .{vertices});
+
+    mesh.vertices = vertices.items.ptr;
+    mesh.texcoords = textureCoords.items.ptr;
+    mesh.indices = indices.items.ptr;
+
+    // _ = &textureCoords;
+    // _ = &indices;
 
     rl.uploadMesh(mesh, false);
 
-    const model = rl.loadModelFromMesh(mesh.*) catch |err| {
-        std.log.err("[Mesh]: Failed to create model {s}. {s}", .{ name, @errorName(err) });
-        std.process.exit(1);
-    };
+    // std.debug.print("old: {}, new: {}", .{ x, mesh.vaoId });
+
+    // const model = rl.loadModelFromMesh(mesh.*) catch |err| {
+    //     std.log.err("[Mesh]: Failed to create model {s}. {s}", .{ name, @errorName(err) });
+    //     std.process.exit(1);
+    // };
+
+    // std.debug.print("hi\n", .{});
 
     // todo: set a texture somehow.
 
-    _ = &model;
-    // _ = &name;
-    // _ = &vertices;
-    // _ = &textureCoords;
-    // _ = &indices;
+    // _ = &model;
+    _ = &name;
+    _ = &vertices;
+    _ = &textureCoords;
+    _ = &indices;
 
     // mesh.vao = createVao();
     // mesh.vboVertexData = vertexUpload(vertexData);
@@ -135,3 +141,24 @@ pub fn draw(name: []const u8) void {
 }
 
 //* INTERNAL API. ==============================================
+
+fn destroyMesh(mesh: *rl.Mesh) void {
+    // Overriding the destruction method for a mesh.
+
+    // First, set this thing to all null pointers so libc doesn't explode.
+    mesh.vertices = 0;
+    mesh.texcoords = 0;
+    mesh.texcoords2 = 0;
+    mesh.normals = 0;
+    mesh.tangents = 0;
+    mesh.colors = 0;
+    mesh.indices = 0;
+    mesh.animVertices = 0;
+    mesh.animNormals = 0;
+    mesh.boneIds = 0;
+    mesh.boneWeights = 0;
+    mesh.boneMatrices = 0;
+
+    rl.unloadMesh(mesh.*);
+    allocator.destroy(mesh);
+}
