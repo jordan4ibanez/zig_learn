@@ -9,7 +9,7 @@ const map = @import("world/map.zig");
 // const gl = @import("gl");
 // const window = @import("graphics/window.zig");
 // const shader = @import("graphics/shader.zig");
-const mesh = @import("graphics/mesh.zig");
+const model = @import("graphics/model.zig");
 
 // const map = @import("world/map.zig");
 // const camera = @import("graphics/camera.zig");
@@ -39,8 +39,8 @@ pub fn main() !void {
     allocator.initialize();
     defer allocator.terminate();
 
-    mesh.initialize();
-    defer mesh.terminate();
+    model.initialize();
+    defer model.terminate();
 
     // rl.setTraceLogLevel(rl.TraceLogLevel.err);
 
